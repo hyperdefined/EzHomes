@@ -5,6 +5,7 @@ import lol.hyper.ezhomes.commands.CommandHomes;
 import lol.hyper.ezhomes.commands.CommandSetHome;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 
 public final class EzHomes extends JavaPlugin {
 
@@ -19,6 +21,7 @@ public final class EzHomes extends JavaPlugin {
     public File configFile = new File(this.getDataFolder(), "config.yml");
     public Path homesPath = Paths.get(this.getDataFolder() + File.separator + "data");
     public FileConfiguration config = this.getConfig();
+    public HashMap<Player, Long> teleportCooldowns = new HashMap<>();
 
     public static EzHomes getInstance() {
         return instance;

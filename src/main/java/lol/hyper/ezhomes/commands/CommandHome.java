@@ -1,5 +1,6 @@
 package lol.hyper.ezhomes.commands;
 
+import lol.hyper.ezhomes.EzHomes;
 import lol.hyper.ezhomes.HomeManagement;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -10,6 +11,7 @@ import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class CommandHome implements CommandExecutor {
     @Override
@@ -22,11 +24,18 @@ public class CommandHome implements CommandExecutor {
                 try {
                     ArrayList<String> playerHomes = HomeManagement.getPlayerHomes(player.getUniqueId());
                     if (playerHomes != null) {
-                        if (playerHomes.contains(args[0])) {
-                            player.teleport(HomeManagement.getHomeLocation(player.getUniqueId(), args[0]));
-                            player.sendMessage(ChatColor.GREEN + "Whoosh!");
+                        if (HomeManagement.canPlayerTeleport(player)) {
+                            if (playerHomes.contains(args[0])) {
+                                player.teleport(HomeManagement.getHomeLocation(player.getUniqueId(), args[0]));
+                                player.sendMessage(ChatColor.GREEN + "Whoosh!");
+                                EzHomes.getInstance().teleportCooldowns.put(player, System.nanoTime());
+                            } else {
+                                player.sendMessage(ChatColor.RED + "That home does not exist.");
+                            }
                         } else {
-                            player.sendMessage(ChatColor.RED + "That home does not exist.");
+                            long timeLeft = TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - EzHomes.getInstance().teleportCooldowns.get(player));
+                            long configTime = EzHomes.getInstance().config.getInt("teleport-cooldown");
+                            player.sendMessage(ChatColor.RED + "You must wait " + (configTime - timeLeft) + " seconds to teleport.");
                         }
                     } else {
                         player.sendMessage(ChatColor.RED + "You do not have any homes set.");

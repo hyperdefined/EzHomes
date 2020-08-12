@@ -3,6 +3,7 @@ package lol.hyper.ezhomes;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -11,7 +12,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class HomeManagement {
     private static FileWriter writer;
@@ -93,6 +96,15 @@ public class HomeManagement {
             return playerHomes;
         } else {
             return null;
+        }
+    }
+
+    public static boolean canPlayerTeleport (Player player) {
+        if (EzHomes.getInstance().teleportCooldowns.containsKey(player)) {
+            long timeLeft = TimeUnit.NANOSECONDS.toSeconds((System.nanoTime() - EzHomes.getInstance().teleportCooldowns.get(player)) - (long) EzHomes.getInstance().config.getInt("teleport-cooldown"));
+            return timeLeft >= Long.valueOf(EzHomes.getInstance().config.getInt("teleport-cooldown"));
+        } else {
+            return true;
         }
     }
 }
