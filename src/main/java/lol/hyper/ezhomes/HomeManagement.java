@@ -1,15 +1,17 @@
 package lol.hyper.ezhomes;
 
-import com.google.gson.JsonArray;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -18,7 +20,7 @@ public class HomeManagement {
     private static FileWriter writer;
     private static FileReader reader;
 
-    public static void createHome (UUID player, Location homeLocation, String homeName) throws IOException, ParseException {
+    public static void createHome(UUID player, Location homeLocation, String homeName) throws IOException, ParseException {
         File homeFile = new File(EzHomes.getInstance().homesPath.toFile(), player.toString() + ".json");
         // Checks if the player has a home file already.
         // If they do, then read current file then add new JSONObject to it.
@@ -56,7 +58,8 @@ public class HomeManagement {
             writer.close();
         }
     }
-    public static Location getHomeLocation (UUID player, String homeName) throws IOException, ParseException {
+
+    public static Location getHomeLocation(UUID player, String homeName) throws IOException, ParseException {
         File homeFile = new File(EzHomes.getInstance().homesPath.toFile(), player.toString() + ".json");
         if (homeFile.exists()) {
             JSONParser parser = new JSONParser();
@@ -72,6 +75,24 @@ public class HomeManagement {
             float yaw = Float.parseFloat(home.get("yaw").toString());
             World w = Bukkit.getWorld(home.get("world").toString());
             return new Location(w, x, y, z, pitch, yaw);
+        } else {
+            return null;
+        }
+    }
+
+    public static ArrayList<String> getPlayerHomes(UUID player) throws IOException, ParseException {
+        File homeFile = new File(EzHomes.getInstance().homesPath.toFile(), player.toString() + ".json");
+        if (homeFile.exists()) {
+            ArrayList<String> playerHomes = new ArrayList<>();
+            JSONParser parser = new JSONParser();
+            reader = new FileReader(homeFile);
+            Object obj = parser.parse(reader);
+            reader.close();
+            JSONObject currentHomeFileJSON = (JSONObject) obj;
+            for (Object o : currentHomeFileJSON.keySet()) {
+                playerHomes.add((String) o);
+            }
+            return playerHomes;
         } else {
             return null;
         }

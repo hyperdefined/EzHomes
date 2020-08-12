@@ -11,3 +11,6 @@ commands:
   home:
     usage: /home <name>
     description: Teleport to home.
+  homes:
+    usage: /homes
+    description: List player homes.

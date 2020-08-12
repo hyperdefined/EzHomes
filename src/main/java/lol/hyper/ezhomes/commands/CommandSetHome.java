@@ -1,6 +1,7 @@
 package lol.hyper.ezhomes.commands;
 
 import lol.hyper.ezhomes.HomeManagement;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -28,7 +29,8 @@ public class CommandSetHome implements CommandExecutor {
                     sender.sendMessage(ChatColor.GREEN + "Set new home " + args[0] + "!");
                 } catch (IOException | ParseException e) {
                     e.printStackTrace();
-                    sender.sendMessage(ChatColor.RED + "Unable to create home!");
+                    sender.sendMessage(ChatColor.RED + "Unable to create home! Please check your console for more information.");
+                    Bukkit.getLogger().severe("Error reading home data for player: " + player.getName());
                 }
             } else {
                 sender.sendMessage(ChatColor.RED + "Invalid syntax. To set a home, simply do \"/sethome <home name>\"");
