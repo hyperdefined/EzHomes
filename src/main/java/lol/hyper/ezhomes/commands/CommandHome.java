@@ -2,6 +2,7 @@ package lol.hyper.ezhomes.commands;
 
 import lol.hyper.ezhomes.EzHomes;
 import lol.hyper.ezhomes.HomeManagement;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -42,6 +43,8 @@ public class CommandHome implements CommandExecutor {
                     }
                 } catch (IOException | ParseException e) {
                     e.printStackTrace();
+                    sender.sendMessage(ChatColor.RED + "Unable to teleport! This is from a file issue. Please check your console for more information.");
+                    Bukkit.getLogger().severe("Error reading home data for player: " + player.getName());
                 }
             }
         }
