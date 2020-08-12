@@ -11,10 +11,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class HomeManagement {
     private static FileWriter writer;
@@ -92,6 +89,7 @@ public class HomeManagement {
             for (Object o : currentHomeFileJSON.keySet()) {
                 playerHomes.add((String) o);
             }
+            playerHomes.sort(String.CASE_INSENSITIVE_ORDER);
             return playerHomes;
         } else {
             return null;
