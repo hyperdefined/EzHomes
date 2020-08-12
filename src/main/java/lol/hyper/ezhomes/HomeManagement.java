@@ -12,8 +12,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class HomeManagement {
@@ -99,10 +101,10 @@ public class HomeManagement {
         }
     }
 
-    public static boolean canPlayerTeleport (Player player) {
+    public static boolean canPlayerTeleport(Player player) {
         if (EzHomes.getInstance().teleportCooldowns.containsKey(player)) {
             long timeLeft = TimeUnit.NANOSECONDS.toSeconds((System.nanoTime() - EzHomes.getInstance().teleportCooldowns.get(player)) - (long) EzHomes.getInstance().config.getInt("teleport-cooldown"));
-            return timeLeft >= Long.valueOf(EzHomes.getInstance().config.getInt("teleport-cooldown"));
+            return timeLeft >= (long) EzHomes.getInstance().config.getInt("teleport-cooldown");
         } else {
             return true;
         }
