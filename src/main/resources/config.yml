@@ -1,4 +1,3 @@
-
 # How many seconds a player has to wait before teleporting again.
 teleport-cooldown: 100
 

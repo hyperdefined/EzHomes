@@ -1,5 +1,6 @@
 package lol.hyper.ezhomes.commands;
 
+import lol.hyper.ezhomes.EzHomes;
 import lol.hyper.ezhomes.HomeManagement;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -25,8 +26,17 @@ public class CommandSetHome implements CommandExecutor {
         } else {
             if (args.length == 1) {
                 try {
-                    HomeManagement.createHome(player.getUniqueId(), player.getLocation(), args[0]);
-                    sender.sendMessage(ChatColor.GREEN + "Set new home " + args[0] + "!");
+                    if (HomeManagement.getPlayerHomes(player.getUniqueId()) != null) {
+                        if (HomeManagement.getPlayerHomes(player.getUniqueId()).size() != EzHomes.getInstance().config.getInt("total-homes")) {
+                            HomeManagement.createHome(player.getUniqueId(), player.getLocation(), args[0]);
+                            sender.sendMessage(ChatColor.GREEN + "Set new home " + args[0] + "!");
+                        } else {
+                            player.sendMessage(ChatColor.RED + "You can only have a maximum of " + EzHomes.getInstance().config.getInt("total-homes") + " homes.");
+                        }
+                    } else {
+                        HomeManagement.createHome(player.getUniqueId(), player.getLocation(), args[0]);
+                        sender.sendMessage(ChatColor.GREEN + "Set new home " + args[0] + "!");
+                    }
                 } catch (IOException | ParseException e) {
                     e.printStackTrace();
                     sender.sendMessage(ChatColor.RED + "Unable to create home! Please check your console for more information.");

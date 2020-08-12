@@ -4,6 +4,7 @@ import lol.hyper.ezhomes.commands.CommandHome;
 import lol.hyper.ezhomes.commands.CommandHomes;
 import lol.hyper.ezhomes.commands.CommandSetHome;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -17,6 +18,7 @@ public final class EzHomes extends JavaPlugin {
     private static EzHomes instance;
     public File configFile = new File(this.getDataFolder(), "config.yml");
     public Path homesPath = Paths.get(this.getDataFolder() + File.separator + "data");
+    public FileConfiguration config = this.getConfig();
 
     public static EzHomes getInstance() {
         return instance;
