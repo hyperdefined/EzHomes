@@ -109,4 +109,25 @@ public class HomeManagement {
             return true;
         }
     }
+
+    public static void updateHome(UUID player, String homeName, Location newLocation) throws IOException, ParseException {
+        File homeFile = new File(EzHomes.getInstance().homesPath.toFile(), player.toString() + ".json");
+        JSONParser parser = new JSONParser();
+        reader = new FileReader(homeFile);
+        Object obj = parser.parse(reader);
+        reader.close();
+        JSONObject homeFileJSON = (JSONObject) obj;
+        homeFileJSON.remove(homeName);
+        Map m = new LinkedHashMap(5);
+        m.put("x", newLocation.getX());
+        m.put("y", newLocation.getY());
+        m.put("z", newLocation.getZ());
+        m.put("pitch", newLocation.getPitch());
+        m.put("yaw", newLocation.getYaw());
+        m.put("world", newLocation.getWorld().getName());
+        homeFileJSON.put(homeName, m);
+        writer = new FileWriter(homeFile);
+        writer.write(homeFileJSON.toJSONString());
+        writer.close();
+    }
 }

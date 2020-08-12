@@ -14,3 +14,6 @@ commands:
   homes:
     usage: /homes
     description: List player homes.
+  updatehome:
+    usage: /updatehome
+    description: Update a home location.
