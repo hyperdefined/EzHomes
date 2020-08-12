@@ -17,3 +17,6 @@ commands:
   updatehome:
     usage: /updatehome
     description: Update a home location.
+  delhome:
+    usage: /delhome
+    description: Delete a home.

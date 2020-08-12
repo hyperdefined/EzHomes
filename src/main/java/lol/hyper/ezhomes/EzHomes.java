@@ -1,9 +1,6 @@
 package lol.hyper.ezhomes;
 
-import lol.hyper.ezhomes.commands.CommandHome;
-import lol.hyper.ezhomes.commands.CommandHomes;
-import lol.hyper.ezhomes.commands.CommandSetHome;
-import lol.hyper.ezhomes.commands.CommandUpdateHome;
+import lol.hyper.ezhomes.commands.*;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -47,6 +44,7 @@ public final class EzHomes extends JavaPlugin {
         this.getCommand("home").setExecutor(new CommandHome());
         this.getCommand("homes").setExecutor(new CommandHomes());
         this.getCommand("updatehome").setExecutor(new CommandUpdateHome());
+        this.getCommand("delhome").setExecutor(new CommandDeleteHome());
     }
 
     @Override

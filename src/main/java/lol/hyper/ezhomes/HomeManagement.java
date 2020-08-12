@@ -130,4 +130,16 @@ public class HomeManagement {
         writer.write(homeFileJSON.toJSONString());
         writer.close();
     }
+    public static void deleteHome(UUID player, String homeName) throws IOException, ParseException {
+        File homeFile = new File(EzHomes.getInstance().homesPath.toFile(), player.toString() + ".json");
+        JSONParser parser = new JSONParser();
+        reader = new FileReader(homeFile);
+        Object obj = parser.parse(reader);
+        reader.close();
+        JSONObject homeFileJSON = (JSONObject) obj;
+        homeFileJSON.remove(homeName);
+        writer = new FileWriter(homeFile);
+        writer.write(homeFileJSON.toJSONString());
+        writer.close();
+    }
 }
