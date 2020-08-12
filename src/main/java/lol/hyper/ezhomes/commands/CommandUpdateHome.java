@@ -1,6 +1,5 @@
 package lol.hyper.ezhomes.commands;
 
-import lol.hyper.ezhomes.EzHomes;
 import lol.hyper.ezhomes.HomeManagement;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

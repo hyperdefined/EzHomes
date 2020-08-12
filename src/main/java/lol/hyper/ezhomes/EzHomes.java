@@ -16,10 +16,10 @@ import java.util.HashMap;
 public final class EzHomes extends JavaPlugin {
 
     private static EzHomes instance;
-    public File configFile = new File(this.getDataFolder(), "config.yml");
-    public Path homesPath = Paths.get(this.getDataFolder() + File.separator + "data");
+    public final File configFile = new File(this.getDataFolder(), "config.yml");
+    public final Path homesPath = Paths.get(this.getDataFolder() + File.separator + "data");
     public FileConfiguration config = this.getConfig();
-    public HashMap<Player, Long> teleportCooldowns = new HashMap<>();
+    public final HashMap<Player, Long> teleportCooldowns = new HashMap<>();
 
     public static EzHomes getInstance() {
         return instance;
