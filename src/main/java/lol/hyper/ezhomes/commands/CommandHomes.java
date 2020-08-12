@@ -26,8 +26,10 @@ public class CommandHomes implements CommandExecutor {
             if (playerHomes == null || playerHomes.size() == 0) {
                 player.sendMessage(ChatColor.RED + "You don't have any homes set! Do /sethome <name> to set a home!");
             } else {
+                sender.sendMessage(ChatColor.GOLD + "--------------------------------------------");
                 player.sendMessage(ChatColor.GOLD + "You currently have these homes:");
                 player.sendMessage(ChatColor.YELLOW + String.join(", ", playerHomes));
+                sender.sendMessage(ChatColor.GOLD + "--------------------------------------------");
             }
         } catch (IOException | ParseException e) {
             e.printStackTrace();
