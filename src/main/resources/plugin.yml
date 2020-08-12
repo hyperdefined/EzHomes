@@ -23,3 +23,6 @@ commands:
   homesreload:
     usage: /homesreload
     description: Reloads config.
+permission:
+  ezhomes.reload:
+    default: op
