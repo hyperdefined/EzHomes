@@ -20,3 +20,6 @@ commands:
   delhome:
     usage: /delhome
     description: Delete a home.
+  homesreload:
+    usage: /homesreload
+    description: Reloads config.
