@@ -28,7 +28,7 @@ public class CommandUpdateHome implements CommandExecutor {
                     if (HomeManagement.getPlayerHomes(player.getUniqueId()) != null) {
                         if (HomeManagement.getPlayerHomes(player.getUniqueId()).contains(args[0])) {
                             HomeManagement.updateHome(player.getUniqueId(), args[0], player.getLocation());
-                            player.sendMessage(ChatColor.GREEN + "Updated home!");
+                            player.sendMessage(ChatColor.GREEN + "Updated home.");
                         } else {
                             player.sendMessage(ChatColor.RED + "That home does not exist.");
                         }

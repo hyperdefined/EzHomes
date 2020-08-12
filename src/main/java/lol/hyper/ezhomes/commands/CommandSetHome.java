@@ -29,13 +29,13 @@ public class CommandSetHome implements CommandExecutor {
                     if (HomeManagement.getPlayerHomes(player.getUniqueId()) != null) {
                         if (HomeManagement.getPlayerHomes(player.getUniqueId()).size() != EzHomes.getInstance().config.getInt("total-homes")) {
                             HomeManagement.createHome(player.getUniqueId(), player.getLocation(), args[0]);
-                            sender.sendMessage(ChatColor.GREEN + "Set new home " + args[0] + "!");
+                            sender.sendMessage(ChatColor.GREEN + "Home set.");
                         } else {
                             player.sendMessage(ChatColor.RED + "You can only have a maximum of " + EzHomes.getInstance().config.getInt("total-homes") + " homes.");
                         }
                     } else {
                         HomeManagement.createHome(player.getUniqueId(), player.getLocation(), args[0]);
-                        sender.sendMessage(ChatColor.GREEN + "Set new home " + args[0] + "!");
+                        sender.sendMessage(ChatColor.GREEN + "Home set.");
                     }
                 } catch (IOException | ParseException e) {
                     e.printStackTrace();

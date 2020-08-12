@@ -33,7 +33,7 @@ public class CommandDeleteHome implements CommandExecutor {
                             player.sendMessage(ChatColor.RED + "That home does not exist.");
                         }
                     } else {
-                        player.sendMessage(ChatColor.RED + "You don't have any homes!");
+                        player.sendMessage(ChatColor.RED + "You don't have any homes.");
                     }
                 } catch (IOException | ParseException e) {
                     e.printStackTrace();
