@@ -4,3 +4,10 @@ main: lol.hyper.ezhomes.EzHomes
 api-version: 1.16
 authors: [hyperdefined]
 description: A simple homes plugin.
+commands:
+  sethome:
+    usage: /sethome <name>
+    description: Set home.
+  home:
+    usage: /home <name>
+    description: Teleport to home.

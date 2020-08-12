@@ -1,0 +1,6 @@
+
+# How many seconds a player has to wait before teleporting again.
+teleport-cooldown: 100
+
+# How many homes a player can have.
+total-homes: 5
