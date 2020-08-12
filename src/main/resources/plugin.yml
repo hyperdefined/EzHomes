@@ -23,6 +23,9 @@ commands:
   homesreload:
     usage: /homesreload
     description: Reloads config.
+  where:
+    usage: /where
+    description: Shows a home's location.
 permission:
   ezhomes.reload:
     default: op
