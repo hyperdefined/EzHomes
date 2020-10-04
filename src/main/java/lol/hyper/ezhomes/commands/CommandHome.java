@@ -25,14 +25,14 @@ public class CommandHome implements CommandExecutor {
         } else {
             if (args.length == 1){
                 try {
-                    ArrayList<String> playerHomes = HomeManagement.getPlayerHomes(player.getUniqueId());
+                    ArrayList<String> playerHomes = HomeManagement.getPlayerHomes(player);
                     if (playerHomes != null) {
                         if (HomeManagement.canPlayerTeleport(player)) {
                             if (playerHomes.contains(args[0])) {
                                 if (PaperLib.isPaper()) {
-                                    PaperLib.teleportAsync(player, HomeManagement.getHomeLocation(player.getUniqueId(), args[0]));
+                                    PaperLib.teleportAsync(player, HomeManagement.getHomeLocation(player, args[0]));
                                 } else {
-                                    player.teleport(HomeManagement.getHomeLocation(player.getUniqueId(), args[0]));
+                                    player.teleport(HomeManagement.getHomeLocation(player, args[0]));
                                 }
                                 player.sendMessage(ChatColor.GREEN + "Whoosh!");
                                 EzHomes.getInstance().teleportCooldowns.put(player, System.nanoTime());

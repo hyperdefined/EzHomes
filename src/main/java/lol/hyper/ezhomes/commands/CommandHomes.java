@@ -22,7 +22,7 @@ public class CommandHomes implements CommandExecutor {
         }
         Player player = (Player) sender;
         try {
-            ArrayList<String> playerHomes = HomeManagement.getPlayerHomes(player.getUniqueId());
+            ArrayList<String> playerHomes = HomeManagement.getPlayerHomes(player);
             if (playerHomes == null || playerHomes.size() == 0) {
                 player.sendMessage(ChatColor.RED + "You don't have any homes set! Do /sethome <name> to set a home!");
             } else {

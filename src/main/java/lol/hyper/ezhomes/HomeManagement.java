@@ -22,12 +22,13 @@ public class HomeManagement {
     private static FileWriter writer;
     private static FileReader reader;
 
-    public static void createHome(UUID player, Location homeLocation, String homeName) throws IOException, ParseException {
-        File homeFile = new File(EzHomes.getInstance().homesPath.toFile(), player.toString() + ".json");
+    public static void createHome(Player player, String homeName) throws IOException, ParseException {
+        File homeFile = new File(EzHomes.getInstance().homesPath.toFile(), player.getUniqueId() + ".json");
         // Checks if the player has a home file already.
         // If they do, then read current file then add new JSONObject to it.
         // If they don't, then just put a new JSONObject there.
         // There is probably a better way of doing this, but I have done this method in the past.
+        Location homeLocation = player.getLocation();
         if (homeFile.exists()) {
             JSONParser parser = new JSONParser();
             reader = new FileReader(homeFile);
@@ -61,8 +62,8 @@ public class HomeManagement {
         }
     }
 
-    public static Location getHomeLocation(UUID player, String homeName) throws IOException, ParseException {
-        File homeFile = new File(EzHomes.getInstance().homesPath.toFile(), player.toString() + ".json");
+    public static Location getHomeLocation(Player player, String homeName) throws IOException, ParseException {
+        File homeFile = new File(EzHomes.getInstance().homesPath.toFile(), player.getUniqueId() + ".json");
         if (homeFile.exists()) {
             JSONParser parser = new JSONParser();
             reader = new FileReader(homeFile);
@@ -82,8 +83,8 @@ public class HomeManagement {
         }
     }
 
-    public static ArrayList<String> getPlayerHomes(UUID player) throws IOException, ParseException {
-        File homeFile = new File(EzHomes.getInstance().homesPath.toFile(), player.toString() + ".json");
+    public static ArrayList<String> getPlayerHomes(Player player) throws IOException, ParseException {
+        File homeFile = new File(EzHomes.getInstance().homesPath.toFile(), player.getUniqueId() + ".json");
         if (homeFile.exists()) {
             ArrayList<String> playerHomes = new ArrayList<>();
             JSONParser parser = new JSONParser();
@@ -110,8 +111,9 @@ public class HomeManagement {
         }
     }
 
-    public static void updateHome(UUID player, String homeName, Location newLocation) throws IOException, ParseException {
-        File homeFile = new File(EzHomes.getInstance().homesPath.toFile(), player.toString() + ".json");
+    public static void updateHome(Player player, String homeName) throws IOException, ParseException {
+        File homeFile = new File(EzHomes.getInstance().homesPath.toFile(), player.getUniqueId() + ".json");
+        Location newLocation = player.getLocation();
         JSONParser parser = new JSONParser();
         reader = new FileReader(homeFile);
         Object obj = parser.parse(reader);
@@ -130,8 +132,8 @@ public class HomeManagement {
         writer.write(homeFileJSON.toJSONString());
         writer.close();
     }
-    public static void deleteHome(UUID player, String homeName) throws IOException, ParseException {
-        File homeFile = new File(EzHomes.getInstance().homesPath.toFile(), player.toString() + ".json");
+    public static void deleteHome(Player player, String homeName) throws IOException, ParseException {
+        File homeFile = new File(EzHomes.getInstance().homesPath.toFile(), player.getUniqueId() + ".json");
         JSONParser parser = new JSONParser();
         reader = new FileReader(homeFile);
         Object obj = parser.parse(reader);
