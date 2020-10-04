@@ -13,6 +13,7 @@ public class CommandUpdateHome implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof ConsoleCommandSender) {
             sender.sendMessage("You must be a player for this command!");
+            return true;
         }
         Player player = (Player) sender;
         if (args.length == 0) {
