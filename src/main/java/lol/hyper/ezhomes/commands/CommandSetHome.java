@@ -27,7 +27,7 @@ public class CommandSetHome implements CommandExecutor {
             if (args.length == 1) {
                 try {
                     if (HomeManagement.getPlayerHomes(player.getUniqueId()) != null) {
-                        if (HomeManagement.getPlayerHomes(player.getUniqueId()).size() != EzHomes.getInstance().config.getInt("total-homes")) {
+                        if (HomeManagement.getPlayerHomes(player.getUniqueId()).size() != EzHomes.getInstance().config.getInt("total-homes") || player.hasPermission("ezhomes.bypasslimit")) {
                             HomeManagement.createHome(player.getUniqueId(), player.getLocation(), args[0]);
                             sender.sendMessage(ChatColor.GREEN + "Home set.");
                         } else {

@@ -29,3 +29,5 @@ commands:
 permission:
   ezhomes.reload:
     default: op
+  ezhomes.bypasslimit:
+    default: op

@@ -29,3 +29,5 @@ total-homes: 5
 # Permissions
 - ezhomes.reload
     - Reload the config.
+- ezhomes.bypasslimit
+    - Bypasses the config limit for homes.

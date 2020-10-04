@@ -1,5 +1,6 @@
 package lol.hyper.ezhomes;
 
+import io.papermc.lib.PaperLib;
 import lol.hyper.ezhomes.commands.*;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -40,6 +41,12 @@ public final class EzHomes extends JavaPlugin {
                 e.printStackTrace();
             }
         }
+
+        if (!PaperLib.isPaper()) {
+            PaperLib.suggestPaper(this);
+
+        }
+
         this.getCommand("sethome").setExecutor(new CommandSetHome());
         this.getCommand("home").setExecutor(new CommandHome());
         this.getCommand("homes").setExecutor(new CommandHomes());

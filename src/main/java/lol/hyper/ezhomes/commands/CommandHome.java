@@ -1,5 +1,6 @@
 package lol.hyper.ezhomes.commands;
 
+import io.papermc.lib.PaperLib;
 import lol.hyper.ezhomes.EzHomes;
 import lol.hyper.ezhomes.HomeManagement;
 import org.bukkit.Bukkit;
@@ -10,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.json.simple.parser.ParseException;
 
+import java.awt.print.Paper;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -27,7 +29,11 @@ public class CommandHome implements CommandExecutor {
                     if (playerHomes != null) {
                         if (HomeManagement.canPlayerTeleport(player)) {
                             if (playerHomes.contains(args[0])) {
-                                player.teleport(HomeManagement.getHomeLocation(player.getUniqueId(), args[0]));
+                                if (PaperLib.isPaper()) {
+                                    PaperLib.teleportAsync(player, HomeManagement.getHomeLocation(player.getUniqueId(), args[0]));
+                                } else {
+                                    player.teleport(HomeManagement.getHomeLocation(player.getUniqueId(), args[0]));
+                                }
                                 player.sendMessage(ChatColor.GREEN + "Whoosh!");
                                 EzHomes.getInstance().teleportCooldowns.put(player, System.nanoTime());
                             } else {
