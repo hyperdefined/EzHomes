@@ -44,6 +44,10 @@
                                     <pattern>io.papermc.lib</pattern>
                                     <shadedPattern>lol.hyper.ezhomes.paperlib</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>org.json.simple</pattern>
+                                    <shadedPattern>lol.hyper.ezhomes.json-simple</shadedPattern>
+                                </relocation>
                             </relocations>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                         </configuration>
