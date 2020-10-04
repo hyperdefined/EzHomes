@@ -44,7 +44,8 @@ public final class EzHomes extends JavaPlugin {
 
         if (!PaperLib.isPaper()) {
             PaperLib.suggestPaper(this);
-
+        } else {
+            Bukkit.getLogger().info("[EzHomes] Yay! You are using Paper! We will make teleports async!");
         }
 
         this.getCommand("sethome").setExecutor(new CommandSetHome());
