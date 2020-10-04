@@ -10,7 +10,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class CommandReload implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender.hasPermission("ezhomes.reload")) {
+        if (sender.hasPermission("ezhomes.reload") || sender.isOp()) {
             EzHomes.getInstance().config = YamlConfiguration.loadConfiguration(EzHomes.getInstance().configFile);
             sender.sendMessage(ChatColor.GREEN + "Config was reloaded!");
         } else {
