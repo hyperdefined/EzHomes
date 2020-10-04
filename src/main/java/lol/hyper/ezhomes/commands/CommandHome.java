@@ -3,15 +3,12 @@ package lol.hyper.ezhomes.commands;
 import io.papermc.lib.PaperLib;
 import lol.hyper.ezhomes.EzHomes;
 import lol.hyper.ezhomes.HomeManagement;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
-import org.json.simple.parser.ParseException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -24,33 +21,27 @@ public class CommandHome implements TabExecutor {
             player.sendMessage(ChatColor.RED + "You must specify a home!");
         } else {
             if (args.length == 1){
-                try {
-                    ArrayList<String> playerHomes = HomeManagement.getPlayerHomes(player);
-                    if (playerHomes != null) {
-                        if (HomeManagement.canPlayerTeleport(player)) {
-                            if (playerHomes.contains(args[0])) {
-                                if (PaperLib.isPaper()) {
-                                    PaperLib.teleportAsync(player, HomeManagement.getHomeLocation(player, args[0]));
-                                } else {
-                                    player.teleport(HomeManagement.getHomeLocation(player, args[0]));
-                                }
-                                player.sendMessage(ChatColor.GREEN + "Whoosh!");
-                                EzHomes.getInstance().teleportCooldowns.put(player, System.nanoTime());
+                ArrayList<String> playerHomes = HomeManagement.getPlayerHomes(player);
+                if (playerHomes != null) {
+                    if (HomeManagement.canPlayerTeleport(player)) {
+                        if (playerHomes.contains(args[0])) {
+                            if (PaperLib.isPaper()) {
+                                PaperLib.teleportAsync(player, HomeManagement.getHomeLocation(player, args[0]));
                             } else {
-                                player.sendMessage(ChatColor.RED + "That home does not exist.");
+                                player.teleport(HomeManagement.getHomeLocation(player, args[0]));
                             }
+                            player.sendMessage(ChatColor.GREEN + "Whoosh!");
+                            EzHomes.getInstance().teleportCooldowns.put(player, System.nanoTime());
                         } else {
-                            long timeLeft = TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - EzHomes.getInstance().teleportCooldowns.get(player));
-                            long configTime = EzHomes.getInstance().config.getInt("teleport-cooldown");
-                            player.sendMessage(ChatColor.RED + "You must wait " + (configTime - timeLeft) + " seconds to teleport.");
+                            player.sendMessage(ChatColor.RED + "That home does not exist.");
                         }
                     } else {
-                        player.sendMessage(ChatColor.RED + "You do not have any homes set.");
+                        long timeLeft = TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - EzHomes.getInstance().teleportCooldowns.get(player));
+                        long configTime = EzHomes.getInstance().config.getInt("teleport-cooldown");
+                        player.sendMessage(ChatColor.RED + "You must wait " + (configTime - timeLeft) + " seconds to teleport.");
                     }
-                } catch (IOException | ParseException e) {
-                    e.printStackTrace();
-                    sender.sendMessage(ChatColor.RED + "Unable to teleport! This is from a file issue. Please check your console for more information.");
-                    Bukkit.getLogger().severe("Error reading home data for player: " + player.getName());
+                } else {
+                    player.sendMessage(ChatColor.RED + "You do not have any homes set.");
                 }
             }
         }
@@ -60,11 +51,6 @@ public class CommandHome implements TabExecutor {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         Player player = (Player) sender;
-        try {
-            return HomeManagement.getPlayerHomes(player);
-        } catch (IOException | ParseException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return HomeManagement.getPlayerHomes(player);
     }
 }
