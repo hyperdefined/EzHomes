@@ -46,7 +46,7 @@
                                 </relocation>
                                 <relocation>
                                     <pattern>org.json.simple</pattern>
-                                    <shadedPattern>lol.hyper.ezhomes.json-simple</shadedPattern>
+                                    <shadedPattern>lol.hyper.ezhomes.jsonsimple</shadedPattern>
                                 </relocation>
                             </relocations>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
