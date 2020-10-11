@@ -2,7 +2,7 @@ name: EzHomes
 version: ${project.version}
 main: lol.hyper.ezhomes.EzHomes
 api-version: 1.16
-authors: [hyperdefined]
+author: hyperdefined
 description: A simple homes plugin.
 commands:
   sethome:
