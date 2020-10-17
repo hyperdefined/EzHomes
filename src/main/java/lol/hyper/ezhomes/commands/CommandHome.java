@@ -28,7 +28,7 @@ public class CommandHome implements TabExecutor {
             if (args.length == 1){
                 ArrayList<String> playerHomes = HomeManagement.getPlayerHomes(player);
                 if (playerHomes != null) {
-                    if (HomeManagement.canPlayerTeleport(player)) {
+                    if (HomeManagement.canPlayerTeleport(player) || player.hasPermission("ezhomes.bypasscooldown")) {
                         if (playerHomes.contains(args[0])) {
                             if (PaperLib.isPaper()) {
                                 PaperLib.teleportAsync(player, HomeManagement.getHomeLocation(player, args[0]));

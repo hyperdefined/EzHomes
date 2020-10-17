@@ -31,3 +31,5 @@ permission:
     default: op
   ezhomes.bypasslimit:
     default: op
+  ezhomes.bypasscooldown:
+    default: op
