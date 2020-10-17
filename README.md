@@ -32,3 +32,5 @@ total-homes: 5
     - Reload the config.
 - ezhomes.bypasslimit
     - Bypasses the config limit for homes.
+- ezhomes.bypasscooldown
+    - Bypass the teleport cooldown.
