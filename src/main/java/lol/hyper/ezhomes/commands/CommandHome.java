@@ -30,11 +30,7 @@ public class CommandHome implements TabExecutor {
                 if (playerHomes != null) {
                     if (HomeManagement.canPlayerTeleport(player) || player.hasPermission("ezhomes.bypasscooldown")) {
                         if (playerHomes.contains(args[0])) {
-                            if (PaperLib.isPaper()) {
-                                PaperLib.teleportAsync(player, HomeManagement.getHomeLocation(player, args[0]));
-                            } else {
-                                player.teleport(HomeManagement.getHomeLocation(player, args[0]));
-                            }
+                            PaperLib.teleportAsync(player, HomeManagement.getHomeLocation(player, args[0]));
                             player.sendMessage(ChatColor.GREEN + "Whoosh!");
                             EzHomes.getInstance().teleportCooldowns.put(player, System.nanoTime());
                         } else {
