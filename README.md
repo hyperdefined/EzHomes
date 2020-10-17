@@ -7,14 +7,14 @@ For Minecraft 1.16 and above.
 
 # Features
 - Works just like any homes plugin.
-- Use /home <name> to teleport to a home.
-- Use /homes to list your homes.
-- Use /sethome <name> to set a home.
-- Use /delhome <name> to delete a home.
-- Use /updatehome <name> to update a home's location.
-- Use /where <home> to see a home's location.
+- Use `/home <name>` to teleport to a home.
+- Use `/homes` to list your homes.
+- Use `/sethome <name>` to set a home.
+- Use `/delhome <name>` to delete a home.
+- Use `/updatehome <name>` to update a home's location.
+- Use `/where <home>` to see a home's location.
 - Set a cooldown between teleports.
-- Set a limit on total homes.
+- Set a limit on total homes. Use `ezhomes.bypasslimit` to bypass this limit.
 - Very lightweight, super easy to use.
 
 # Config
