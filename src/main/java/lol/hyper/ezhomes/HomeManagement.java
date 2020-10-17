@@ -57,7 +57,7 @@ public class HomeManagement {
             }
             writer.close();
         } catch (ParseException | IOException e) {
-            Bukkit.getLogger().severe("[EzHomes] There was an issue reading file " + homeFile + "!");
+            EzHomes.getInstance().logger.severe("There was an issue reading file " + homeFile + "!");
             e.printStackTrace();
         }
     }
@@ -83,7 +83,7 @@ public class HomeManagement {
                 return null;
             }
         } catch (ParseException | IOException e) {
-            Bukkit.getLogger().severe("[EzHomes] There was an issue reading file " + homeFile + "!");
+            EzHomes.getInstance().logger.severe("There was an issue reading file " + homeFile + "!");
             e.printStackTrace();
             return null;
         }
@@ -108,7 +108,7 @@ public class HomeManagement {
                 return null;
             }
         } catch (ParseException | IOException e) {
-            Bukkit.getLogger().severe("[EzHomes] There was an issue reading file " + homeFile + "!");
+            EzHomes.getInstance().logger.severe("There was an issue reading file " + homeFile + "!");
             e.printStackTrace();
             return null;
         }
@@ -145,7 +145,7 @@ public class HomeManagement {
             writer.write(homeFileJSON.toJSONString());
             writer.close();
         } catch (ParseException | IOException e) {
-            Bukkit.getLogger().severe("[EzHomes] There was an issue reading file " + homeFile + "!");
+            EzHomes.getInstance().logger.severe("There was an issue reading file " + homeFile + "!");
             e.printStackTrace();
         }
     }
@@ -162,7 +162,7 @@ public class HomeManagement {
             writer.write(homeFileJSON.toJSONString());
             writer.close();
         } catch (ParseException | IOException e) {
-            Bukkit.getLogger().severe("[EzHomes] There was an issue reading file " + homeFile + "!");
+            EzHomes.getInstance().logger.severe("There was an issue reading file " + homeFile + "!");
             e.printStackTrace();
         }
     }
