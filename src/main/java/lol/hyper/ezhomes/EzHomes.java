@@ -56,6 +56,14 @@ public final class EzHomes extends JavaPlugin {
         this.getCommand("delhome").setExecutor(new CommandDeleteHome());
         this.getCommand("homesreload").setExecutor(new CommandReload());
         this.getCommand("where").setExecutor(new CommandWhere());
+
+        new UpdateChecker(this, 82663).getVersion(version -> {
+            if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
+                logger.info("You are running the latest version.");
+            } else {
+                logger.info("There is a new version available! Please download at https://www.spigotmc.org/resources/ezhomes.82663/");
+            }
+        });
     }
 
     @Override
