@@ -10,6 +10,15 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 public class CommandSetHome implements CommandExecutor {
+
+    private final EzHomes ezHomes;
+    private final HomeManagement homeManagement;
+
+    public CommandSetHome(EzHomes ezHomes, HomeManagement homeManagement) {
+        this.ezHomes = ezHomes;
+        this.homeManagement = homeManagement;
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof ConsoleCommandSender) {
@@ -22,14 +31,14 @@ public class CommandSetHome implements CommandExecutor {
         } else {
             if (args.length == 1) {
                 if (HomeManagement.getPlayerHomes(player.getUniqueId()) != null) {
-                    if (HomeManagement.getPlayerHomes(player.getUniqueId()).size() != EzHomes.getInstance().config.getInt("total-homes") || player.hasPermission("ezhomes.bypasslimit")) {
-                        HomeManagement.createHome(player.getUniqueId(), args[0]);
+                    if (HomeManagement.getPlayerHomes(player.getUniqueId()).size() != ezHomes.config.getInt("total-homes") || player.hasPermission("ezhomes.bypasslimit")) {
+                        homeManagement.createHome(player.getUniqueId(), args[0]);
                         sender.sendMessage(ChatColor.GREEN + "Home set.");
                     } else {
-                        player.sendMessage(ChatColor.RED + "You can only have a maximum of " + EzHomes.getInstance().config.getInt("total-homes") + " homes.");
+                        player.sendMessage(ChatColor.RED + "You can only have a maximum of " + ezHomes.config.getInt("total-homes") + " homes.");
                     }
                 } else {
-                    HomeManagement.createHome(player.getUniqueId(), args[0]);
+                    homeManagement.createHome(player.getUniqueId(), args[0]);
                     sender.sendMessage(ChatColor.GREEN + "Home set.");
                 }
             } else {

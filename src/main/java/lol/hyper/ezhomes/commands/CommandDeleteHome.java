@@ -9,6 +9,13 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 public class CommandDeleteHome implements CommandExecutor {
+
+    private final HomeManagement homeManagement;
+
+    public CommandDeleteHome(HomeManagement homeManagement) {
+        this.homeManagement = homeManagement;
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof ConsoleCommandSender) {
@@ -20,9 +27,9 @@ public class CommandDeleteHome implements CommandExecutor {
             sender.sendMessage(ChatColor.RED + "You must specify a home name!");
         } else {
             if (args.length == 1) {
-                if (HomeManagement.getPlayerHomes(player.getUniqueId()) != null) {
-                    if (HomeManagement.getPlayerHomes(player.getUniqueId()).contains(args[0])) {
-                        HomeManagement.deleteHome(player.getUniqueId(), args[0]);
+                if (homeManagement.getPlayerHomes(player.getUniqueId()) != null) {
+                    if (homeManagement.getPlayerHomes(player.getUniqueId()).contains(args[0])) {
+                        homeManagement.deleteHome(player.getUniqueId(), args[0]);
                         player.sendMessage(ChatColor.GREEN + "Home was deleted.");
                     } else {
                         player.sendMessage(ChatColor.RED + "That home does not exist.");

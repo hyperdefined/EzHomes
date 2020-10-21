@@ -18,14 +18,20 @@ public class HomeManagement {
     private static FileWriter writer;
     private static FileReader reader;
 
+    private final EzHomes ezHomes;
+
+    public HomeManagement(EzHomes ezHomes) {
+        this.ezHomes = ezHomes;
+    }
+
     /**
      * Create a new home for a player.
      *
      * @param player Player that is creating a new home.
      * @param homeName Name of the home to create.
      */
-    public static void createHome(UUID player, String homeName) {
-        File homeFile = new File(EzHomes.getInstance().homesPath.toFile(), player + ".json");
+    public void createHome(UUID player, String homeName) {
+        File homeFile = new File(ezHomes.homesPath.toFile(), player + ".json");
         // Checks if the player has a home file already.
         // If they do, then read current file then add new JSONObject to it.
         // If they don't, then just put a new JSONObject there.
@@ -63,7 +69,7 @@ public class HomeManagement {
             }
             writer.close();
         } catch (ParseException | IOException e) {
-            EzHomes.getInstance().logger.severe("There was an issue reading file " + homeFile + "!");
+            ezHomes.logger.severe("There was an issue reading file " + homeFile + "!");
             e.printStackTrace();
         }
     }
@@ -75,8 +81,8 @@ public class HomeManagement {
      * @param homeName Home name to get location.
      * @return Location of the home.
      */
-    public static Location getHomeLocation(UUID player, String homeName) {
-        File homeFile = new File(EzHomes.getInstance().homesPath.toFile(), player + ".json");
+    public Location getHomeLocation(UUID player, String homeName) {
+        File homeFile = new File(ezHomes.homesPath.toFile(), player + ".json");
         try {
             if (homeFile.exists()) {
                 JSONParser parser = new JSONParser();
@@ -96,7 +102,7 @@ public class HomeManagement {
                 return null;
             }
         } catch (ParseException | IOException e) {
-            EzHomes.getInstance().logger.severe("There was an issue reading file " + homeFile + "!");
+            ezHomes.logger.severe("There was an issue reading file " + homeFile + "!");
             e.printStackTrace();
             return null;
         }
@@ -108,8 +114,8 @@ public class HomeManagement {
      * @param player Player to lookup homes for.
      * @return Returns null if the file doesn't exist. Returns 0 if there are no locations. Returns the number of locations if there are any.
      */
-    public static ArrayList<String> getPlayerHomes(UUID player) {
-        File homeFile = new File(EzHomes.getInstance().homesPath.toFile(), player + ".json");
+    public ArrayList<String> getPlayerHomes(UUID player) {
+        File homeFile = new File(ezHomes.homesPath.toFile(), player + ".json");
         try {
             if (homeFile.exists()) {
                 ArrayList<String> playerHomes = new ArrayList<>();
@@ -127,7 +133,7 @@ public class HomeManagement {
                 return null;
             }
         } catch (ParseException | IOException e) {
-            EzHomes.getInstance().logger.severe("There was an issue reading file " + homeFile + "!");
+            ezHomes.logger.severe("There was an issue reading file " + homeFile + "!");
             e.printStackTrace();
             return null;
         }
@@ -139,10 +145,10 @@ public class HomeManagement {
      * @param player Player to check cooldown for.
      * @return Returns true if the player can teleport, false if they cannot.
      */
-    public static boolean canPlayerTeleport(UUID player) {
-        if (EzHomes.getInstance().teleportCooldowns.containsKey(player)) {
-            long timeLeft = TimeUnit.NANOSECONDS.toSeconds((System.nanoTime() - EzHomes.getInstance().teleportCooldowns.get(player)) - (long) EzHomes.getInstance().config.getInt("teleport-cooldown"));
-            return timeLeft >= (long) EzHomes.getInstance().config.getInt("teleport-cooldown");
+    public boolean canPlayerTeleport(UUID player) {
+        if (ezHomes.teleportCooldowns.containsKey(player)) {
+            long timeLeft = TimeUnit.NANOSECONDS.toSeconds((System.nanoTime() - ezHomes.teleportCooldowns.get(player)) - (long) ezHomes.config.getInt("teleport-cooldown"));
+            return timeLeft >= (long) ezHomes.config.getInt("teleport-cooldown");
         } else {
             return true;
         }
@@ -154,8 +160,8 @@ public class HomeManagement {
      * @param player Player to update home.
      * @param homeName Home to update location for.
      */
-    public static void updateHome(UUID player, String homeName) {
-        File homeFile = new File(EzHomes.getInstance().homesPath.toFile(), player + ".json");
+    public void updateHome(UUID player, String homeName) {
+        File homeFile = new File(ezHomes.homesPath.toFile(), player + ".json");
         try {
             Location newLocation = Bukkit.getPlayer(player).getLocation();
             JSONParser parser = new JSONParser();
@@ -176,7 +182,7 @@ public class HomeManagement {
             writer.write(homeFileJSON.toJSONString());
             writer.close();
         } catch (ParseException | IOException e) {
-            EzHomes.getInstance().logger.severe("There was an issue reading file " + homeFile + "!");
+            ezHomes.logger.severe("There was an issue reading file " + homeFile + "!");
             e.printStackTrace();
         }
     }
@@ -187,8 +193,8 @@ public class HomeManagement {
      * @param player Player to delete home from.
      * @param homeName Home to delete.
      */
-    public static void deleteHome(UUID player, String homeName) {
-        File homeFile = new File(EzHomes.getInstance().homesPath.toFile(), player + ".json");
+    public void deleteHome(UUID player, String homeName) {
+        File homeFile = new File(ezHomes.homesPath.toFile(), player + ".json");
         try {
             JSONParser parser = new JSONParser();
             reader = new FileReader(homeFile);
@@ -200,7 +206,7 @@ public class HomeManagement {
             writer.write(homeFileJSON.toJSONString());
             writer.close();
         } catch (ParseException | IOException e) {
-            EzHomes.getInstance().logger.severe("There was an issue reading file " + homeFile + "!");
+            ezHomes.logger.severe("There was an issue reading file " + homeFile + "!");
             e.printStackTrace();
         }
     }

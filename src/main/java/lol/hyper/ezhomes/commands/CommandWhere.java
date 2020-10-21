@@ -10,6 +10,13 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 public class CommandWhere implements CommandExecutor {
+
+    private final HomeManagement homeManagement;
+
+    public CommandWhere(HomeManagement homeManagement) {
+        this.homeManagement = homeManagement;
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof ConsoleCommandSender) {
@@ -21,9 +28,9 @@ public class CommandWhere implements CommandExecutor {
             sender.sendMessage(ChatColor.RED + "You must specify a home name!");
         } else {
             if (args.length == 1) {
-                if (HomeManagement.getPlayerHomes(player.getUniqueId()) != null) {
-                    if (HomeManagement.getPlayerHomes(player.getUniqueId()).contains(args[0])) {
-                        Location home = HomeManagement.getHomeLocation(player.getUniqueId(), args[0]);
+                if (homeManagement.getPlayerHomes(player.getUniqueId()) != null) {
+                    if (homeManagement.getPlayerHomes(player.getUniqueId()).contains(args[0])) {
+                        Location home = homeManagement.getHomeLocation(player.getUniqueId(), args[0]);
                         sender.sendMessage(ChatColor.GOLD + "--------------------------------------------");
                         sender.sendMessage(ChatColor.GOLD + args[0] + "'s location:");
                         sender.sendMessage(ChatColor.YELLOW + "World: " + ChatColor.GOLD + home.getWorld().getName());
