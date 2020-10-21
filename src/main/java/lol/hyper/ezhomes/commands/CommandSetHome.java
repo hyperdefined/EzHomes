@@ -30,8 +30,8 @@ public class CommandSetHome implements CommandExecutor {
             sender.sendMessage(ChatColor.RED + "You must specify a home name!");
         } else {
             if (args.length == 1) {
-                if (HomeManagement.getPlayerHomes(player.getUniqueId()) != null) {
-                    if (HomeManagement.getPlayerHomes(player.getUniqueId()).size() != ezHomes.config.getInt("total-homes") || player.hasPermission("ezhomes.bypasslimit")) {
+                if (homeManagement.getPlayerHomes(player.getUniqueId()) != null) {
+                    if (homeManagement.getPlayerHomes(player.getUniqueId()).size() != ezHomes.config.getInt("total-homes") || player.hasPermission("ezhomes.bypasslimit")) {
                         homeManagement.createHome(player.getUniqueId(), args[0]);
                         sender.sendMessage(ChatColor.GREEN + "Home set.");
                     } else {
