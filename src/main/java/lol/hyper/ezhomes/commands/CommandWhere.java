@@ -21,9 +21,9 @@ public class CommandWhere implements CommandExecutor {
             sender.sendMessage(ChatColor.RED + "You must specify a home name!");
         } else {
             if (args.length == 1) {
-                if (HomeManagement.getPlayerHomes(player) != null) {
-                    if (HomeManagement.getPlayerHomes(player).contains(args[0])) {
-                        Location home = HomeManagement.getHomeLocation(player, args[0]);
+                if (HomeManagement.getPlayerHomes(player.getUniqueId()) != null) {
+                    if (HomeManagement.getPlayerHomes(player.getUniqueId()).contains(args[0])) {
+                        Location home = HomeManagement.getHomeLocation(player.getUniqueId(), args[0]);
                         sender.sendMessage(ChatColor.GOLD + "--------------------------------------------");
                         sender.sendMessage(ChatColor.GOLD + args[0] + "'s location:");
                         sender.sendMessage(ChatColor.YELLOW + "World: " + ChatColor.GOLD + home.getWorld().getName());

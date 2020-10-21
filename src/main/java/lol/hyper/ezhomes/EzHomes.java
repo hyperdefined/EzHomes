@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 public final class EzHomes extends JavaPlugin {
@@ -20,7 +21,7 @@ public final class EzHomes extends JavaPlugin {
     public final File configFile = new File(this.getDataFolder(), "config.yml");
     public final Path homesPath = Paths.get(this.getDataFolder() + File.separator + "data");
     public FileConfiguration config = this.getConfig();
-    public final HashMap<Player, Long> teleportCooldowns = new HashMap<>();
+    public final HashMap<UUID, Long> teleportCooldowns = new HashMap<>();
     public Logger logger = this.getLogger();
 
     public static EzHomes getInstance() {

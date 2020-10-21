@@ -21,15 +21,15 @@ public class CommandSetHome implements CommandExecutor {
             sender.sendMessage(ChatColor.RED + "You must specify a home name!");
         } else {
             if (args.length == 1) {
-                if (HomeManagement.getPlayerHomes(player) != null) {
-                    if (HomeManagement.getPlayerHomes(player).size() != EzHomes.getInstance().config.getInt("total-homes") || player.hasPermission("ezhomes.bypasslimit")) {
-                        HomeManagement.createHome(player, args[0]);
+                if (HomeManagement.getPlayerHomes(player.getUniqueId()) != null) {
+                    if (HomeManagement.getPlayerHomes(player.getUniqueId()).size() != EzHomes.getInstance().config.getInt("total-homes") || player.hasPermission("ezhomes.bypasslimit")) {
+                        HomeManagement.createHome(player.getUniqueId(), args[0]);
                         sender.sendMessage(ChatColor.GREEN + "Home set.");
                     } else {
                         player.sendMessage(ChatColor.RED + "You can only have a maximum of " + EzHomes.getInstance().config.getInt("total-homes") + " homes.");
                     }
                 } else {
-                    HomeManagement.createHome(player, args[0]);
+                    HomeManagement.createHome(player.getUniqueId(), args[0]);
                     sender.sendMessage(ChatColor.GREEN + "Home set.");
                 }
             } else {

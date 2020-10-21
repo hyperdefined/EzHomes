@@ -3,7 +3,6 @@ package lol.hyper.ezhomes;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -12,20 +11,27 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class HomeManagement {
     private static FileWriter writer;
     private static FileReader reader;
 
-    public static void createHome(Player player, String homeName) {
-        File homeFile = new File(EzHomes.getInstance().homesPath.toFile(), player.getUniqueId() + ".json");
+    /**
+     * Create a new home for a player.
+     *
+     * @param player Player that is creating a new home.
+     * @param homeName Name of the home to create.
+     */
+    public static void createHome(UUID player, String homeName) {
+        File homeFile = new File(EzHomes.getInstance().homesPath.toFile(), player + ".json");
         // Checks if the player has a home file already.
         // If they do, then read current file then add new JSONObject to it.
         // If they don't, then just put a new JSONObject there.
         // There is probably a better way of doing this, but I have done this method in the past.
         try {
-            Location homeLocation = player.getLocation();
+            Location homeLocation = Bukkit.getPlayer(player).getLocation();
             if (homeFile.exists()) {
                 JSONParser parser = new JSONParser();
                 reader = new FileReader(homeFile);
@@ -62,8 +68,15 @@ public class HomeManagement {
         }
     }
 
-    public static Location getHomeLocation(Player player, String homeName) {
-        File homeFile = new File(EzHomes.getInstance().homesPath.toFile(), player.getUniqueId() + ".json");
+    /**
+     * Get the location of a home.
+     *
+     * @param player Player to see home location.
+     * @param homeName Home name to get location.
+     * @return Location of the home.
+     */
+    public static Location getHomeLocation(UUID player, String homeName) {
+        File homeFile = new File(EzHomes.getInstance().homesPath.toFile(), player + ".json");
         try {
             if (homeFile.exists()) {
                 JSONParser parser = new JSONParser();
@@ -89,8 +102,14 @@ public class HomeManagement {
         }
     }
 
-    public static ArrayList<String> getPlayerHomes(Player player) {
-        File homeFile = new File(EzHomes.getInstance().homesPath.toFile(), player.getUniqueId() + ".json");
+    /**
+     * Returns a list of player homes.
+     *
+     * @param player Player to lookup homes for.
+     * @return Returns null if the file doesn't exist. Returns 0 if there are no locations. Returns the number of locations if there are any.
+     */
+    public static ArrayList<String> getPlayerHomes(UUID player) {
+        File homeFile = new File(EzHomes.getInstance().homesPath.toFile(), player + ".json");
         try {
             if (homeFile.exists()) {
                 ArrayList<String> playerHomes = new ArrayList<>();
@@ -114,7 +133,13 @@ public class HomeManagement {
         }
     }
 
-    public static boolean canPlayerTeleport(Player player) {
+    /**
+     * Checks the cooldown between teleports.
+     *
+     * @param player Player to check cooldown for.
+     * @return Returns true if the player can teleport, false if they cannot.
+     */
+    public static boolean canPlayerTeleport(UUID player) {
         if (EzHomes.getInstance().teleportCooldowns.containsKey(player)) {
             long timeLeft = TimeUnit.NANOSECONDS.toSeconds((System.nanoTime() - EzHomes.getInstance().teleportCooldowns.get(player)) - (long) EzHomes.getInstance().config.getInt("teleport-cooldown"));
             return timeLeft >= (long) EzHomes.getInstance().config.getInt("teleport-cooldown");
@@ -123,10 +148,16 @@ public class HomeManagement {
         }
     }
 
-    public static void updateHome(Player player, String homeName) {
-        File homeFile = new File(EzHomes.getInstance().homesPath.toFile(), player.getUniqueId() + ".json");
+    /**
+     * Update a home's location.
+     *
+     * @param player Player to update home.
+     * @param homeName Home to update location for.
+     */
+    public static void updateHome(UUID player, String homeName) {
+        File homeFile = new File(EzHomes.getInstance().homesPath.toFile(), player + ".json");
         try {
-            Location newLocation = player.getLocation();
+            Location newLocation = Bukkit.getPlayer(player).getLocation();
             JSONParser parser = new JSONParser();
             reader = new FileReader(homeFile);
             Object obj = parser.parse(reader);
@@ -149,8 +180,15 @@ public class HomeManagement {
             e.printStackTrace();
         }
     }
-    public static void deleteHome(Player player, String homeName) {
-        File homeFile = new File(EzHomes.getInstance().homesPath.toFile(), player.getUniqueId() + ".json");
+
+    /**
+     * Delete a player's home.
+     *
+     * @param player Player to delete home from.
+     * @param homeName Home to delete.
+     */
+    public static void deleteHome(UUID player, String homeName) {
+        File homeFile = new File(EzHomes.getInstance().homesPath.toFile(), player + ".json");
         try {
             JSONParser parser = new JSONParser();
             reader = new FileReader(homeFile);
