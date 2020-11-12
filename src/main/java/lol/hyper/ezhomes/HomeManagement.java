@@ -17,6 +17,11 @@
 
 package lol.hyper.ezhomes;
 
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -225,6 +230,34 @@ public class HomeManagement {
         } catch (ParseException | IOException e) {
             ezHomes.logger.severe("There was an issue reading file " + homeFile + "!");
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * Returns a nice and clickable list of player homes.
+     *
+     * @param player Player to get the homes of.
+     * @return Returns TextComponent of homes that can be clicked.
+     */
+    public TextComponent getHomesClickable(UUID player) {
+        if (getPlayerHomes(player) == null) {
+            return null;
+        } else {
+            TextComponent homesList = new TextComponent("");
+            for (String home : getPlayerHomes(player)) {
+                int index = getPlayerHomes(player).indexOf(home);
+                TextComponent singleHome;
+                if (index != getPlayerHomes(player).size() - 1) {
+                    singleHome = new TextComponent(home + ", ");
+                } else {
+                    singleHome = new TextComponent(home);
+                }
+                singleHome.setColor(ChatColor.YELLOW);
+                singleHome.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/home " + home));
+                singleHome.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(ChatColor.GREEN + "Click to teleport to " + home + "!")));
+                homesList.addExtra(singleHome);
+            }
+            return homesList;
         }
     }
 }
