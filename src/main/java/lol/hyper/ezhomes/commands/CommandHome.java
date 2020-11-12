@@ -51,7 +51,7 @@ public class CommandHome implements TabExecutor {
         if (args.length == 0) {
             player.sendMessage(ChatColor.RED + "You must specify a home!");
         } else {
-            if (args.length == 1){
+            if (args.length == 1) {
                 ArrayList<String> playerHomes = homeManagement.getPlayerHomes(player.getUniqueId());
                 if (playerHomes != null) {
                     if (homeManagement.canPlayerTeleport(player.getUniqueId()) || player.hasPermission("ezhomes.bypasscooldown")) {

@@ -18,7 +18,6 @@
 package lol.hyper.ezhomes.commands;
 
 import lol.hyper.ezhomes.HomeManagement;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -41,15 +40,14 @@ public class CommandHomes implements CommandExecutor {
             return true;
         }
         Player player = (Player) sender;
-        int homeSize = homeManagement.getPlayerHomes(player.getUniqueId()).size();
-        if (homeSize == 0) {
+        if (homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
             player.sendMessage(ChatColor.RED + "You don't have any homes set! Do /sethome <name> to set a home!");
-        } else {
-            sender.sendMessage(ChatColor.GOLD + "--------------------------------------------");
-            player.sendMessage(ChatColor.GOLD + "You currently have these homes:");
-            player.spigot().sendMessage(homeManagement.getHomesClickable(player.getUniqueId()));
-            sender.sendMessage(ChatColor.GOLD + "--------------------------------------------");
+            return true;
         }
+        sender.sendMessage(ChatColor.GOLD + "--------------------------------------------");
+        player.sendMessage(ChatColor.GOLD + "You currently have these homes:");
+        player.spigot().sendMessage(homeManagement.getHomesClickable(player.getUniqueId()));
+        sender.sendMessage(ChatColor.GOLD + "--------------------------------------------");
         return true;
     }
 }
