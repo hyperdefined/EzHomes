@@ -270,11 +270,13 @@ public class HomeManagement {
      * This is just for cleanup.
      */
     public void cleanEmptyHomeFiles() {
+        ezHomes.logger.info("Looking for any empty homes files to clean up...");
         File homesFolder = ezHomes.homesPath.toFile();
         File[] homeFiles = homesFolder.listFiles();
         if (homeFiles == null) {
             return;
         }
+        int fileCount = 0;
         for (File f : homeFiles) {
             JSONParser parser = new JSONParser();
             try {
@@ -284,10 +286,13 @@ public class HomeManagement {
                 JSONObject homeFileJSON = (JSONObject) obj;
                 if (homeFileJSON.size() == 0) {
                     Files.delete(f.toPath());
+                    ezHomes.logger.info("Deleting empty home file " + f);
+                    fileCount++;
                 }
             } catch (ParseException | IOException e) {
                 e.printStackTrace();
             }
         }
+        ezHomes.logger.info(fileCount + " file(s) were cleaned.");
     }
 }
