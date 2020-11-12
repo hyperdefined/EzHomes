@@ -19,6 +19,7 @@ package lol.hyper.ezhomes;
 
 import io.papermc.lib.PaperLib;
 import lol.hyper.ezhomes.commands.*;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -95,6 +96,8 @@ public final class EzHomes extends JavaPlugin {
         });
 
         Bukkit.getScheduler().runTaskLaterAsynchronously(this, () -> homeManagement.cleanEmptyHomeFiles(), 100);
+
+        Metrics metrics = new Metrics(this, 9390);
     }
 
     @Override
