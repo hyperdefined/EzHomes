@@ -19,6 +19,7 @@ package lol.hyper.ezhomes;
 
 import io.papermc.lib.PaperLib;
 import lol.hyper.ezhomes.commands.*;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -92,6 +93,8 @@ public final class EzHomes extends JavaPlugin {
                 logger.info("There is a new version available! Please download at https://www.spigotmc.org/resources/ezhomes.82663/");
             }
         });
+
+        Bukkit.getScheduler().runTaskLaterAsynchronously(this, () -> homeManagement.cleanEmptyHomeFiles(), 100);
     }
 
     @Override

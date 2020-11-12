@@ -30,6 +30,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -227,6 +228,9 @@ public class HomeManagement {
             writer = new FileWriter(homeFile);
             writer.write(homeFileJSON.toJSONString());
             writer.close();
+            if (homeFileJSON.size() == 0) {
+                Files.delete(homeFile.toPath());
+            }
         } catch (ParseException | IOException e) {
             ezHomes.logger.severe("There was an issue reading file " + homeFile + "!");
             e.printStackTrace();
@@ -258,6 +262,32 @@ public class HomeManagement {
                 homesList.addExtra(singleHome);
             }
             return homesList;
+        }
+    }
+
+    /**
+     * This will delete any homes files that do not have homes in them.
+     * This is just for cleanup.
+     */
+    public void cleanEmptyHomeFiles() {
+        File homesFolder = ezHomes.homesPath.toFile();
+        File[] homeFiles = homesFolder.listFiles();
+        if (homeFiles == null) {
+            return;
+        }
+        for (File f : homeFiles) {
+            JSONParser parser = new JSONParser();
+            try {
+                reader = new FileReader(f);
+                Object obj = parser.parse(reader);
+                reader.close();
+                JSONObject homeFileJSON = (JSONObject) obj;
+                if (homeFileJSON.size() == 0) {
+                    Files.delete(f.toPath());
+                }
+            } catch (ParseException | IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
