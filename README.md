@@ -3,4 +3,5 @@
 
 EzHomes is a super simple homes plugin for Spigot/Paper. It works on versions 1.16 and above.
 
-[Documentation and more info](https://hyper.lol/minecraft-plugins/ezhomes/).
+- [Documentation and more info](https://hyper.lol/minecraft-plugins/ezhomes/).
+- [SpigotMC Page](https://www.spigotmc.org/resources/ezhomes.82663/).
