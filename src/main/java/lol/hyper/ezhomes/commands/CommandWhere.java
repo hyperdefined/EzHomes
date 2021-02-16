@@ -53,7 +53,7 @@ public class CommandWhere implements CommandExecutor {
                         sender.sendMessage(ChatColor.YELLOW + "World: " + ChatColor.GOLD + home.getWorld().getName());
                         sender.sendMessage(ChatColor.YELLOW + "X: " + ChatColor.GOLD + (int) home.getX());
                         sender.sendMessage(ChatColor.YELLOW + "Y: " + ChatColor.GOLD + (int) home.getY());
-                        sender.sendMessage(ChatColor.YELLOW + "Y: " + ChatColor.GOLD + (int) home.getZ());
+                        sender.sendMessage(ChatColor.YELLOW + "Z: " + ChatColor.GOLD + (int) home.getZ());
                         sender.sendMessage(ChatColor.GOLD + "--------------------------------------------");
                     } else {
                         sender.sendMessage(ChatColor.RED + "That home does not exist.");
