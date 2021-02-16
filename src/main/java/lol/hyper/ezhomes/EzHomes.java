@@ -22,6 +22,7 @@ import lol.hyper.ezhomes.commands.*;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -29,8 +30,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.UUID;
 import java.util.logging.Logger;
 
 public final class EzHomes extends JavaPlugin {
@@ -38,8 +37,8 @@ public final class EzHomes extends JavaPlugin {
     public final File configFile = new File(this.getDataFolder(), "config.yml");
     public final Path homesPath = Paths.get(this.getDataFolder() + File.separator + "data");
     public FileConfiguration config = this.getConfig();
-    public final HashMap<UUID, Long> teleportCooldowns = new HashMap<>();
-    public Logger logger = this.getLogger();
+    public final Logger logger = this.getLogger();
+    public final int CONFIG_VERSION = 1;
 
     public CommandReload commandReload;
     public CommandHome commandHome;
@@ -49,21 +48,24 @@ public final class EzHomes extends JavaPlugin {
     public CommandWhere commandWhere;
     public CommandUpdateHome commandUpdateHome;
     public HomeManagement homeManagement;
+    public Events events;
 
     @Override
     public void onEnable() {
         homeManagement = new HomeManagement(this);
         commandReload = new CommandReload(this);
-        commandHome = new CommandHome(this, homeManagement);
-        commandSetHome = new CommandSetHome(this, homeManagement);
-        commandDeleteHome = new CommandDeleteHome(homeManagement);
-        commandHomes = new CommandHomes(homeManagement);
-        commandWhere = new CommandWhere(homeManagement);
-        commandUpdateHome = new CommandUpdateHome(homeManagement);
+        commandHome = new CommandHome(this);
+        commandSetHome = new CommandSetHome(this);
+        commandDeleteHome = new CommandDeleteHome(this);
+        commandHomes = new CommandHomes(this);
+        commandWhere = new CommandWhere(this);
+        commandUpdateHome = new CommandUpdateHome(this);
+        events = new Events(this);
         if (!configFile.exists()) {
             this.saveResource("config.yml", true);
             logger.info("Copying default config!");
         }
+        loadConfig();
         if (!Files.exists(homesPath)) {
             try {
                 Files.createDirectory(homesPath);
@@ -79,13 +81,15 @@ public final class EzHomes extends JavaPlugin {
             logger.info("Yay! You are using Paper! We will make teleports async!");
         }
 
-        this.getCommand("sethome").setExecutor(new CommandSetHome(this, homeManagement));
-        this.getCommand("home").setExecutor(new CommandHome(this, homeManagement));
-        this.getCommand("homes").setExecutor(new CommandHomes(homeManagement));
-        this.getCommand("updatehome").setExecutor(new CommandUpdateHome(homeManagement));
-        this.getCommand("delhome").setExecutor(new CommandDeleteHome(homeManagement));
-        this.getCommand("homesreload").setExecutor(new CommandReload(this));
-        this.getCommand("where").setExecutor(new CommandWhere(homeManagement));
+        this.getCommand("sethome").setExecutor(commandSetHome);
+        this.getCommand("home").setExecutor(commandHome);
+        this.getCommand("homes").setExecutor(commandHomes);
+        this.getCommand("updatehome").setExecutor(commandUpdateHome);
+        this.getCommand("delhome").setExecutor(commandDeleteHome);
+        this.getCommand("homesreload").setExecutor(commandReload);
+        this.getCommand("where").setExecutor(commandWhere);
+
+        Bukkit.getPluginManager().registerEvents(events, this);
 
         new UpdateChecker(this, 82663).getVersion(version -> {
             if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
@@ -100,8 +104,10 @@ public final class EzHomes extends JavaPlugin {
         Metrics metrics = new Metrics(this, 9390);
     }
 
-    @Override
-    public void onDisable() {
-        // Plugin shutdown logic
+    public void loadConfig() {
+        config = YamlConfiguration.loadConfiguration(configFile);
+        if (config.getInt("config-version") != CONFIG_VERSION) {
+            logger.warning("Your config file is outdated! Please regenerate the config.");
+        }
     }
 }

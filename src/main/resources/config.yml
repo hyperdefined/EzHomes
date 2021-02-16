@@ -3,3 +3,10 @@ teleport-cooldown: 100
 
 # How many homes a player can have.
 total-homes: 5
+
+# Use a GUI for /homes.
+# Players can click on the homes to teleport, rather than type /home <home>.
+use-homes-gui: true
+
+# No touch please :)
+config-version: 1

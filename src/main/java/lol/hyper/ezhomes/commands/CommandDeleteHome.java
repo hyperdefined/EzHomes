@@ -17,7 +17,7 @@
 
 package lol.hyper.ezhomes.commands;
 
-import lol.hyper.ezhomes.HomeManagement;
+import lol.hyper.ezhomes.EzHomes;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -27,10 +27,10 @@ import org.bukkit.entity.Player;
 
 public class CommandDeleteHome implements CommandExecutor {
 
-    private final HomeManagement homeManagement;
+    private final EzHomes ezHomes;
 
-    public CommandDeleteHome(HomeManagement homeManagement) {
-        this.homeManagement = homeManagement;
+    public CommandDeleteHome(EzHomes ezHomes) {
+        this.ezHomes = ezHomes;
     }
 
     @Override
@@ -44,9 +44,9 @@ public class CommandDeleteHome implements CommandExecutor {
             sender.sendMessage(ChatColor.RED + "You must specify a home name!");
         } else {
             if (args.length == 1) {
-                if (homeManagement.getPlayerHomes(player.getUniqueId()) != null) {
-                    if (homeManagement.getPlayerHomes(player.getUniqueId()).contains(args[0])) {
-                        homeManagement.deleteHome(player.getUniqueId(), args[0]);
+                if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) != null) {
+                    if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()).contains(args[0])) {
+                        ezHomes.homeManagement.deleteHome(player.getUniqueId(), args[0]);
                         player.sendMessage(ChatColor.GREEN + "Home was deleted.");
                     } else {
                         player.sendMessage(ChatColor.RED + "That home does not exist.");

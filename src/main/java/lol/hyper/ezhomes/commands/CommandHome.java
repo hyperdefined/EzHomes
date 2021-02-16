@@ -19,7 +19,6 @@ package lol.hyper.ezhomes.commands;
 
 import io.papermc.lib.PaperLib;
 import lol.hyper.ezhomes.EzHomes;
-import lol.hyper.ezhomes.HomeManagement;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -34,11 +33,9 @@ import java.util.concurrent.TimeUnit;
 public class CommandHome implements TabExecutor {
 
     private final EzHomes ezHomes;
-    private final HomeManagement homeManagement;
 
-    public CommandHome(EzHomes ezHomes, HomeManagement homeManagement) {
+    public CommandHome(EzHomes ezHomes) {
         this.ezHomes = ezHomes;
-        this.homeManagement = homeManagement;
     }
 
     @Override
@@ -52,18 +49,18 @@ public class CommandHome implements TabExecutor {
             player.sendMessage(ChatColor.RED + "You must specify a home!");
         } else {
             if (args.length == 1) {
-                ArrayList<String> playerHomes = homeManagement.getPlayerHomes(player.getUniqueId());
+                ArrayList<String> playerHomes = ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
                 if (playerHomes != null) {
-                    if (homeManagement.canPlayerTeleport(player.getUniqueId()) || player.hasPermission("ezhomes.bypasscooldown")) {
+                    if (ezHomes.homeManagement.canPlayerTeleport(player.getUniqueId()) || player.hasPermission("ezhomes.bypasscooldown")) {
                         if (playerHomes.contains(args[0])) {
-                            PaperLib.teleportAsync(player, homeManagement.getHomeLocation(player.getUniqueId(), args[0]));
+                            PaperLib.teleportAsync(player, ezHomes.homeManagement.getHomeLocation(player.getUniqueId(), args[0]));
                             player.sendMessage(ChatColor.GREEN + "Whoosh!");
-                            ezHomes.teleportCooldowns.put(player.getUniqueId(), System.nanoTime());
+                            ezHomes.homeManagement.teleportCooldowns.put(player.getUniqueId(), System.nanoTime());
                         } else {
                             player.sendMessage(ChatColor.RED + "That home does not exist.");
                         }
                     } else {
-                        long timeLeft = TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - ezHomes.teleportCooldowns.get(player.getUniqueId()));
+                        long timeLeft = TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - ezHomes.homeManagement.teleportCooldowns.get(player.getUniqueId()));
                         long configTime = ezHomes.config.getInt("teleport-cooldown");
                         player.sendMessage(ChatColor.RED + "You must wait " + (configTime - timeLeft) + " seconds to teleport.");
                     }
@@ -78,6 +75,6 @@ public class CommandHome implements TabExecutor {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         Player player = (Player) sender;
-        return homeManagement.getPlayerHomes(player.getUniqueId());
+        return ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
     }
 }

@@ -17,6 +17,7 @@
 
 package lol.hyper.ezhomes;
 
+import lol.hyper.ezhomes.gui.GUIManager;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -25,21 +26,22 @@ import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class HomeManagement {
     private static FileWriter writer;
     private static FileReader reader;
+
+    public final HashMap<UUID, Long> teleportCooldowns = new HashMap<>();
+    public final HashMap<Player, GUIManager> guiManagers = new HashMap<>();
 
     private final EzHomes ezHomes;
 
@@ -120,7 +122,7 @@ public class HomeManagement {
                 float pitch = Float.parseFloat(home.get("pitch").toString());
                 float yaw = Float.parseFloat(home.get("yaw").toString());
                 World w = Bukkit.getWorld(home.get("world").toString());
-                return new Location(w, x, y, z, pitch, yaw);
+                return new Location(w, x, y, z, yaw, pitch);
             } else {
                 return null;
             }
@@ -150,7 +152,7 @@ public class HomeManagement {
                 for (Object o : currentHomeFileJSON.keySet()) {
                     playerHomes.add((String) o);
                 }
-                playerHomes.sort(String.CASE_INSENSITIVE_ORDER);
+                Collections.sort(playerHomes);
                 return playerHomes;
             } else {
                 return null;
@@ -169,8 +171,8 @@ public class HomeManagement {
      * @return Returns true if the player can teleport, false if they cannot.
      */
     public boolean canPlayerTeleport(UUID player) {
-        if (ezHomes.teleportCooldowns.containsKey(player)) {
-            long timeLeft = TimeUnit.NANOSECONDS.toSeconds((System.nanoTime() - ezHomes.teleportCooldowns.get(player)) - (long) ezHomes.config.getInt("teleport-cooldown"));
+        if (teleportCooldowns.containsKey(player)) {
+            long timeLeft = TimeUnit.NANOSECONDS.toSeconds((System.nanoTime() - teleportCooldowns.get(player)) - (long) ezHomes.config.getInt("teleport-cooldown"));
             return timeLeft >= (long) ezHomes.config.getInt("teleport-cooldown");
         } else {
             return true;

@@ -18,7 +18,6 @@
 package lol.hyper.ezhomes.commands;
 
 import lol.hyper.ezhomes.EzHomes;
-import lol.hyper.ezhomes.HomeManagement;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -29,11 +28,8 @@ import org.bukkit.entity.Player;
 public class CommandSetHome implements CommandExecutor {
 
     private final EzHomes ezHomes;
-    private final HomeManagement homeManagement;
-
-    public CommandSetHome(EzHomes ezHomes, HomeManagement homeManagement) {
+    public CommandSetHome(EzHomes ezHomes) {
         this.ezHomes = ezHomes;
-        this.homeManagement = homeManagement;
     }
 
     @Override
@@ -47,15 +43,15 @@ public class CommandSetHome implements CommandExecutor {
             sender.sendMessage(ChatColor.RED + "You must specify a home name!");
         } else {
             if (args.length == 1) {
-                if (homeManagement.getPlayerHomes(player.getUniqueId()) != null) {
-                    if (homeManagement.getPlayerHomes(player.getUniqueId()).size() != ezHomes.config.getInt("total-homes") || player.hasPermission("ezhomes.bypasslimit")) {
-                        homeManagement.createHome(player.getUniqueId(), args[0]);
+                if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) != null) {
+                    if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()).size() != ezHomes.config.getInt("total-homes") || player.hasPermission("ezhomes.bypasslimit")) {
+                        ezHomes.homeManagement.createHome(player.getUniqueId(), args[0]);
                         sender.sendMessage(ChatColor.GREEN + "Home set.");
                     } else {
                         player.sendMessage(ChatColor.RED + "You can only have a maximum of " + ezHomes.config.getInt("total-homes") + " homes.");
                     }
                 } else {
-                    homeManagement.createHome(player.getUniqueId(), args[0]);
+                    ezHomes.homeManagement.createHome(player.getUniqueId(), args[0]);
                     sender.sendMessage(ChatColor.GREEN + "Home set.");
                 }
             } else {

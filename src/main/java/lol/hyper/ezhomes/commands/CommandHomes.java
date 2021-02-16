@@ -17,8 +17,9 @@
 
 package lol.hyper.ezhomes.commands;
 
-import lol.hyper.ezhomes.HomeManagement;
-import org.bukkit.ChatColor;
+import lol.hyper.ezhomes.EzHomes;
+import lol.hyper.ezhomes.gui.GUIManager;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -27,10 +28,10 @@ import org.bukkit.entity.Player;
 
 public class CommandHomes implements CommandExecutor {
 
-    private final HomeManagement homeManagement;
+    private final EzHomes ezHomes;
 
-    public CommandHomes(HomeManagement homeManagement) {
-        this.homeManagement = homeManagement;
+    public CommandHomes(EzHomes ezHomes) {
+        this.ezHomes = ezHomes;
     }
 
     @Override
@@ -40,13 +41,19 @@ public class CommandHomes implements CommandExecutor {
             return true;
         }
         Player player = (Player) sender;
-        if (homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
+
+        if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
             player.sendMessage(ChatColor.RED + "You don't have any homes set! Do /sethome <name> to set a home!");
             return true;
         }
+        if (ezHomes.config.getBoolean("use-homes-gui")) {
+            GUIManager gui = new GUIManager(player, ezHomes.homeManagement);
+            gui.openGUI(0);
+            return true;
+        }
         sender.sendMessage(ChatColor.GOLD + "--------------------------------------------");
-        player.sendMessage(ChatColor.GOLD + "You currently have these homes:");
-        player.spigot().sendMessage(homeManagement.getHomesClickable(player.getUniqueId()));
+        player.sendMessage(ChatColor.GOLD + player.getDisplayName() + "' Homes");
+        player.spigot().sendMessage(ezHomes.homeManagement.getHomesClickable(player.getUniqueId()));
         sender.sendMessage(ChatColor.GOLD + "--------------------------------------------");
         return true;
     }

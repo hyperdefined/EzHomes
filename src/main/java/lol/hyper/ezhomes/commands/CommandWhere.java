@@ -17,7 +17,7 @@
 
 package lol.hyper.ezhomes.commands;
 
-import lol.hyper.ezhomes.HomeManagement;
+import lol.hyper.ezhomes.EzHomes;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -28,10 +28,10 @@ import org.bukkit.entity.Player;
 
 public class CommandWhere implements CommandExecutor {
 
-    private final HomeManagement homeManagement;
+    private final EzHomes ezHomes;
 
-    public CommandWhere(HomeManagement homeManagement) {
-        this.homeManagement = homeManagement;
+    public CommandWhere(EzHomes ezHomes) {
+        this.ezHomes = ezHomes;
     }
 
     @Override
@@ -45,9 +45,9 @@ public class CommandWhere implements CommandExecutor {
             sender.sendMessage(ChatColor.RED + "You must specify a home name!");
         } else {
             if (args.length == 1) {
-                if (homeManagement.getPlayerHomes(player.getUniqueId()) != null) {
-                    if (homeManagement.getPlayerHomes(player.getUniqueId()).contains(args[0])) {
-                        Location home = homeManagement.getHomeLocation(player.getUniqueId(), args[0]);
+                if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) != null) {
+                    if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()).contains(args[0])) {
+                        Location home = ezHomes.homeManagement.getHomeLocation(player.getUniqueId(), args[0]);
                         sender.sendMessage(ChatColor.GOLD + "--------------------------------------------");
                         sender.sendMessage(ChatColor.GOLD + args[0] + "'s location:");
                         sender.sendMessage(ChatColor.YELLOW + "World: " + ChatColor.GOLD + home.getWorld().getName());

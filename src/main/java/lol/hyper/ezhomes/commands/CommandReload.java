@@ -35,10 +35,10 @@ public class CommandReload implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender.hasPermission("ezhomes.reload") || sender.isOp()) {
-            ezHomes.config = YamlConfiguration.loadConfiguration(ezHomes.configFile);
+            ezHomes.loadConfig();
             sender.sendMessage(ChatColor.GREEN + "Config was reloaded!");
         } else {
-            sender.sendMessage(ChatColor.RED + "You don't have permission to reload!");
+            sender.sendMessage(ChatColor.RED + "You don't have permission to use this command.");
         }
         return true;
     }
