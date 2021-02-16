@@ -36,6 +36,7 @@ import java.nio.file.Files;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+@SuppressWarnings("DuplicatedCode")
 public class HomeManagement {
     private static FileWriter writer;
     private static FileReader reader;
