@@ -20,13 +20,12 @@ package lol.hyper.ezhomes.commands;
 import lol.hyper.ezhomes.EzHomes;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
-public class CommandWhere implements CommandExecutor {
+import java.util.List;
+
+public class CommandWhere implements TabExecutor {
 
     private final EzHomes ezHomes;
 
@@ -66,5 +65,11 @@ public class CommandWhere implements CommandExecutor {
             }
         }
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        Player player = (Player) sender;
+        return ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
     }
 }

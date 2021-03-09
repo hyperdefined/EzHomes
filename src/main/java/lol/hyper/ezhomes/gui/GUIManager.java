@@ -33,9 +33,9 @@ import java.util.List;
 
 public class GUIManager {
 
-    ArrayList<Inventory> homePages = new ArrayList<>();
+    final ArrayList<Inventory> homePages = new ArrayList<>();
     int currentPage = 0;
-    Player owner;
+    final Player owner;
 
     private final HomeManagement homeManagement;
 
