@@ -33,6 +33,7 @@ import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -51,11 +52,11 @@ public class HomeManagement {
     }
 
     private File getPlayerFile(UUID player) {
-        return new File(ezHomes.homesPath.toFile(), player + ".json");
+        return Paths.get("ezHomes.homesPath", player.toString(), ".json").toFile();
     }
 
     private File getRespawnHomesFile() {
-        return new File(ezHomes.getDataFolder() + File.separator + "respawns.json");
+        return ezHomes.respawnsFile;
     }
 
     /**
