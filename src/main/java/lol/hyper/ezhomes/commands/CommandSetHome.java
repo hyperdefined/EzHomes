@@ -25,6 +25,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+
 public class CommandSetHome implements CommandExecutor {
 
     private final EzHomes ezHomes;
@@ -38,25 +40,25 @@ public class CommandSetHome implements CommandExecutor {
             sender.sendMessage("You must be a player for this command!");
             return true;
         }
+
         Player player = (Player) sender;
-        if (args.length == 0) {
-            sender.sendMessage(ChatColor.RED + "You must specify a home name!");
-            return true;
-        }
-        if (args.length == 1) {
-            if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) != null) {
+
+        int argsLength = args.length;
+        switch (argsLength) {
+            case 0:
+                player.sendMessage(ChatColor.RED + "You must specify a home name!");
+                return true;
+            case 1:
                 if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()).size() != ezHomes.config.getInt("total-homes") || player.hasPermission("ezhomes.bypasslimit")) {
                     ezHomes.homeManagement.createHome(player.getUniqueId(), args[0]);
-                    sender.sendMessage(ChatColor.GREEN + "Home set.");
+                    sender.sendMessage(ChatColor.GREEN + "New home set.");
                 } else {
                     player.sendMessage(ChatColor.RED + "You can only have a maximum of " + ezHomes.config.getInt("total-homes") + " homes.");
                 }
-            } else {
-                ezHomes.homeManagement.createHome(player.getUniqueId(), args[0]);
-                sender.sendMessage(ChatColor.GREEN + "Home set.");
-            }
-        } else {
-            sender.sendMessage(ChatColor.RED + "Invalid syntax. To set a home, simply do \"/sethome <home name>\"");
+                return true;
+            default:
+                player.sendMessage(ChatColor.RED + "Invalid command usage. Usage: /sethome <home> to set a new home.");
+                break;
         }
         return true;
     }

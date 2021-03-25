@@ -23,6 +23,7 @@ import org.bukkit.Location;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CommandWhere implements TabExecutor {
@@ -39,14 +40,21 @@ public class CommandWhere implements TabExecutor {
             sender.sendMessage("You must be a player for this command!");
             return true;
         }
+
         Player player = (Player) sender;
-        if (args.length == 0) {
-            sender.sendMessage(ChatColor.RED + "You must specify a home name!");
+        if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
+            sender.sendMessage(ChatColor.RED + "You do not have any homes.");
             return true;
         }
-        if (args.length == 1) {
-            if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) != null) {
-                if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()).contains(args[0])) {
+        ArrayList<String> playerHomes = ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
+
+        int argsLength = args.length;
+        switch (argsLength) {
+            case 0:
+                player.sendMessage(ChatColor.RED + "You must specify a home name!");
+                return true;
+            case 1:
+                if (playerHomes.contains(args[0])) {
                     Location home = ezHomes.homeManagement.getHomeLocation(player.getUniqueId(), args[0]);
                     sender.sendMessage(ChatColor.GOLD + "--------------------------------------------");
                     sender.sendMessage(ChatColor.GOLD + args[0] + "'s location:");
@@ -58,11 +66,9 @@ public class CommandWhere implements TabExecutor {
                 } else {
                     sender.sendMessage(ChatColor.RED + "That home does not exist.");
                 }
-            } else {
-                sender.sendMessage(ChatColor.RED + "You do not have any homes.");
-            }
-        } else {
-            sender.sendMessage(ChatColor.RED + "Invalid syntax. To see where a home is, simply do \"/where <home name>\"");
+            default:
+                player.sendMessage(ChatColor.RED + "Invalid command usage. Usage: /where <home> to get it's location.");
+                break;
         }
         return true;
     }

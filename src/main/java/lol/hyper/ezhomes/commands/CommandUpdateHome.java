@@ -19,9 +19,11 @@ package lol.hyper.ezhomes.commands;
 
 import lol.hyper.ezhomes.EzHomes;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CommandUpdateHome implements TabExecutor {
@@ -38,24 +40,30 @@ public class CommandUpdateHome implements TabExecutor {
             sender.sendMessage("You must be a player for this command!");
             return true;
         }
+
         Player player = (Player) sender;
-        if (args.length == 0) {
-            sender.sendMessage(ChatColor.RED + "You must specify a home name!");
+        if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
+            sender.sendMessage(ChatColor.RED + "You do not have any homes.");
             return true;
         }
-        if (args.length == 1) {
-            if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) != null) {
-                if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()).contains(args[0])) {
+        ArrayList<String> playerHomes = ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
+
+        int argsLength = args.length;
+        switch (argsLength) {
+            case 0:
+                player.sendMessage(ChatColor.RED + "You must specify a home name!");
+                return true;
+            case 1:
+                if (playerHomes.contains(args[0])) {
                     ezHomes.homeManagement.updateHome(player.getUniqueId(), args[0]);
                     player.sendMessage(ChatColor.GREEN + "Updated home.");
                 } else {
                     player.sendMessage(ChatColor.RED + "That home does not exist.");
                 }
-            } else {
-                player.sendMessage(ChatColor.RED + "You don't have any homes!");
-            }
-        } else {
-            sender.sendMessage(ChatColor.RED + "Invalid syntax. To update a home, simply do \"/updatehome <home name>\"");
+                return true;
+            default:
+                player.sendMessage(ChatColor.RED + "Invalid command usage. Usage: /updatehome <home> to update a home's location.");
+                break;
         }
         return true;
     }

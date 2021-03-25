@@ -44,14 +44,21 @@ public class CommandHome implements TabExecutor {
             sender.sendMessage("You must be a player for this command!");
             return true;
         }
+
         Player player = (Player) sender;
-        if (args.length == 0) {
-            player.sendMessage(ChatColor.RED + "You must specify a home!");
+        if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
+            sender.sendMessage(ChatColor.RED + "You do not have any homes.");
             return true;
         }
-        if (args.length == 1) {
-            ArrayList<String> playerHomes = ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
-            if (playerHomes != null) {
+
+        ArrayList<String> playerHomes = ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
+
+        int argsLength = args.length;
+        switch(argsLength) {
+            case 0:
+                player.sendMessage(ChatColor.RED + "You must specify a home!");
+                return true;
+            case 1:
                 if (ezHomes.homeManagement.canPlayerTeleport(player.getUniqueId()) || player.hasPermission("ezhomes.bypasscooldown")) {
                     if (playerHomes.contains(args[0])) {
                         PaperLib.teleportAsync(player, ezHomes.homeManagement.getHomeLocation(player.getUniqueId(), args[0]));
@@ -65,9 +72,9 @@ public class CommandHome implements TabExecutor {
                     long configTime = ezHomes.config.getInt("teleport-cooldown");
                     player.sendMessage(ChatColor.RED + "You must wait " + (configTime - timeLeft) + " seconds to teleport.");
                 }
-            } else {
-                player.sendMessage(ChatColor.RED + "You do not have any homes set.");
-            }
+            default:
+                player.sendMessage(ChatColor.RED + "Invalid command usage. Usage: /home <home> to teleport to a home.");
+                break;
         }
         return true;
     }
