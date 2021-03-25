@@ -59,6 +59,8 @@ public class HomeManagement {
             obj = parser.parse(reader);
             reader.close();
         } catch (IOException | ParseException e) {
+            ezHomes.logger.severe("Unable to read file + " + homeFile.getAbsolutePath());
+            ezHomes.logger.severe("This is bad, really bad.");
             e.printStackTrace();
         }
         return (JSONObject) obj;
@@ -70,6 +72,8 @@ public class HomeManagement {
             writer = new FileWriter(homeFile);
             writer.write(jsonToWrite);
         } catch (IOException e) {
+            ezHomes.logger.severe("Unable to write file + " + homeFile.getAbsolutePath());
+            ezHomes.logger.severe("This is bad, really bad.");
             e.printStackTrace();
         }
     }
@@ -79,6 +83,8 @@ public class HomeManagement {
         try {
             Files.delete(homeFile.toPath());
         } catch (IOException e) {
+            ezHomes.logger.severe("Unable to delete file + " + homeFile.getAbsolutePath());
+            ezHomes.logger.severe("This is bad, really bad.");
             e.printStackTrace();
         }
     }
