@@ -66,6 +66,7 @@ public class CommandWhere implements TabExecutor {
                 } else {
                     sender.sendMessage(ChatColor.RED + "That home does not exist.");
                 }
+                return true;
             default:
                 player.sendMessage(ChatColor.RED + "Invalid command usage. Usage: /where <home> to get it's location.");
                 break;

@@ -72,6 +72,7 @@ public class CommandHome implements TabExecutor {
                     long configTime = ezHomes.config.getInt("teleport-cooldown");
                     player.sendMessage(ChatColor.RED + "You must wait " + (configTime - timeLeft) + " seconds to teleport.");
                 }
+                return true;
             default:
                 player.sendMessage(ChatColor.RED + "Invalid command usage. Usage: /home <home> to teleport to a home.");
                 break;
