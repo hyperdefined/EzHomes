@@ -50,24 +50,31 @@ public class HomeManagement {
         this.ezHomes = ezHomes;
     }
 
+    private File getPlayerFile(UUID player) {
+        return new File(ezHomes.homesPath.toFile(), player + ".json");
+    }
+
+    private File getRespawnHomesFile() {
+        return new File(ezHomes.getDataFolder() + File.separator + "respawns.json");
+    }
+
     /**
-     * Read a player's home file.
-     * @param player Player to read file from.
-     * @return JSONObject with the player's home data. Returns null if the file doesn't exist.
+     * Read data from JSON file.
+     * @param file File to read data from.
+     * @return JSONObject with JSON data.
      */
-    private JSONObject readPlayerFiles(UUID player) {
-        File homeFile = new File(ezHomes.homesPath.toFile(), player + ".json");
-        if (!homeFile.exists()) {
+    private JSONObject readFile(File file) {
+        if (!file.exists()) {
             return null;
         }
         JSONParser parser = new JSONParser();
         Object obj = null;
         try {
-            reader = new FileReader(homeFile);
+            reader = new FileReader(file);
             obj = parser.parse(reader);
             reader.close();
         } catch (IOException | ParseException e) {
-            ezHomes.logger.severe("Unable to read file " + homeFile.getAbsolutePath());
+            ezHomes.logger.severe("Unable to read file " + file.getAbsolutePath());
             ezHomes.logger.severe("This is bad, really bad.");
             e.printStackTrace();
         }
@@ -75,18 +82,17 @@ public class HomeManagement {
     }
 
     /**
-     * Write data to a player's home file.
-     * @param player Player to write new data to.
+     * Write data to JSON file.
+     * @param file File to write data to.
      * @param jsonToWrite Data to write to file. This much be a JSON string.
      */
-    private void writePlayerFile(UUID player, String jsonToWrite) {
-        File homeFile = new File(ezHomes.homesPath.toFile(), player + ".json");
+    private void writeFile(File file, String jsonToWrite) {
         try {
-            writer = new FileWriter(homeFile);
+            writer = new FileWriter(file);
             writer.write(jsonToWrite);
             writer.close();
         } catch (IOException e) {
-            ezHomes.logger.severe("Unable to write file " + homeFile.getAbsolutePath());
+            ezHomes.logger.severe("Unable to write file " + file.getAbsolutePath());
             ezHomes.logger.severe("This is bad, really bad.");
             e.printStackTrace();
         }
@@ -97,7 +103,7 @@ public class HomeManagement {
      * @param player Player to delete file.
      */
     private void deletePlayerHomeFile(UUID player) {
-        File homeFile = new File(ezHomes.homesPath.toFile(), player + ".json");
+        File homeFile = getPlayerFile(player);
         try {
             Files.delete(homeFile.toPath());
         } catch (IOException e) {
@@ -115,11 +121,12 @@ public class HomeManagement {
      */
     public void createHome(UUID player, String homeName) {
         Location homeLocation = Bukkit.getPlayer(player).getLocation();
-        JSONObject homeFile = readPlayerFiles(player);
+        File homeFile = getPlayerFile(player);
+        JSONObject homes = readFile(homeFile);
 
         // They don't have a file
-        if (homeFile == null) {
-            homeFile = new JSONObject();
+        if (homes == null) {
+            homes = new JSONObject();
         }
         Map m = new LinkedHashMap(5);
         m.put("x", homeLocation.getX());
@@ -128,8 +135,8 @@ public class HomeManagement {
         m.put("pitch", homeLocation.getPitch());
         m.put("yaw", homeLocation.getYaw());
         m.put("world", homeLocation.getWorld().getName());
-        homeFile.put(homeName, m);
-        writePlayerFile(player, homeFile.toJSONString());
+        homes.put(homeName, m);
+        writeFile(homeFile, homes.toJSONString());
     }
 
     /**
@@ -140,9 +147,10 @@ public class HomeManagement {
      * @return Location of the home.
      */
     public Location getHomeLocation(UUID player, String homeName) {
-        if (readPlayerFiles(player) != null) {
-            JSONObject homeFile = readPlayerFiles(player);
-            JSONObject home = (JSONObject) homeFile.get(homeName);
+        File homeFile = getPlayerFile(player);
+        if (readFile(homeFile) != null) {
+            JSONObject homes = readFile(homeFile);
+            JSONObject home = (JSONObject) homes.get(homeName);
             double x = Double.parseDouble(home.get("x").toString());
             double y = Double.parseDouble(home.get("y").toString());
             double z = Double.parseDouble(home.get("z").toString());
@@ -162,9 +170,10 @@ public class HomeManagement {
      * @return Returns null if the file doesn't exist. Returns 0 if there are no locations. Returns the number of locations if there are any.
      */
     public ArrayList<String> getPlayerHomes(UUID player) {
-        if (readPlayerFiles(player) != null) {
+        File homeFile = getPlayerFile(player);
+        if (readFile(homeFile) != null) {
             ArrayList<String> playerHomes = new ArrayList<>();
-            JSONObject currentHomeFileJSON = readPlayerFiles(player);
+            JSONObject currentHomeFileJSON = readFile(homeFile);
             for (Object o : currentHomeFileJSON.keySet()) {
                 playerHomes.add((String) o);
             }
@@ -198,8 +207,9 @@ public class HomeManagement {
      */
     public void updateHome(UUID player, String homeName) {
         Location newLocation = Bukkit.getPlayer(player).getLocation();
-        JSONObject homeFile = readPlayerFiles(player);
-        homeFile.remove(homeName);
+        File homeFile = getPlayerFile(player);
+        JSONObject homes = readFile(homeFile);
+        homes.remove(homeName);
         Map m = new LinkedHashMap(5);
         m.put("x", newLocation.getX());
         m.put("y", newLocation.getY());
@@ -207,8 +217,8 @@ public class HomeManagement {
         m.put("pitch", newLocation.getPitch());
         m.put("yaw", newLocation.getYaw());
         m.put("world", newLocation.getWorld().getName());
-        homeFile.put(homeName, m);
-        writePlayerFile(player, homeFile.toJSONString());
+        homes.put(homeName, m);
+        writeFile(homeFile, homes.toJSONString());
     }
 
     /**
@@ -218,16 +228,17 @@ public class HomeManagement {
      * @param homeName Home to delete.
      */
     public void deleteHome(UUID player, String homeName) {
-        JSONObject homeFile = readPlayerFiles(player);
-        homeFile.remove(homeName);
+        File homeFile = getPlayerFile(player);
+        JSONObject homes = readFile(homeFile);
+        homes.remove(homeName);
         // check if the player has zero homes
         // if they do, delete the file off of the disk
         // otherwise write the new file
-        if (homeFile.size() == 0) {
+        if (homes.size() == 0) {
             deletePlayerHomeFile(player);
             return;
         }
-        writePlayerFile(player, homeFile.toJSONString());
+        writeFile(homeFile, homes.toJSONString());
     }
 
     /**
@@ -296,9 +307,13 @@ public class HomeManagement {
      * @param homeName Home to set as spawn.
      */
     public void setRespawnLocation(UUID player, String homeName) {
-        JSONObject homeFile = readPlayerFiles(player);
-        homeFile.put("respawnhome", homeName);
-        writePlayerFile(player, homeFile.toJSONString());
+        JSONObject respawns = readFile(getRespawnHomesFile());
+
+        if (respawns == null) {
+            respawns = new JSONObject();
+        }
+        respawns.put(player, homeName);
+        writeFile(getRespawnHomesFile(), respawns.toJSONString());
     }
 
     /**
@@ -307,9 +322,13 @@ public class HomeManagement {
      * @param player Player to remove spawn location for.
      */
     public void removeRespawnLocation(UUID player) {
-        JSONObject homeFile = readPlayerFiles(player);
-        homeFile.put("respawnhome", null);
-        writePlayerFile(player, homeFile.toJSONString());
+        JSONObject respawns = readFile(getRespawnHomesFile());
+
+        if (respawns == null) {
+            respawns = new JSONObject();
+        }
+        respawns.remove(player);
+        writeFile(getRespawnHomesFile(), respawns.toJSONString());
     }
 
     /**
@@ -318,7 +337,7 @@ public class HomeManagement {
      * @param player Player to get their respawn location.
      */
     public Location getRespawnLocation(UUID player) {
-        JSONObject homeFile = readPlayerFiles(player);
-        return getHomeLocation(player, homeFile.get("respawnhome").toString());
+        JSONObject respawns = readFile(getRespawnHomesFile());
+        return getHomeLocation(player, respawns.get(player).toString());
     }
 }
