@@ -33,6 +33,7 @@ import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -45,18 +46,47 @@ public class HomeManagement {
     public final HashMap<UUID, Long> teleportCooldowns = new HashMap<>();
     public final HashMap<Player, GUIManager> guiManagers = new HashMap<>();
 
+    public final Path homesPath;
+    public final File respawnsFile;
+
     private final EzHomes ezHomes;
 
     public HomeManagement(EzHomes ezHomes) {
         this.ezHomes = ezHomes;
+        homesPath = Paths.get(this.ezHomes.getDataFolder() + File.separator + "data");
+        respawnsFile = new File (this.ezHomes.getDataFolder() + File.separator + "respawns.json");
+        createFilesWeNeed();
     }
 
+    /**
+     * Get a player's home file.
+     * @param player Player to get file.
+     * @return The player's home file.
+     */
     private File getPlayerFile(UUID player) {
-        return Paths.get(ezHomes.homesPath.toString(), player.toString() + ".json").toFile();
+        return Paths.get(homesPath.toString(), player.toString() + ".json").toFile();
     }
 
-    private File getRespawnHomesFile() {
-        return ezHomes.respawnsFile;
+    private void createFilesWeNeed() {
+        if (!Files.exists(homesPath)) {
+            try {
+                Files.createDirectory(homesPath);
+            } catch (IOException e) {
+                ezHomes.logger.severe("Unable to create folder " + homesPath.toString() + "! Please make the folder manually or check folder permissions!");
+                e.printStackTrace();
+            }
+        }
+
+        if (!Files.exists(respawnsFile.toPath())) {
+            try {
+                Files.createFile(respawnsFile.toPath());
+                JSONObject empty = new JSONObject();
+                writeFile(respawnsFile, empty.toJSONString()); // write an empty json because shit won't work otherwise
+            } catch (IOException e) {
+                ezHomes.logger.severe("Unable to create file " + respawnsFile.toString() + "! Please make the file manually or check file permissions!");
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -276,7 +306,7 @@ public class HomeManagement {
      */
     public void cleanEmptyHomeFiles() {
         ezHomes.logger.info("Looking for any empty homes files to clean up...");
-        File homesFolder = ezHomes.homesPath.toFile();
+        File homesFolder = homesPath.toFile();
         File[] homeFiles = homesFolder.listFiles();
         if (homeFiles == null) {
             return;
@@ -308,13 +338,13 @@ public class HomeManagement {
      * @param homeName Home to set as spawn.
      */
     public void setRespawnLocation(UUID player, String homeName) {
-        JSONObject respawns = readFile(getRespawnHomesFile());
+        JSONObject respawns = readFile(respawnsFile);
 
         if (respawns == null) {
             respawns = new JSONObject();
         }
         respawns.put(player, homeName);
-        writeFile(getRespawnHomesFile(), respawns.toJSONString());
+        writeFile(respawnsFile, respawns.toJSONString());
     }
 
     /**
@@ -323,13 +353,13 @@ public class HomeManagement {
      * @param player Player to remove spawn location for.
      */
     public void removeRespawnLocation(UUID player) {
-        JSONObject respawns = readFile(getRespawnHomesFile());
+        JSONObject respawns = readFile(respawnsFile);
 
         if (respawns == null) {
             respawns = new JSONObject();
         }
         respawns.remove(player);
-        writeFile(getRespawnHomesFile(), respawns.toJSONString());
+        writeFile(respawnsFile, respawns.toJSONString());
     }
 
     /**
@@ -338,7 +368,7 @@ public class HomeManagement {
      * @param player Player to get their respawn location.
      */
     public Location getRespawnLocation(UUID player) {
-        JSONObject respawns = readFile(getRespawnHomesFile());
+        JSONObject respawns = readFile(respawnsFile);
         return getHomeLocation(player, respawns.get(player).toString());
     }
 }

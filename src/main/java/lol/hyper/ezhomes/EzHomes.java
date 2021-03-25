@@ -35,8 +35,6 @@ import java.util.logging.Logger;
 public final class EzHomes extends JavaPlugin {
 
     public final File configFile = new File(this.getDataFolder(), "config.yml");
-    public final Path homesPath = Paths.get(this.getDataFolder() + File.separator + "data");
-    public final File respawnsFile = new File (this.getDataFolder() + File.separator + "respawns.json");
     public FileConfiguration config = this.getConfig();
     public final Logger logger = this.getLogger();
     public final int CONFIG_VERSION = 1;
@@ -69,23 +67,6 @@ public final class EzHomes extends JavaPlugin {
             logger.info("Copying default config!");
         }
         loadConfig();
-        if (!Files.exists(homesPath)) {
-            try {
-                Files.createDirectory(homesPath);
-            } catch (IOException e) {
-                logger.severe("Unable to create folder " + homesPath.toString() + "! Please make the folder manually or check folder permissions!");
-                e.printStackTrace();
-            }
-        }
-
-        if (!Files.exists(respawnsFile.toPath())) {
-            try {
-                Files.createFile(respawnsFile.toPath());
-            } catch (IOException e) {
-                logger.severe("Unable to create file " + respawnsFile.toString() + "! Please make the file manually or check file permissions!");
-                e.printStackTrace();
-            }
-        }
 
         if (!PaperLib.isPaper()) {
             PaperLib.suggestPaper(this);
