@@ -25,6 +25,8 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CommandHomeRespawn implements TabExecutor {
@@ -41,41 +43,55 @@ public class CommandHomeRespawn implements TabExecutor {
             sender.sendMessage("You must be a player for this command!");
             return true;
         }
-        if (args.length == 0) {
-            sender.sendMessage(ChatColor.RED + "You must specify what you want to do.");
-            return true;
-        }
+
         Player player = (Player) sender;
         if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
             sender.sendMessage(ChatColor.RED + "You do not have any homes.");
             return true;
         }
 
-        if (args.length == 1) {
-            if (args[0].equalsIgnoreCase("remove")) {
-                ezHomes.homeManagement.removeRespawnLocation(player.getUniqueId());
-                sender.sendMessage(ChatColor.GREEN + "Respawn home has been removed.");
+        ArrayList<String> playerHomes = ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
+
+        int argsLength = args.length;
+        switch(argsLength) {
+            case 0:
+                sender.sendMessage(ChatColor.RED + "You must specify what you want to do.");
+                break;
+            case 1:
+                if (args[0].equalsIgnoreCase("remove")) {
+                    ezHomes.homeManagement.removeRespawnLocation(player.getUniqueId());
+                    sender.sendMessage(ChatColor.GREEN + "Respawn home has been removed.");
+                } else {
+                    sender.sendMessage(ChatColor.RED + "Invalid option. Valid options are: \"remove\" or \"set\" <home>.");
+                }
                 return true;
-            } else {
-                sender.sendMessage(ChatColor.RED + "Invalid option.");
-                return true;
-            }
-        }
-        if (args.length == 2) {
-            if (args[0].equalsIgnoreCase("set")) {
-                String homeName = args[1];
-                ezHomes.homeManagement.setRespawnLocation(player.getUniqueId(), homeName);
-                sender.sendMessage(ChatColor.GREEN + "Respawn home has been set.");
-            } else {
-                sender.sendMessage(ChatColor.RED + "Invalid option.");
-                return true;
-            }
+            case 2:
+                if (args[0].equalsIgnoreCase("set")) {
+                    String homeName = args[1];
+                    if (playerHomes.contains(homeName)) {
+                        ezHomes.homeManagement.setRespawnLocation(player.getUniqueId(), homeName);
+                        sender.sendMessage(ChatColor.GREEN + "Respawn home has been set.");
+                    } else {
+                        player.sendMessage(ChatColor.RED + "That home does not exist.");
+                    }
+                } else {
+                    sender.sendMessage(ChatColor.RED + "Invalid option. Valid options are: \"remove\" or \"set\" <home>.");
+                    return true;
+                }
         }
         return true;
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (args.length == 0) {
+            return Arrays.asList("set", "remove");
+        }
+
+        if (args[0].equalsIgnoreCase("set")) {
+            Player player = (Player) sender;
+            return ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
+        }
         return null;
     }
 }
