@@ -52,7 +52,7 @@ public class HomeManagement {
     }
 
     private File getPlayerFile(UUID player) {
-        return Paths.get(ezHomes.homesPath.toString(), player.toString(), ".json").toFile();
+        return Paths.get(ezHomes.homesPath.toString(), player.toString() + ".json").toFile();
     }
 
     private File getRespawnHomesFile() {
