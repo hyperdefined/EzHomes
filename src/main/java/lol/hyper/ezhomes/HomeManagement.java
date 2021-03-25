@@ -50,8 +50,16 @@ public class HomeManagement {
         this.ezHomes = ezHomes;
     }
 
+    /**
+     * Read a player's home file.
+     * @param player Player to read file from.
+     * @return JSONObject with the player's home data. Returns null if the file doesn't exist.
+     */
     private JSONObject readPlayerFiles(UUID player) {
         File homeFile = new File(ezHomes.homesPath.toFile(), player + ".json");
+        if (!homeFile.exists()) {
+            return null;
+        }
         JSONParser parser = new JSONParser();
         Object obj = null;
         try {
@@ -66,6 +74,11 @@ public class HomeManagement {
         return (JSONObject) obj;
     }
 
+    /**
+     * Write data to a player's home file.
+     * @param player Player to write new data to.
+     * @param jsonToWrite Data to write to file. This much be a JSON string.
+     */
     private void writePlayerFile(UUID player, String jsonToWrite) {
         File homeFile = new File(ezHomes.homesPath.toFile(), player + ".json");
         try {
@@ -78,6 +91,10 @@ public class HomeManagement {
         }
     }
 
+    /**
+     * Delete a player's home file.
+     * @param player Player to delete file.
+     */
     private void deletePlayerHomeFile(UUID player) {
         File homeFile = new File(ezHomes.homesPath.toFile(), player + ".json");
         try {
