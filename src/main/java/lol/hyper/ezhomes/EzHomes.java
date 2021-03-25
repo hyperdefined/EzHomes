@@ -47,6 +47,7 @@ public final class EzHomes extends JavaPlugin {
     public CommandHomes commandHomes;
     public CommandWhere commandWhere;
     public CommandUpdateHome commandUpdateHome;
+    public CommandHomeRespawn commandHomeRespawn;
     public HomeManagement homeManagement;
     public Events events;
 
@@ -60,6 +61,7 @@ public final class EzHomes extends JavaPlugin {
         commandHomes = new CommandHomes(this);
         commandWhere = new CommandWhere(this);
         commandUpdateHome = new CommandUpdateHome(this);
+        commandHomeRespawn = new CommandHomeRespawn(this);
         events = new Events(this);
         if (!configFile.exists()) {
             this.saveResource("config.yml", true);
@@ -88,6 +90,7 @@ public final class EzHomes extends JavaPlugin {
         this.getCommand("delhome").setExecutor(commandDeleteHome);
         this.getCommand("homesreload").setExecutor(commandReload);
         this.getCommand("where").setExecutor(commandWhere);
+        this.getCommand("respawnhome").setExecutor(commandHomeRespawn);
 
         Bukkit.getPluginManager().registerEvents(events, this);
 

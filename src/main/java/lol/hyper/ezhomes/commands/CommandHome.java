@@ -47,26 +47,26 @@ public class CommandHome implements TabExecutor {
         Player player = (Player) sender;
         if (args.length == 0) {
             player.sendMessage(ChatColor.RED + "You must specify a home!");
-        } else {
-            if (args.length == 1) {
-                ArrayList<String> playerHomes = ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
-                if (playerHomes != null) {
-                    if (ezHomes.homeManagement.canPlayerTeleport(player.getUniqueId()) || player.hasPermission("ezhomes.bypasscooldown")) {
-                        if (playerHomes.contains(args[0])) {
-                            PaperLib.teleportAsync(player, ezHomes.homeManagement.getHomeLocation(player.getUniqueId(), args[0]));
-                            player.sendMessage(ChatColor.GREEN + "Whoosh!");
-                            ezHomes.homeManagement.teleportCooldowns.put(player.getUniqueId(), System.nanoTime());
-                        } else {
-                            player.sendMessage(ChatColor.RED + "That home does not exist.");
-                        }
+            return true;
+        }
+        if (args.length == 1) {
+            ArrayList<String> playerHomes = ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
+            if (playerHomes != null) {
+                if (ezHomes.homeManagement.canPlayerTeleport(player.getUniqueId()) || player.hasPermission("ezhomes.bypasscooldown")) {
+                    if (playerHomes.contains(args[0])) {
+                        PaperLib.teleportAsync(player, ezHomes.homeManagement.getHomeLocation(player.getUniqueId(), args[0]));
+                        player.sendMessage(ChatColor.GREEN + "Whoosh!");
+                        ezHomes.homeManagement.teleportCooldowns.put(player.getUniqueId(), System.nanoTime());
                     } else {
-                        long timeLeft = TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - ezHomes.homeManagement.teleportCooldowns.get(player.getUniqueId()));
-                        long configTime = ezHomes.config.getInt("teleport-cooldown");
-                        player.sendMessage(ChatColor.RED + "You must wait " + (configTime - timeLeft) + " seconds to teleport.");
+                        player.sendMessage(ChatColor.RED + "That home does not exist.");
                     }
                 } else {
-                    player.sendMessage(ChatColor.RED + "You do not have any homes set.");
+                    long timeLeft = TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - ezHomes.homeManagement.teleportCooldowns.get(player.getUniqueId()));
+                    long configTime = ezHomes.config.getInt("teleport-cooldown");
+                    player.sendMessage(ChatColor.RED + "You must wait " + (configTime - timeLeft) + " seconds to teleport.");
                 }
+            } else {
+                player.sendMessage(ChatColor.RED + "You do not have any homes set.");
             }
         }
         return true;

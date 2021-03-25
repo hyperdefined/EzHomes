@@ -42,27 +42,27 @@ public class CommandWhere implements TabExecutor {
         Player player = (Player) sender;
         if (args.length == 0) {
             sender.sendMessage(ChatColor.RED + "You must specify a home name!");
-        } else {
-            if (args.length == 1) {
-                if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) != null) {
-                    if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()).contains(args[0])) {
-                        Location home = ezHomes.homeManagement.getHomeLocation(player.getUniqueId(), args[0]);
-                        sender.sendMessage(ChatColor.GOLD + "--------------------------------------------");
-                        sender.sendMessage(ChatColor.GOLD + args[0] + "'s location:");
-                        sender.sendMessage(ChatColor.YELLOW + "World: " + ChatColor.GOLD + home.getWorld().getName());
-                        sender.sendMessage(ChatColor.YELLOW + "X: " + ChatColor.GOLD + (int) home.getX());
-                        sender.sendMessage(ChatColor.YELLOW + "Y: " + ChatColor.GOLD + (int) home.getY());
-                        sender.sendMessage(ChatColor.YELLOW + "Z: " + ChatColor.GOLD + (int) home.getZ());
-                        sender.sendMessage(ChatColor.GOLD + "--------------------------------------------");
-                    } else {
-                        sender.sendMessage(ChatColor.RED + "That home does not exist.");
-                    }
+            return true;
+        }
+        if (args.length == 1) {
+            if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) != null) {
+                if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()).contains(args[0])) {
+                    Location home = ezHomes.homeManagement.getHomeLocation(player.getUniqueId(), args[0]);
+                    sender.sendMessage(ChatColor.GOLD + "--------------------------------------------");
+                    sender.sendMessage(ChatColor.GOLD + args[0] + "'s location:");
+                    sender.sendMessage(ChatColor.YELLOW + "World: " + ChatColor.GOLD + home.getWorld().getName());
+                    sender.sendMessage(ChatColor.YELLOW + "X: " + ChatColor.GOLD + (int) home.getX());
+                    sender.sendMessage(ChatColor.YELLOW + "Y: " + ChatColor.GOLD + (int) home.getY());
+                    sender.sendMessage(ChatColor.YELLOW + "Z: " + ChatColor.GOLD + (int) home.getZ());
+                    sender.sendMessage(ChatColor.GOLD + "--------------------------------------------");
                 } else {
-                    sender.sendMessage(ChatColor.RED + "You do not have any homes.");
+                    sender.sendMessage(ChatColor.RED + "That home does not exist.");
                 }
             } else {
-                sender.sendMessage(ChatColor.RED + "Invalid syntax. To see where a home is, simply do \"/where <home name>\"");
+                sender.sendMessage(ChatColor.RED + "You do not have any homes.");
             }
+        } else {
+            sender.sendMessage(ChatColor.RED + "Invalid syntax. To see where a home is, simply do \"/where <home name>\"");
         }
         return true;
     }

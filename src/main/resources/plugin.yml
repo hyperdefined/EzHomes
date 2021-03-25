@@ -26,6 +26,9 @@ commands:
   where:
     usage: /where
     description: Shows a home's location.
+  respawnhome:
+    usage: /respawnhome
+    description: Set a home to respawn at.
 permission:
   ezhomes.reload:
     default: op

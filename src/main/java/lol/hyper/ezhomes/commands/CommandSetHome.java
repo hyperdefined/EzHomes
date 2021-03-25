@@ -41,22 +41,22 @@ public class CommandSetHome implements CommandExecutor {
         Player player = (Player) sender;
         if (args.length == 0) {
             sender.sendMessage(ChatColor.RED + "You must specify a home name!");
-        } else {
-            if (args.length == 1) {
-                if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) != null) {
-                    if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()).size() != ezHomes.config.getInt("total-homes") || player.hasPermission("ezhomes.bypasslimit")) {
-                        ezHomes.homeManagement.createHome(player.getUniqueId(), args[0]);
-                        sender.sendMessage(ChatColor.GREEN + "Home set.");
-                    } else {
-                        player.sendMessage(ChatColor.RED + "You can only have a maximum of " + ezHomes.config.getInt("total-homes") + " homes.");
-                    }
-                } else {
+            return true;
+        }
+        if (args.length == 1) {
+            if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) != null) {
+                if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()).size() != ezHomes.config.getInt("total-homes") || player.hasPermission("ezhomes.bypasslimit")) {
                     ezHomes.homeManagement.createHome(player.getUniqueId(), args[0]);
                     sender.sendMessage(ChatColor.GREEN + "Home set.");
+                } else {
+                    player.sendMessage(ChatColor.RED + "You can only have a maximum of " + ezHomes.config.getInt("total-homes") + " homes.");
                 }
             } else {
-                sender.sendMessage(ChatColor.RED + "Invalid syntax. To set a home, simply do \"/sethome <home name>\"");
+                ezHomes.homeManagement.createHome(player.getUniqueId(), args[0]);
+                sender.sendMessage(ChatColor.GREEN + "Home set.");
             }
+        } else {
+            sender.sendMessage(ChatColor.RED + "Invalid syntax. To set a home, simply do \"/sethome <home name>\"");
         }
         return true;
     }

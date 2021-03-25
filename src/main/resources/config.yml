@@ -8,5 +8,7 @@ total-homes: 5
 # Players can click on the homes to teleport, rather than type /home <home>.
 use-homes-gui: true
 
+allow-respawn-at-home: true
+
 # No touch please :)
 config-version: 1

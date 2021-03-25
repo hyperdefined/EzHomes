@@ -28,6 +28,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -84,5 +85,19 @@ public class Events implements Listener {
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
         ezHomes.homeManagement.guiManagers.remove(event.getPlayer());
+    }
+
+    @EventHandler
+    public void onPlayerRespawn(PlayerRespawnEvent event) {
+        if (!ezHomes.config.getBoolean("allow-respawn-at-home")) {
+            return;
+        }
+
+        Player player = event.getPlayer();
+        Location respawnLocation = ezHomes.homeManagement.getRespawnLocation(player.getUniqueId());
+
+        if (respawnLocation != null) {
+            event.setRespawnLocation(respawnLocation);
+        }
     }
 }

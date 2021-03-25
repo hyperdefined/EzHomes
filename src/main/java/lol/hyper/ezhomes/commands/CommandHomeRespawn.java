@@ -19,16 +19,19 @@ package lol.hyper.ezhomes.commands;
 
 import lol.hyper.ezhomes.EzHomes;
 import org.bukkit.ChatColor;
-import org.bukkit.command.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class CommandUpdateHome implements TabExecutor {
+public class CommandHomeRespawn implements TabExecutor {
 
     private final EzHomes ezHomes;
 
-    public CommandUpdateHome(EzHomes ezHomes) {
+    public CommandHomeRespawn(EzHomes ezHomes) {
         this.ezHomes = ezHomes;
     }
 
@@ -38,31 +41,41 @@ public class CommandUpdateHome implements TabExecutor {
             sender.sendMessage("You must be a player for this command!");
             return true;
         }
-        Player player = (Player) sender;
         if (args.length == 0) {
-            sender.sendMessage(ChatColor.RED + "You must specify a home name!");
+            sender.sendMessage(ChatColor.RED + "You must specify what you want to do.");
             return true;
         }
+        Player player = (Player) sender;
+        if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
+            sender.sendMessage(ChatColor.RED + "You do not have any homes.");
+            return true;
+        }
+
         if (args.length == 1) {
-            if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) != null) {
-                if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()).contains(args[0])) {
-                    ezHomes.homeManagement.updateHome(player.getUniqueId(), args[0]);
-                    player.sendMessage(ChatColor.GREEN + "Updated home.");
-                } else {
-                    player.sendMessage(ChatColor.RED + "That home does not exist.");
-                }
+            if (args[0].equalsIgnoreCase("remove")) {
+                ezHomes.homeManagement.removeRespawnLocation(player.getUniqueId());
+                sender.sendMessage(ChatColor.GREEN + "Respawn home has been removed.");
+                return true;
             } else {
-                player.sendMessage(ChatColor.RED + "You don't have any homes!");
+                sender.sendMessage(ChatColor.RED + "Invalid option.");
+                return true;
             }
-        } else {
-            sender.sendMessage(ChatColor.RED + "Invalid syntax. To update a home, simply do \"/updatehome <home name>\"");
+        }
+        if (args.length == 2) {
+            if (args[0].equalsIgnoreCase("set")) {
+                String homeName = args[1];
+                ezHomes.homeManagement.setRespawnLocation(player.getUniqueId(), homeName);
+                sender.sendMessage(ChatColor.GREEN + "Respawn home has been set.");
+            } else {
+                sender.sendMessage(ChatColor.RED + "Invalid option.");
+                return true;
+            }
         }
         return true;
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        Player player = (Player) sender;
-        return ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
+        return null;
     }
 }

@@ -41,21 +41,21 @@ public class CommandDeleteHome implements TabExecutor {
         Player player = (Player) sender;
         if (args.length == 0) {
             sender.sendMessage(ChatColor.RED + "You must specify a home name!");
-        } else {
-            if (args.length == 1) {
-                if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) != null) {
-                    if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()).contains(args[0])) {
-                        ezHomes.homeManagement.deleteHome(player.getUniqueId(), args[0]);
-                        player.sendMessage(ChatColor.GREEN + "Home was deleted.");
-                    } else {
-                        player.sendMessage(ChatColor.RED + "That home does not exist.");
-                    }
+            return true;
+        }
+        if (args.length == 1) {
+            if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) != null) {
+                if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()).contains(args[0])) {
+                    ezHomes.homeManagement.deleteHome(player.getUniqueId(), args[0]);
+                    player.sendMessage(ChatColor.GREEN + "Home was deleted.");
                 } else {
-                    player.sendMessage(ChatColor.RED + "You don't have any homes.");
+                    player.sendMessage(ChatColor.RED + "That home does not exist.");
                 }
             } else {
-                sender.sendMessage(ChatColor.RED + "Invalid syntax. To delete a home, simply do \"/delhome <home name>\"");
+                player.sendMessage(ChatColor.RED + "You don't have any homes.");
             }
+        } else {
+            sender.sendMessage(ChatColor.RED + "Invalid syntax. To delete a home, simply do \"/delhome <home name>\"");
         }
         return true;
     }
