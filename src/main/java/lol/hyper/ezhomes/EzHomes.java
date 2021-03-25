@@ -80,7 +80,7 @@ public final class EzHomes extends JavaPlugin {
 
         if (!Files.exists(respawnsFile.toPath())) {
             try {
-                Files.createDirectory(respawnsFile.toPath());
+                Files.createFile(respawnsFile.toPath());
             } catch (IOException e) {
                 logger.severe("Unable to create file " + respawnsFile.toString() + "! Please make the file manually or check file permissions!");
                 e.printStackTrace();
