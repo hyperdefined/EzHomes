@@ -68,9 +68,10 @@ public class HomeManagement {
     }
 
     private void createFilesWeNeed() {
+
         if (!Files.exists(homesPath)) {
             try {
-                Files.createDirectory(homesPath);
+                Files.createDirectories(homesPath);
             } catch (IOException e) {
                 ezHomes.logger.severe("Unable to create folder " + homesPath.toString() + "! Please make the folder manually or check folder permissions!");
                 e.printStackTrace();
@@ -358,7 +359,7 @@ public class HomeManagement {
         if (respawns == null) {
             respawns = new JSONObject();
         }
-        respawns.remove(player);
+        respawns.remove(player.toString());
         writeFile(respawnsFile, respawns.toJSONString());
     }
 
@@ -369,6 +370,6 @@ public class HomeManagement {
      */
     public Location getRespawnLocation(UUID player) {
         JSONObject respawns = readFile(respawnsFile);
-        return getHomeLocation(player, respawns.get(player).toString());
+        return getHomeLocation(player, respawns.get(player.toString()).toString());
     }
 }
