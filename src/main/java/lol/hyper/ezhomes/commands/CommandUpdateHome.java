@@ -25,6 +25,8 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CommandUpdateHome implements TabExecutor {
 
@@ -55,6 +57,12 @@ public class CommandUpdateHome implements TabExecutor {
                 return true;
             case 1:
                 if (playerHomes.contains(args[0])) {
+                    Pattern pattern = Pattern.compile("^[a-zA-Z0-9]+$");
+                    Matcher matcher = pattern.matcher(args[0]);
+                    if (matcher.matches()) {
+                        sender.sendMessage(ChatColor.RED + "Invalid character in home name.");
+                        return true;
+                    }
                     ezHomes.homeManagement.updateHome(player.getUniqueId(), args[0]);
                     player.sendMessage(ChatColor.GREEN + "Updated home.");
                 } else {

@@ -25,6 +25,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class CommandSetHome implements CommandExecutor {
 
     private final EzHomes ezHomes;
@@ -56,6 +59,12 @@ public class CommandSetHome implements CommandExecutor {
                 return true;
             case 1:
                 if (homeSize != ezHomes.config.getInt("total-homes") || player.hasPermission("ezhomes.bypasslimit")) {
+                    Pattern pattern = Pattern.compile("^[a-zA-Z0-9]+$");
+                    Matcher matcher = pattern.matcher(args[0]);
+                    if (matcher.matches()) {
+                        sender.sendMessage(ChatColor.RED + "Invalid character in home name.");
+                        return true;
+                    }
                     ezHomes.homeManagement.createHome(player.getUniqueId(), args[0]);
                     sender.sendMessage(ChatColor.GREEN + "New home set.");
                 } else {
