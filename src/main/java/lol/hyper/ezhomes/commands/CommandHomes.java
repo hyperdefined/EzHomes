@@ -55,7 +55,7 @@ public class CommandHomes implements CommandExecutor {
         player.sendMessage(ChatColor.GOLD + player.getDisplayName() + "'s Homes");
         player.spigot().sendMessage(ezHomes.homeManagement.getHomesClickable(player.getUniqueId()));
         if (ezHomes.homeManagement.getRespawnHomeName(player.getUniqueId()) != null) {
-            player.sendMessage(ChatColor.GOLD + "You will respawn at " + ChatColor.GREEN + ezHomes.homeManagement.getRespawnHomeName(player.getUniqueId()) + ChatColor.YELLOW + ".");
+            player.sendMessage(ChatColor.GOLD + "You will respawn at " + ChatColor.GREEN + ezHomes.homeManagement.getRespawnHomeName(player.getUniqueId()) + ChatColor.GOLD + ".");
         }
         sender.sendMessage(ChatColor.GOLD + "--------------------------------------------");
         return true;
