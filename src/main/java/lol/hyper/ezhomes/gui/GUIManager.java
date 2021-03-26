@@ -104,7 +104,7 @@ public class GUIManager {
                 ItemStack bed;
                 // Check if the home is their respawn home
                 // If it is, then make the bed green so they can see it's the respawn home
-                if (respawnHome.equals(homeName)) {
+                if (respawnHome != null && respawnHome.equals(homeName)) {
                     bed = new ItemStack(Material.GREEN_BED);
                 } else {
                     bed = new ItemStack(Material.RED_BED);

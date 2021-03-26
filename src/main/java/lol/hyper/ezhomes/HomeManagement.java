@@ -292,7 +292,7 @@ public class HomeManagement {
                 } else {
                     singleHome = new TextComponent(home);
                 }
-                if (home.equals(getRespawnHomeName(player))) {
+                if (getRespawnHomeName(player) != null && home.equals(getRespawnHomeName(player))) {
                     singleHome.setColor(ChatColor.GREEN);
                 } else {
                     singleHome.setColor(ChatColor.YELLOW);
