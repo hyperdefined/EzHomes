@@ -62,7 +62,7 @@ public class CommandHomeRespawn implements TabExecutor {
                     ezHomes.homeManagement.removeRespawnLocation(player.getUniqueId());
                     sender.sendMessage(ChatColor.GREEN + "Respawn home has been removed.");
                 } else {
-                    sender.sendMessage(ChatColor.RED + "Invalid option. Valid options are: \"remove\" or \"set\" <home>.");
+                    sender.sendMessage(ChatColor.RED + "Invalid option. Valid options are: \"remove\" or \"set <home>\".");
                 }
                 return true;
             case 2:
