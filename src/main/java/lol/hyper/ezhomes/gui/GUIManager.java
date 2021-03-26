@@ -126,7 +126,6 @@ public class GUIManager {
                 if (respawnHome.equals(homeName)) {
                     lore.add(ChatColor.GREEN + "You will respawn at this home.");
                 }
-                lore.add(ChatColor.WHITE + "World: " + ChatColor.GRAY + loc.getWorld().getName());
                 bedMeta.setLore(lore);
                 bed.setItemMeta(bedMeta);
                 inv.setItem(x, bed);
