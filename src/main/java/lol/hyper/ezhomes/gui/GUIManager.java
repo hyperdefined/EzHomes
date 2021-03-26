@@ -90,6 +90,9 @@ public class GUIManager {
             // Break the homes list into chunks of 45
             List<List<String>> homes = Lists.partition(homeManagement.getPlayerHomes(owner.getUniqueId()), 45);
 
+            // Get the player's respawn home name so we can use it later
+            String respawnHome = homeManagement.getRespawnHomeName(owner.getUniqueId());
+
             // Go through the list of homes and put them into the inventory
             for (int x = 0; x < 45; x++) {
                 String homeName;
@@ -98,14 +101,31 @@ public class GUIManager {
                 } catch (IndexOutOfBoundsException e) {
                     break;
                 }
-                ItemStack bed = new ItemStack(Material.RED_BED);
+                ItemStack bed;
+                // Check if the home is their respawn home
+                // If it is, then make the bed green so they can see it's the respawn home
+                if (respawnHome.equals(homeName)) {
+                    bed = new ItemStack(Material.GREEN_BED);
+                } else {
+                    bed = new ItemStack(Material.RED_BED);
+                }
                 ItemMeta bedMeta = bed.getItemMeta();
-                bedMeta.setDisplayName(homeName);
+                // Make the name green if it's their respawn home
+                if (respawnHome.equals(homeName)) {
+                    bedMeta.setDisplayName(ChatColor.GREEN + homeName);
+                } else {
+                    bedMeta.setDisplayName(homeName);
+                }
                 Location loc = homeManagement.getHomeLocation(owner.getUniqueId(), homes.get(i).get(x));
                 ArrayList<String> lore = new ArrayList<>();
                 lore.add(ChatColor.WHITE + "X: " + ChatColor.GRAY + (int) loc.getX());
                 lore.add(ChatColor.WHITE + "Y: " + ChatColor.GRAY + (int) loc.getY());
                 lore.add(ChatColor.WHITE + "Z: " + ChatColor.GRAY + (int) loc.getZ());
+                lore.add(ChatColor.WHITE + "World: " + ChatColor.GRAY + loc.getWorld().getName());
+                // Add a new line if the home is their respawn home
+                if (respawnHome.equals(homeName)) {
+                    lore.add(ChatColor.GREEN + "You will respawn at this home.");
+                }
                 lore.add(ChatColor.WHITE + "World: " + ChatColor.GRAY + loc.getWorld().getName());
                 bedMeta.setLore(lore);
                 bed.setItemMeta(bedMeta);

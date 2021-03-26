@@ -292,7 +292,11 @@ public class HomeManagement {
                 } else {
                     singleHome = new TextComponent(home);
                 }
-                singleHome.setColor(ChatColor.YELLOW);
+                if (home.equals(getRespawnHomeName(player))) {
+                    singleHome.setColor(ChatColor.GREEN);
+                } else {
+                    singleHome.setColor(ChatColor.YELLOW);
+                }
                 singleHome.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/home " + home));
                 singleHome.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(ChatColor.GREEN + "Click to teleport to " + home + "!")));
                 homesList.addExtra(singleHome);
