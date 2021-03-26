@@ -4,6 +4,11 @@
 
 EzHomes is a super simple homes plugin for Spigot/Paper. It works on versions 1.16 and above. Players can save locations and teleport to them.
 
+## Features
+* Works like any other home plugin.
+* Enable/disable GUI for teleporting to homes.
+* Allow players to set a home they will respawn at. You can disable this if you don't want it.
+
 ## Documentation
 Visit the [wiki](https://github.com/hyperdefined/EzHomes/wiki) for help.
 
