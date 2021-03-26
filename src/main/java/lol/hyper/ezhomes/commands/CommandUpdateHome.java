@@ -59,7 +59,7 @@ public class CommandUpdateHome implements TabExecutor {
                 if (playerHomes.contains(args[0])) {
                     Pattern pattern = Pattern.compile("^[a-zA-Z0-9]+$");
                     Matcher matcher = pattern.matcher(args[0]);
-                    if (matcher.matches()) {
+                    if (!matcher.matches()) {
                         sender.sendMessage(ChatColor.RED + "Invalid character in home name.");
                         return true;
                     }

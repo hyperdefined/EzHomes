@@ -61,7 +61,7 @@ public class CommandSetHome implements CommandExecutor {
                 if (homeSize != ezHomes.config.getInt("total-homes") || player.hasPermission("ezhomes.bypasslimit")) {
                     Pattern pattern = Pattern.compile("^[a-zA-Z0-9]+$");
                     Matcher matcher = pattern.matcher(args[0]);
-                    if (matcher.matches()) {
+                    if (!matcher.matches()) {
                         sender.sendMessage(ChatColor.RED + "Invalid character in home name.");
                         return true;
                     }
