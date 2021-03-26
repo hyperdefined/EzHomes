@@ -12,4 +12,4 @@ use-homes-gui: true
 allow-respawn-at-home: true
 
 # No touch please :)
-config-version: 1
+config-version: 2

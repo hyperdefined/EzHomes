@@ -37,7 +37,7 @@ public final class EzHomes extends JavaPlugin {
     public final File configFile = new File(this.getDataFolder(), "config.yml");
     public FileConfiguration config = this.getConfig();
     public final Logger logger = this.getLogger();
-    public final int CONFIG_VERSION = 1;
+    public final int CONFIG_VERSION = 2;
 
     public CommandReload commandReload;
     public CommandHome commandHome;

@@ -384,6 +384,10 @@ public class HomeManagement {
      */
     public String getRespawnHomeName(UUID player) {
         JSONObject respawns = readFile(respawnsFile);
-        return respawns.get(player.toString()).toString();
+        if (respawns.get(player.toString()) == null) {
+            return null;
+        } else {
+            return respawns.get(player.toString()).toString();
+        }
     }
 }
