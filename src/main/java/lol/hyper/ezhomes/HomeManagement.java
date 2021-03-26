@@ -271,6 +271,12 @@ public class HomeManagement {
             return;
         }
         writeFile(homeFile, homes.toJSONString());
+
+        // If the player deletes their respawn location, then remove
+        // it from the respawn home lists
+        if (homeName.equals(getRespawnHomeName(player))) {
+            removeRespawnLocation(player);
+        }
     }
 
     /**
