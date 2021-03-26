@@ -8,6 +8,7 @@ total-homes: 5
 # Players can click on the homes to teleport, rather than type /home <home>.
 use-homes-gui: true
 
+# Allow users to set a home they will respawn at when they die.
 allow-respawn-at-home: true
 
 # No touch please :)
