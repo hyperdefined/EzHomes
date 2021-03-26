@@ -44,6 +44,11 @@ public class CommandHomeRespawn implements TabExecutor {
             return true;
         }
 
+        if (!ezHomes.config.getBoolean("allow-respawn-at-home")) {
+            sender.sendMessage(ChatColor.RED + "This feature is not enabled.");
+            return true;
+        }
+
         Player player = (Player) sender;
         if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
             sender.sendMessage(ChatColor.RED + "You do not have any homes.");
