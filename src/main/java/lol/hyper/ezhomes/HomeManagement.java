@@ -372,4 +372,14 @@ public class HomeManagement {
         JSONObject respawns = readFile(respawnsFile);
         return getHomeLocation(player, respawns.get(player.toString()).toString());
     }
+
+    /**
+     * Get a player's respawn home name.
+     * @param player Player to get the home name.
+     * @return Player's respawn home name.
+     */
+    public String getRespawnHomeName(UUID player) {
+        JSONObject respawns = readFile(respawnsFile);
+        return respawns.get(player.toString()).toString();
+    }
 }
