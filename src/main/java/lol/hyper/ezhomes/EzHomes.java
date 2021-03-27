@@ -86,11 +86,11 @@ public final class EzHomes extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(events, this);
 
         new UpdateChecker(this, 82663).getVersion(version -> {
-            if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
-                logger.info("You are running the latest version.");
-            } else {
-                logger.info("There is a new version available! Please download at https://www.spigotmc.org/resources/ezhomes.82663/");
-            }
+        if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
+            logger.info("You are running the latest version.");
+        } else {
+            logger.info("There is a new version available! Please download at https://www.spigotmc.org/resources/ezhomes.82663/");
+        }
         });
 
         Bukkit.getScheduler().runTaskLaterAsynchronously(this, () -> homeManagement.cleanEmptyHomeFiles(), 100);

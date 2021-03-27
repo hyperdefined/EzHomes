@@ -55,10 +55,10 @@ public class CommandHomeRespawn implements TabExecutor {
             return true;
         }
 
-        ArrayList<String> playerHomes = ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
+        ArrayList < String > playerHomes = ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
 
         int argsLength = args.length;
-        switch(argsLength) {
+        switch (argsLength) {
             case 0:
                 sender.sendMessage(ChatColor.RED + "You must specify what you want to do.");
                 break;
@@ -88,7 +88,7 @@ public class CommandHomeRespawn implements TabExecutor {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public List < String > onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (args.length == 0) {
             return Arrays.asList("set", "remove");
         }

@@ -51,10 +51,10 @@ public class CommandHome implements TabExecutor {
             return true;
         }
 
-        ArrayList<String> playerHomes = ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
+        ArrayList < String > playerHomes = ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
 
         int argsLength = args.length;
-        switch(argsLength) {
+        switch (argsLength) {
             case 0:
                 player.sendMessage(ChatColor.RED + "You must specify a home!");
                 return true;
@@ -81,7 +81,7 @@ public class CommandHome implements TabExecutor {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public List < String > onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         Player player = (Player) sender;
         return ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
     }

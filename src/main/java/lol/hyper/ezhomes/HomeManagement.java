@@ -43,8 +43,8 @@ public class HomeManagement {
     private static FileWriter writer;
     private static FileReader reader;
 
-    public final HashMap<UUID, Long> teleportCooldowns = new HashMap<>();
-    public final HashMap<Player, GUIManager> guiManagers = new HashMap<>();
+    public final HashMap < UUID, Long > teleportCooldowns = new HashMap < > ();
+    public final HashMap < Player, GUIManager > guiManagers = new HashMap < > ();
 
     public final Path homesPath;
     public final File respawnsFile;
@@ -54,7 +54,7 @@ public class HomeManagement {
     public HomeManagement(EzHomes ezHomes) {
         this.ezHomes = ezHomes;
         homesPath = Paths.get(this.ezHomes.getDataFolder() + File.separator + "data");
-        respawnsFile = new File (this.ezHomes.getDataFolder() + File.separator + "respawns.json");
+        respawnsFile = new File(this.ezHomes.getDataFolder() + File.separator + "respawns.json");
         createFilesWeNeed();
     }
 
@@ -201,12 +201,12 @@ public class HomeManagement {
      * @param player Player to lookup homes for.
      * @return Returns null if the file doesn't exist. Returns 0 if there are no locations. Returns the number of locations if there are any.
      */
-    public ArrayList<String> getPlayerHomes(UUID player) {
+    public ArrayList < String > getPlayerHomes(UUID player) {
         File homeFile = getPlayerFile(player);
         if (readFile(homeFile) != null) {
-            ArrayList<String> playerHomes = new ArrayList<>();
+            ArrayList < String > playerHomes = new ArrayList < > ();
             JSONObject currentHomeFileJSON = readFile(homeFile);
-            for (Object o : currentHomeFileJSON.keySet()) {
+            for (Object o: currentHomeFileJSON.keySet()) {
                 playerHomes.add((String) o);
             }
             Collections.sort(playerHomes);
@@ -290,7 +290,7 @@ public class HomeManagement {
             return null;
         } else {
             TextComponent homesList = new TextComponent("");
-            for (String home : getPlayerHomes(player)) {
+            for (String home: getPlayerHomes(player)) {
                 int index = getPlayerHomes(player).indexOf(home);
                 TextComponent singleHome;
                 if (index != getPlayerHomes(player).size() - 1) {
@@ -323,7 +323,7 @@ public class HomeManagement {
             return;
         }
         int fileCount = 0;
-        for (File f : homeFiles) {
+        for (File f: homeFiles) {
             JSONParser parser = new JSONParser();
             try {
                 reader = new FileReader(f);

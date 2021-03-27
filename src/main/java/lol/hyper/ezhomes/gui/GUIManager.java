@@ -33,13 +33,13 @@ import java.util.List;
 
 public class GUIManager {
 
-    final ArrayList<Inventory> homePages = new ArrayList<>();
+    final ArrayList < Inventory > homePages = new ArrayList < > ();
     int currentPage = 0;
     final Player owner;
 
     private final HomeManagement homeManagement;
 
-    public GUIManager (Player player, HomeManagement homeManagement) {
+    public GUIManager(Player player, HomeManagement homeManagement) {
         this.homeManagement = homeManagement;
         this.owner = player;
         homeManagement.guiManagers.put(owner, this);
@@ -73,7 +73,7 @@ public class GUIManager {
                 if (pagesToMake != 1) {
                     inv.setItem(53, nextPage);
                 }
-            } else if (i == pagesToMake-1) {
+            } else if (i == pagesToMake - 1) {
                 inv.setItem(45, prevPage);
             } else {
                 inv.setItem(53, nextPage);
@@ -88,7 +88,7 @@ public class GUIManager {
             inv.setItem(49, compass);
 
             // Break the homes list into chunks of 45
-            List<List<String>> homes = Lists.partition(homeManagement.getPlayerHomes(owner.getUniqueId()), 45);
+            List < List < String >> homes = Lists.partition(homeManagement.getPlayerHomes(owner.getUniqueId()), 45);
 
             // Get the player's respawn home name so we can use it later
             String respawnHome = homeManagement.getRespawnHomeName(owner.getUniqueId());
@@ -117,7 +117,7 @@ public class GUIManager {
                     bedMeta.setDisplayName(homeName);
                 }
                 Location loc = homeManagement.getHomeLocation(owner.getUniqueId(), homes.get(i).get(x));
-                ArrayList<String> lore = new ArrayList<>();
+                ArrayList < String > lore = new ArrayList < > ();
                 lore.add(ChatColor.WHITE + "X: " + ChatColor.GRAY + (int) loc.getX());
                 lore.add(ChatColor.WHITE + "Y: " + ChatColor.GRAY + (int) loc.getY());
                 lore.add(ChatColor.WHITE + "Z: " + ChatColor.GRAY + (int) loc.getZ());
