@@ -52,7 +52,7 @@ public class Events implements Listener {
         if (event.getInventory().getHolder() instanceof GUIHolder) {
             event.setCancelled(true);
             ItemStack item = event.getCurrentItem();
-            if (item.getType() == Material.RED_BED && item.getType() != Material.AIR) {
+            if ((item.getType() == Material.RED_BED || item.getType() == Material.GREEN_BED) && item.getType() != Material.AIR) {
                 if (ezHomes.homeManagement.canPlayerTeleport(player.getUniqueId()) || player.hasPermission("ezhomes.bypasscooldown")) {
                     ItemMeta meta = item.getItemMeta();
                     Location loc = ezHomes.homeManagement.getHomeLocation(player.getUniqueId(), meta.getDisplayName());
