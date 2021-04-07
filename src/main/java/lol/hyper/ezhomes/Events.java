@@ -55,7 +55,7 @@ public class Events implements Listener {
             if ((item.getType() == Material.RED_BED || item.getType() == Material.GREEN_BED) && item.getType() != Material.AIR) {
                 if (ezHomes.homeManagement.canPlayerTeleport(player.getUniqueId()) || player.hasPermission("ezhomes.bypasscooldown")) {
                     ItemMeta meta = item.getItemMeta();
-                    Location loc = ezHomes.homeManagement.getHomeLocation(player.getUniqueId(), meta.getDisplayName());
+                    Location loc = ezHomes.homeManagement.getHomeLocation(player.getUniqueId(), ChatColor.stripColor(meta.getDisplayName()));
                     PaperLib.teleportAsync(player, loc);
                     ezHomes.homeManagement.teleportCooldowns.put(player.getUniqueId(), System.nanoTime());
                     player.sendMessage(ChatColor.GREEN + "Whoosh!");
