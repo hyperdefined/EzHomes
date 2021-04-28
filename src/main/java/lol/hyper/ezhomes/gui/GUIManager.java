@@ -101,17 +101,19 @@ public class GUIManager {
                 } catch (IndexOutOfBoundsException e) {
                     break;
                 }
+                boolean isRespawnHome = false;
                 ItemStack bed;
                 // Check if the home is their respawn home
                 // If it is, then make the bed green so they can see it's the respawn home
                 if (respawnHome != null && respawnHome.equals(homeName)) {
                     bed = new ItemStack(Material.GREEN_BED);
+                    isRespawnHome = true;
                 } else {
                     bed = new ItemStack(Material.RED_BED);
                 }
                 ItemMeta bedMeta = bed.getItemMeta();
                 // Make the name green if it's their respawn home
-                if (respawnHome.equals(homeName)) {
+                if (isRespawnHome) {
                     bedMeta.setDisplayName(ChatColor.GREEN + homeName);
                 } else {
                     bedMeta.setDisplayName(homeName);
@@ -123,7 +125,7 @@ public class GUIManager {
                 lore.add(ChatColor.WHITE + "Z: " + ChatColor.GRAY + (int) loc.getZ());
                 lore.add(ChatColor.WHITE + "World: " + ChatColor.GRAY + loc.getWorld().getName());
                 // Add a new line if the home is their respawn home
-                if (respawnHome.equals(homeName)) {
+                if (isRespawnHome) {
                     lore.add(ChatColor.GREEN + "You will respawn at this home.");
                 }
                 bedMeta.setLore(lore);
