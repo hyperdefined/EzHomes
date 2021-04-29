@@ -380,7 +380,11 @@ public class HomeManagement {
      */
     public Location getRespawnLocation(UUID player) {
         JSONObject respawns = readFile(respawnsFile);
-        return getHomeLocation(player, respawns.get(player.toString()).toString());
+        if (respawns.get(player.toString()) == null) {
+            return null;
+        } else {
+            return getHomeLocation(player, respawns.get(player.toString()).toString());
+        }
     }
 
     /**

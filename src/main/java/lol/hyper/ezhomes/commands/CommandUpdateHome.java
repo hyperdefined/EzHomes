@@ -19,7 +19,6 @@ package lol.hyper.ezhomes.commands;
 
 import lol.hyper.ezhomes.EzHomes;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
