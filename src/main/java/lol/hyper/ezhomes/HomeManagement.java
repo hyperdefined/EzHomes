@@ -40,7 +40,6 @@ import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("DuplicatedCode")
 public class HomeManagement {
-    private static FileWriter writer;
     private static FileReader reader;
 
     public final HashMap < UUID, Long > teleportCooldowns = new HashMap < > ();
@@ -120,7 +119,7 @@ public class HomeManagement {
      */
     private void writeFile(File file, String jsonToWrite) {
         try {
-            writer = new FileWriter(file);
+            FileWriter writer = new FileWriter(file);
             writer.write(jsonToWrite);
             writer.close();
         } catch (IOException e) {
