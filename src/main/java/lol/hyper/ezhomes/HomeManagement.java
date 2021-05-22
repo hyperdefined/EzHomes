@@ -40,7 +40,6 @@ import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("DuplicatedCode")
 public class HomeManagement {
-    private static FileReader reader;
 
     public final HashMap < UUID, Long > teleportCooldowns = new HashMap < > ();
     public final HashMap < Player, GUIManager > guiManagers = new HashMap < > ();
@@ -101,7 +100,7 @@ public class HomeManagement {
         JSONParser parser = new JSONParser();
         Object obj = null;
         try {
-            reader = new FileReader(file);
+            FileReader reader = new FileReader(file);
             obj = parser.parse(reader);
             reader.close();
         } catch (IOException | ParseException e) {
@@ -325,7 +324,7 @@ public class HomeManagement {
         for (File f: homeFiles) {
             JSONParser parser = new JSONParser();
             try {
-                reader = new FileReader(f);
+                FileReader reader = new FileReader(f);
                 Object obj = parser.parse(reader);
                 reader.close();
                 JSONObject homeFileJSON = (JSONObject) obj;
