@@ -31,10 +31,9 @@ import java.util.logging.Logger;
 public final class EzHomes extends JavaPlugin {
 
     public final File configFile = new File(this.getDataFolder(), "config.yml");
-    public FileConfiguration config = this.getConfig();
     public final Logger logger = this.getLogger();
     public final int CONFIG_VERSION = 2;
-
+    public FileConfiguration config = this.getConfig();
     public CommandReload commandReload;
     public CommandHome commandHome;
     public CommandDeleteHome commandDeleteHome;
@@ -82,11 +81,12 @@ public final class EzHomes extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(events, this);
 
         new UpdateChecker(this, 82663).getVersion(version -> {
-        if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
-            logger.info("You are running the latest version.");
-        } else {
-            logger.info("There is a new version available! Please download at https://www.spigotmc.org/resources/ezhomes.82663/");
-        }
+            if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
+                logger.info("You are running the latest version.");
+            } else {
+                logger.info(
+                        "There is a new version available! Please download at https://www.spigotmc.org/resources/ezhomes.82663/");
+            }
         });
 
         Bukkit.getScheduler().runTaskLaterAsynchronously(this, () -> homeManagement.cleanEmptyHomeFiles(), 100);

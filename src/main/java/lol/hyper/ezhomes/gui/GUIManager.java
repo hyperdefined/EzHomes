@@ -33,11 +33,10 @@ import java.util.List;
 
 public class GUIManager {
 
-    final ArrayList < Inventory > homePages = new ArrayList < > ();
-    int currentPage = 0;
+    final ArrayList<Inventory> homePages = new ArrayList<>();
     final Player owner;
-
     private final HomeManagement homeManagement;
+    int currentPage = 0;
 
     public GUIManager(Player player, HomeManagement homeManagement) {
         this.homeManagement = homeManagement;
@@ -88,7 +87,7 @@ public class GUIManager {
             inv.setItem(49, compass);
 
             // Break the homes list into chunks of 45
-            List < List < String >> homes = Lists.partition(homeManagement.getPlayerHomes(owner.getUniqueId()), 45);
+            List<List<String>> homes = Lists.partition(homeManagement.getPlayerHomes(owner.getUniqueId()), 45);
 
             // Get the player's respawn home name so we can use it later
             String respawnHome = homeManagement.getRespawnHomeName(owner.getUniqueId());
@@ -118,12 +117,14 @@ public class GUIManager {
                 } else {
                     bedMeta.setDisplayName(homeName);
                 }
-                Location loc = homeManagement.getHomeLocation(owner.getUniqueId(), homes.get(i).get(x));
-                ArrayList < String > lore = new ArrayList < > ();
+                Location loc = homeManagement.getHomeLocation(
+                        owner.getUniqueId(), homes.get(i).get(x));
+                ArrayList<String> lore = new ArrayList<>();
                 lore.add(ChatColor.WHITE + "X: " + ChatColor.GRAY + (int) loc.getX());
                 lore.add(ChatColor.WHITE + "Y: " + ChatColor.GRAY + (int) loc.getY());
                 lore.add(ChatColor.WHITE + "Z: " + ChatColor.GRAY + (int) loc.getZ());
-                lore.add(ChatColor.WHITE + "World: " + ChatColor.GRAY + loc.getWorld().getName());
+                lore.add(ChatColor.WHITE + "World: " + ChatColor.GRAY
+                        + loc.getWorld().getName());
                 // Add a new line if the home is their respawn home
                 if (isRespawnHome) {
                     lore.add(ChatColor.GREEN + "You will respawn at this home.");

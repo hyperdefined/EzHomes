@@ -31,6 +31,7 @@ import java.util.regex.Pattern;
 public class CommandSetHome implements CommandExecutor {
 
     private final EzHomes ezHomes;
+
     public CommandSetHome(EzHomes ezHomes) {
         this.ezHomes = ezHomes;
     }
@@ -49,7 +50,8 @@ public class CommandSetHome implements CommandExecutor {
         if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
             homeSize = 0;
         } else {
-            homeSize = ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()).size();
+            homeSize =
+                    ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()).size();
         }
 
         int argsLength = args.length;
@@ -68,7 +70,8 @@ public class CommandSetHome implements CommandExecutor {
                     ezHomes.homeManagement.createHome(player.getUniqueId(), args[0]);
                     sender.sendMessage(ChatColor.GREEN + "New home set.");
                 } else {
-                    player.sendMessage(ChatColor.RED + "You can only have a maximum of " + ezHomes.config.getInt("total-homes") + " homes.");
+                    player.sendMessage(ChatColor.RED + "You can only have a maximum of "
+                            + ezHomes.config.getInt("total-homes") + " homes.");
                 }
                 return true;
             default:

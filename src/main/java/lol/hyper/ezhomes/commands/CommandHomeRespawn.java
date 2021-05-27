@@ -55,7 +55,7 @@ public class CommandHomeRespawn implements TabExecutor {
             return true;
         }
 
-        ArrayList < String > playerHomes = ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
+        ArrayList<String> playerHomes = ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
 
         int argsLength = args.length;
         switch (argsLength) {
@@ -67,7 +67,8 @@ public class CommandHomeRespawn implements TabExecutor {
                     ezHomes.homeManagement.removeRespawnLocation(player.getUniqueId());
                     sender.sendMessage(ChatColor.GREEN + "Respawn home has been removed.");
                 } else {
-                    sender.sendMessage(ChatColor.RED + "Invalid option. Valid options are: \"remove\" or \"set <home>\".");
+                    sender.sendMessage(
+                            ChatColor.RED + "Invalid option. Valid options are: \"remove\" or \"set <home>\".");
                 }
                 return true;
             case 2:
@@ -80,7 +81,8 @@ public class CommandHomeRespawn implements TabExecutor {
                         player.sendMessage(ChatColor.RED + "That home does not exist.");
                     }
                 } else {
-                    sender.sendMessage(ChatColor.RED + "Invalid option. Valid options are: \"remove\" or \"set\" <home>.");
+                    sender.sendMessage(
+                            ChatColor.RED + "Invalid option. Valid options are: \"remove\" or \"set\" <home>.");
                     return true;
                 }
         }
@@ -88,7 +90,7 @@ public class CommandHomeRespawn implements TabExecutor {
     }
 
     @Override
-    public List < String > onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (args.length == 0) {
             return Arrays.asList("set", "remove");
         }

@@ -31,7 +31,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -41,8 +44,8 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings("DuplicatedCode")
 public class HomeManagement {
 
-    public final HashMap < UUID, Long > teleportCooldowns = new HashMap < > ();
-    public final HashMap < Player, GUIManager > guiManagers = new HashMap < > ();
+    public final HashMap<UUID, Long> teleportCooldowns = new HashMap<>();
+    public final HashMap<Player, GUIManager> guiManagers = new HashMap<>();
 
     public final Path homesPath;
     public final File respawnsFile;
@@ -71,7 +74,8 @@ public class HomeManagement {
             try {
                 Files.createDirectories(homesPath);
             } catch (IOException e) {
-                ezHomes.logger.severe("Unable to create folder " + homesPath.toString() + "! Please make the folder manually or check folder permissions!");
+                ezHomes.logger.severe("Unable to create folder " + homesPath.toString()
+                        + "! Please make the folder manually or check folder permissions!");
                 e.printStackTrace();
             }
         }
@@ -82,7 +86,8 @@ public class HomeManagement {
                 JSONObject empty = new JSONObject();
                 writeFile(respawnsFile, empty.toJSONString()); // write an empty json because shit won't work otherwise
             } catch (IOException e) {
-                ezHomes.logger.severe("Unable to create file " + respawnsFile.toString() + "! Please make the file manually or check file permissions!");
+                ezHomes.logger.severe("Unable to create file " + respawnsFile.toString()
+                        + "! Please make the file manually or check file permissions!");
                 e.printStackTrace();
             }
         }
@@ -199,12 +204,12 @@ public class HomeManagement {
      * @param player Player to lookup homes for.
      * @return Returns null if the file doesn't exist. Returns 0 if there are no locations. Returns the number of locations if there are any.
      */
-    public ArrayList < String > getPlayerHomes(UUID player) {
+    public ArrayList<String> getPlayerHomes(UUID player) {
         File homeFile = getPlayerFile(player);
         if (readFile(homeFile) != null) {
-            ArrayList < String > playerHomes = new ArrayList < > ();
+            ArrayList<String> playerHomes = new ArrayList<>();
             JSONObject currentHomeFileJSON = readFile(homeFile);
-            for (Object o: currentHomeFileJSON.keySet()) {
+            for (Object o : currentHomeFileJSON.keySet()) {
                 playerHomes.add((String) o);
             }
             Collections.sort(playerHomes);
@@ -222,7 +227,8 @@ public class HomeManagement {
      */
     public boolean canPlayerTeleport(UUID player) {
         if (teleportCooldowns.containsKey(player)) {
-            long timeLeft = TimeUnit.NANOSECONDS.toSeconds((System.nanoTime() - teleportCooldowns.get(player)) - (long) ezHomes.config.getInt("teleport-cooldown"));
+            long timeLeft = TimeUnit.NANOSECONDS.toSeconds((System.nanoTime() - teleportCooldowns.get(player))
+                    - (long) ezHomes.config.getInt("teleport-cooldown"));
             return timeLeft >= (long) ezHomes.config.getInt("teleport-cooldown");
         } else {
             return true;
@@ -288,7 +294,7 @@ public class HomeManagement {
             return null;
         } else {
             TextComponent homesList = new TextComponent("");
-            for (String home: getPlayerHomes(player)) {
+            for (String home : getPlayerHomes(player)) {
                 int index = getPlayerHomes(player).indexOf(home);
                 TextComponent singleHome;
                 if (index != getPlayerHomes(player).size() - 1) {
@@ -302,7 +308,8 @@ public class HomeManagement {
                     singleHome.setColor(ChatColor.YELLOW);
                 }
                 singleHome.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/home " + home));
-                singleHome.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(ChatColor.GREEN + "Click to teleport to " + home + "!")));
+                singleHome.setHoverEvent(new HoverEvent(
+                        HoverEvent.Action.SHOW_TEXT, new Text(ChatColor.GREEN + "Click to teleport to " + home + "!")));
                 homesList.addExtra(singleHome);
             }
             return homesList;
@@ -321,7 +328,7 @@ public class HomeManagement {
             return;
         }
         int fileCount = 0;
-        for (File f: homeFiles) {
+        for (File f : homeFiles) {
             JSONParser parser = new JSONParser();
             try {
                 FileReader reader = new FileReader(f);
