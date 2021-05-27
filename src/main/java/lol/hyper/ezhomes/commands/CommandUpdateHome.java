@@ -19,7 +19,10 @@ package lol.hyper.ezhomes.commands;
 
 import lol.hyper.ezhomes.EzHomes;
 import org.bukkit.ChatColor;
-import org.bukkit.command.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -47,7 +50,7 @@ public class CommandUpdateHome implements TabExecutor {
             sender.sendMessage(ChatColor.RED + "You do not have any homes.");
             return true;
         }
-        ArrayList < String > playerHomes = ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
+        ArrayList<String> playerHomes = ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
 
         int argsLength = args.length;
         switch (argsLength) {
@@ -69,14 +72,15 @@ public class CommandUpdateHome implements TabExecutor {
                 }
                 return true;
             default:
-                player.sendMessage(ChatColor.RED + "Invalid command usage. Usage: /updatehome <home> to update a home's location.");
+                player.sendMessage(ChatColor.RED
+                        + "Invalid command usage. Usage: /updatehome <home> to update a home's location.");
                 break;
         }
         return true;
     }
 
     @Override
-    public List < String > onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         Player player = (Player) sender;
         return ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
     }
