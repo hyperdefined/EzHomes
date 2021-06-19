@@ -15,7 +15,7 @@
  * along with EzHomes.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package lol.hyper.ezhomes;
+package lol.hyper.ezhomes.tools;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;

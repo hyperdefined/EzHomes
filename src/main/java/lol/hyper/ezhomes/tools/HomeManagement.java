@@ -15,8 +15,9 @@
  * along with EzHomes.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package lol.hyper.ezhomes;
+package lol.hyper.ezhomes.tools;
 
+import lol.hyper.ezhomes.EzHomes;
 import lol.hyper.ezhomes.gui.GUIManager;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;

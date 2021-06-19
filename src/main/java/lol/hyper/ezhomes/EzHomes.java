@@ -19,6 +19,11 @@ package lol.hyper.ezhomes;
 
 import io.papermc.lib.PaperLib;
 import lol.hyper.ezhomes.commands.*;
+import lol.hyper.ezhomes.events.InventoryClick;
+import lol.hyper.ezhomes.events.PlayerLeave;
+import lol.hyper.ezhomes.events.PlayerRespawn;
+import lol.hyper.ezhomes.tools.HomeManagement;
+import lol.hyper.ezhomes.tools.UpdateChecker;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -43,7 +48,9 @@ public final class EzHomes extends JavaPlugin {
     public CommandUpdateHome commandUpdateHome;
     public CommandHomeRespawn commandHomeRespawn;
     public HomeManagement homeManagement;
-    public Events events;
+    public InventoryClick inventoryClick;
+    public PlayerLeave playerLeave;
+    public PlayerRespawn playerRespawn;
 
     @Override
     public void onEnable() {
@@ -56,7 +63,9 @@ public final class EzHomes extends JavaPlugin {
         commandWhere = new CommandWhere(this);
         commandUpdateHome = new CommandUpdateHome(this);
         commandHomeRespawn = new CommandHomeRespawn(this);
-        events = new Events(this);
+        inventoryClick = new InventoryClick(this);
+        playerLeave = new PlayerLeave(this);
+        playerRespawn = new PlayerRespawn(this);
         if (!configFile.exists()) {
             this.saveResource("config.yml", true);
             logger.info("Copying default config!");
@@ -78,7 +87,9 @@ public final class EzHomes extends JavaPlugin {
         this.getCommand("where").setExecutor(commandWhere);
         this.getCommand("respawnhome").setExecutor(commandHomeRespawn);
 
-        Bukkit.getPluginManager().registerEvents(events, this);
+        Bukkit.getPluginManager().registerEvents(inventoryClick, this);
+        Bukkit.getPluginManager().registerEvents(playerLeave, this);
+        Bukkit.getPluginManager().registerEvents(playerRespawn, this);
 
         new UpdateChecker(this, 82663).getVersion(version -> {
             if (this.getDescription().getVersion().equalsIgnoreCase(version)) {

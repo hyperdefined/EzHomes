@@ -18,7 +18,7 @@
 package lol.hyper.ezhomes.gui;
 
 import com.google.common.collect.Lists;
-import lol.hyper.ezhomes.HomeManagement;
+import lol.hyper.ezhomes.tools.HomeManagement;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

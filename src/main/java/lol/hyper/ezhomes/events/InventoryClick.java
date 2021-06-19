@@ -15,9 +15,10 @@
  * along with EzHomes.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package lol.hyper.ezhomes;
+package lol.hyper.ezhomes.events;
 
 import io.papermc.lib.PaperLib;
+import lol.hyper.ezhomes.EzHomes;
 import lol.hyper.ezhomes.gui.GUIHolder;
 import lol.hyper.ezhomes.gui.GUIManager;
 import org.bukkit.ChatColor;
@@ -27,18 +28,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.concurrent.TimeUnit;
 
-public class Events implements Listener {
+public class InventoryClick implements Listener {
 
     private final EzHomes ezHomes;
 
-    public Events(EzHomes ezHomes) {
+    public InventoryClick(EzHomes ezHomes) {
         this.ezHomes = ezHomes;
     }
 
@@ -84,25 +83,6 @@ public class Events implements Listener {
                     guiManager.openGUI(currentPage - 1);
                 }
             }
-        }
-    }
-
-    @EventHandler
-    public void onPlayerLeave(PlayerQuitEvent event) {
-        ezHomes.homeManagement.guiManagers.remove(event.getPlayer());
-    }
-
-    @EventHandler
-    public void onPlayerRespawn(PlayerRespawnEvent event) {
-        if (!ezHomes.config.getBoolean("allow-respawn-at-home")) {
-            return;
-        }
-
-        Player player = event.getPlayer();
-        Location respawnLocation = ezHomes.homeManagement.getRespawnLocation(player.getUniqueId());
-
-        if (respawnLocation != null) {
-            event.setRespawnLocation(respawnLocation);
         }
     }
 }

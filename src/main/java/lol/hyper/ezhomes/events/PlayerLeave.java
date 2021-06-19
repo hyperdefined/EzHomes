@@ -15,19 +15,23 @@
  * along with EzHomes.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package lol.hyper.ezhomes.gui;
+package lol.hyper.ezhomes.events;
 
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
+import lol.hyper.ezhomes.EzHomes;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 
-public class GUIHolder implements InventoryHolder {
+public class PlayerLeave implements Listener {
 
-    /**
-     * This class is to detect the custom inventory for the GUI.
-     * We set the owner to this class, and check if the inventory is an instance of this.
-     */
-    @Override
-    public Inventory getInventory() {
-        return null;
+    private final EzHomes ezHomes;
+
+    public PlayerLeave(EzHomes ezHomes) {
+        this.ezHomes = ezHomes;
+    }
+
+    @EventHandler
+    public void onPlayerLeave(PlayerQuitEvent event) {
+        ezHomes.homeManagement.guiManagers.remove(event.getPlayer());
     }
 }
