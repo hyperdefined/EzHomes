@@ -28,14 +28,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -75,7 +70,7 @@ public class HomeManagement {
             try {
                 Files.createDirectories(homesPath);
             } catch (IOException e) {
-                ezHomes.logger.severe("Unable to create folder " + homesPath.toString()
+                ezHomes.logger.severe("Unable to create folder " + homesPath
                         + "! Please make the folder manually or check folder permissions!");
                 e.printStackTrace();
             }
@@ -85,7 +80,7 @@ public class HomeManagement {
             try {
                 Files.createFile(respawnsFile.toPath());
                 JSONObject empty = new JSONObject();
-                writeFile(respawnsFile, empty.toJSONString()); // write an empty json because shit won't work otherwise
+                writeFile(respawnsFile, empty.toString()); // write an empty json because shit won't work otherwise
             } catch (IOException e) {
                 ezHomes.logger.severe("Unable to create file " + respawnsFile.toString()
                         + "! Please make the file manually or check file permissions!");
@@ -100,21 +95,23 @@ public class HomeManagement {
      * @return JSONObject with JSON data.
      */
     private JSONObject readFile(File file) {
-        if (!file.exists()) {
-            return null;
-        }
-        JSONParser parser = new JSONParser();
-        Object obj = null;
+        JSONObject object = null;
         try {
-            FileReader reader = new FileReader(file);
-            obj = parser.parse(reader);
-            reader.close();
-        } catch (IOException | ParseException e) {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            StringBuilder sb = new StringBuilder();
+            String line = br.readLine();
+            while (line != null) {
+                sb.append(line);
+                line = br.readLine();
+            }
+            object = new JSONObject(sb.toString());
+            br.close();
+        } catch (Exception e) {
             ezHomes.logger.severe("Unable to read file " + file.getAbsolutePath());
             ezHomes.logger.severe("This is bad, really bad.");
             e.printStackTrace();
         }
-        return (JSONObject) obj;
+        return object;
     }
 
     /**
@@ -172,7 +169,7 @@ public class HomeManagement {
         m.put("yaw", homeLocation.getYaw());
         m.put("world", homeLocation.getWorld().getName());
         homes.put(homeName, m);
-        writeFile(homeFile, homes.toJSONString());
+        writeFile(homeFile, homes.toString());
     }
 
     /**
@@ -255,7 +252,7 @@ public class HomeManagement {
         m.put("yaw", newLocation.getYaw());
         m.put("world", newLocation.getWorld().getName());
         homes.put(homeName, m);
-        writeFile(homeFile, homes.toJSONString());
+        writeFile(homeFile, homes.toString());
     }
 
     /**
@@ -271,11 +268,11 @@ public class HomeManagement {
         // check if the player has zero homes
         // if they do, delete the file off of the disk
         // otherwise write the new file
-        if (homes.size() == 0) {
+        if (homes.length() == 0) {
             deletePlayerHomeFile(player);
             return;
         }
-        writeFile(homeFile, homes.toJSONString());
+        writeFile(homeFile, homes.toString());
 
         // If the player deletes their respawn location, then remove
         // it from the respawn home lists
@@ -330,19 +327,16 @@ public class HomeManagement {
         }
         int fileCount = 0;
         for (File f : homeFiles) {
-            JSONParser parser = new JSONParser();
-            try {
-                FileReader reader = new FileReader(f);
-                Object obj = parser.parse(reader);
-                reader.close();
-                JSONObject homeFileJSON = (JSONObject) obj;
-                if (homeFileJSON.size() == 0) {
+            JSONObject homeFileJSON = readFile(f);
+            if (homeFileJSON.length() == 0) {
+                try {
                     Files.delete(f.toPath());
-                    ezHomes.logger.info("Deleting empty home file " + f);
-                    fileCount++;
+                } catch (IOException e) {
+                    ezHomes.logger.severe("Unable to delete empty home file " + f);
+                    e.printStackTrace();
                 }
-            } catch (ParseException | IOException e) {
-                e.printStackTrace();
+                ezHomes.logger.info("Deleting empty home file " + f);
+                fileCount++;
             }
         }
         ezHomes.logger.info(fileCount + " file(s) were cleaned.");
@@ -360,8 +354,8 @@ public class HomeManagement {
         if (respawns == null) {
             respawns = new JSONObject();
         }
-        respawns.put(player, homeName);
-        writeFile(respawnsFile, respawns.toJSONString());
+        respawns.put(player.toString(), homeName);
+        writeFile(respawnsFile, respawns.toString());
     }
 
     /**
@@ -376,7 +370,7 @@ public class HomeManagement {
             respawns = new JSONObject();
         }
         respawns.remove(player.toString());
-        writeFile(respawnsFile, respawns.toJSONString());
+        writeFile(respawnsFile, respawns.toString());
     }
 
     /**
