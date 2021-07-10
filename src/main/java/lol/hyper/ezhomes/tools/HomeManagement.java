@@ -95,6 +95,9 @@ public class HomeManagement {
      * @return JSONObject with JSON data.
      */
     private JSONObject readFile(File file) {
+        if (!file.exists()) {
+            return null;
+        }
         JSONObject object = null;
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
@@ -380,10 +383,10 @@ public class HomeManagement {
      */
     public Location getRespawnLocation(UUID player) {
         JSONObject respawns = readFile(respawnsFile);
-        if (respawns.get(player.toString()) == null) {
-            return null;
-        } else {
+        if (respawns.has(player.toString())) {
             return getHomeLocation(player, respawns.get(player.toString()).toString());
+        } else {
+            return null;
         }
     }
 
@@ -394,10 +397,10 @@ public class HomeManagement {
      */
     public String getRespawnHomeName(UUID player) {
         JSONObject respawns = readFile(respawnsFile);
-        if (respawns.get(player.toString()) == null) {
-            return null;
-        } else {
+        if (respawns.has(player.toString())) {
             return respawns.get(player.toString()).toString();
+        } else {
+            return null;
         }
     }
 }
