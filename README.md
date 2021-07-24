@@ -17,7 +17,7 @@ EzHomes is a super simple homes plugin for Spigot/Paper. It works on versions 1.
 * Allow players to set a home they will respawn at. You can disable this if you don't want it.
 
 ## Documentation
-Visit the [wiki](https://github.com/hyperdefined/EzHomes/wiki) for help.
+Visit the [wiki](https://docs.hyper.lol/ezhomes) for help.
 
 ## License
 This plugin is released under GNU General Public License v3. See [LICENSE](https://github.com/hyperdefined/EzHomes/blob/master/LICENSE).
