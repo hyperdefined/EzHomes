@@ -3,7 +3,8 @@ version: ${project.version}
 main: lol.hyper.ezhomes.EzHomes
 api-version: 1.13
 author: hyperdefined
-description: A simple homes plugin.
+website: https://www.spigotmc.org/resources/ezhomes.82663/
+description: A super easy to use home plugin.
 commands:
   sethome:
     usage: /sethome <name>
@@ -29,10 +30,13 @@ commands:
   respawnhome:
     usage: /respawnhome
     description: Set a home to respawn at.
-permission:
+permissions:
   ezhomes.reload:
     default: op
+    description: Allows the usage of /homesreload
   ezhomes.bypasslimit:
     default: op
+    description: Allows player to bypass home limit
   ezhomes.bypasscooldown:
     default: op
+    description: Allows player to bypass cooldown between teleports
