@@ -10,7 +10,7 @@
 	<a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="License: GPL v3"></a>
 </p>
 
-EzHomes is a super simple homes plugin for Spigot/Paper. It works on versions 1.16 and above. Players can save locations and teleport to them.
+EzHomes is a super simple homes plugin. Players can save locations and teleport back to them when they want to.
 
 ## Features
 * Works like any other home plugin.
