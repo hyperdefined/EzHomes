@@ -19,6 +19,7 @@ package lol.hyper.ezhomes.gui;
 
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
+import org.jetbrains.annotations.NotNull;
 
 public class GUIHolder implements InventoryHolder {
 
@@ -27,7 +28,7 @@ public class GUIHolder implements InventoryHolder {
      * We set the owner to this class, and check if the inventory is an instance of this.
      */
     @Override
-    public Inventory getInventory() {
+    public @NotNull Inventory getInventory() {
         return null;
     }
 }

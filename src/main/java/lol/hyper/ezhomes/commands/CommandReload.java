@@ -22,6 +22,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
 public class CommandReload implements CommandExecutor {
 
@@ -32,7 +33,7 @@ public class CommandReload implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (sender.hasPermission("ezhomes.reload") || sender.isOp()) {
             ezHomes.loadConfig();
             sender.sendMessage(ChatColor.GREEN + "Config was reloaded!");

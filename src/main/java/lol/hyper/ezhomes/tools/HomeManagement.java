@@ -82,7 +82,7 @@ public class HomeManagement {
                 JSONObject empty = new JSONObject();
                 writeFile(respawnsFile, empty.toString()); // write an empty json because shit won't work otherwise
             } catch (IOException e) {
-                ezHomes.logger.severe("Unable to create file " + respawnsFile.toString()
+                ezHomes.logger.severe("Unable to create file " + respawnsFile
                         + "! Please make the file manually or check file permissions!");
                 e.printStackTrace();
             }
@@ -164,7 +164,7 @@ public class HomeManagement {
         if (homes == null) {
             homes = new JSONObject();
         }
-        Map m = new LinkedHashMap(5);
+        Map<String, Object> m = new LinkedHashMap<>(5);
         m.put("x", homeLocation.getX());
         m.put("y", homeLocation.getY());
         m.put("z", homeLocation.getZ());
@@ -208,11 +208,8 @@ public class HomeManagement {
     public ArrayList<String> getPlayerHomes(UUID player) {
         File homeFile = getPlayerFile(player);
         if (readFile(homeFile) != null) {
-            ArrayList<String> playerHomes = new ArrayList<>();
             JSONObject currentHomeFileJSON = readFile(homeFile);
-            for (Object o : currentHomeFileJSON.keySet()) {
-                playerHomes.add((String) o);
-            }
+            ArrayList<String> playerHomes = new ArrayList<>(currentHomeFileJSON.keySet());
             Collections.sort(playerHomes);
             return playerHomes;
         } else {
@@ -247,7 +244,7 @@ public class HomeManagement {
         File homeFile = getPlayerFile(player);
         JSONObject homes = readFile(homeFile);
         homes.remove(homeName);
-        Map m = new LinkedHashMap(5);
+        Map<String, Object> m = new LinkedHashMap<>(5);
         m.put("x", newLocation.getX());
         m.put("y", newLocation.getY());
         m.put("z", newLocation.getZ());
