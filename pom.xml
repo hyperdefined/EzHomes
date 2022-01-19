@@ -23,7 +23,7 @@
 
     <groupId>lol.hyper</groupId>
     <artifactId>ezhomes</artifactId>
-    <version>1.5.4</version>
+    <version>1.6</version>
     <packaging>jar</packaging>
 
     <name>EzHomes</name>
