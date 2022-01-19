@@ -17,10 +17,10 @@
 
 package lol.hyper.ezhomes.events;
 
-import io.papermc.lib.PaperLib;
 import lol.hyper.ezhomes.EzHomes;
 import lol.hyper.ezhomes.gui.GUIHolder;
 import lol.hyper.ezhomes.gui.GUIManager;
+import lol.hyper.ezhomes.tools.TeleportTask;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -30,6 +30,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.concurrent.TimeUnit;
 
@@ -56,22 +57,33 @@ public class InventoryClick implements Listener {
                 if (ezHomes.homeManagement.canPlayerTeleport(player.getUniqueId())
                         || player.hasPermission("ezhomes.bypasscooldown")) {
                     ItemMeta meta = item.getItemMeta();
-                    Location loc = ezHomes.homeManagement.getHomeLocation(
-                            player.getUniqueId(), ChatColor.stripColor(meta.getDisplayName()));
-                    PaperLib.teleportAsync(player, loc);
-                    ezHomes.homeManagement.teleportCooldowns.put(player.getUniqueId(), System.nanoTime());
-                    player.sendMessage(ChatColor.GREEN + "Whoosh!");
+                    Location loc =
+                            ezHomes.homeManagement.getHomeLocation(
+                                    player.getUniqueId(),
+                                    ChatColor.stripColor(meta.getDisplayName()));
+
+                    BukkitTask teleportTask =
+                            new TeleportTask(ezHomes, player, loc).runTaskTimer(ezHomes, 0, 20L);
+                    ezHomes.playerMove.teleportTasks.put(player.getUniqueId(), teleportTask);
+                    player.closeInventory();
                 } else {
-                    long timeLeft = TimeUnit.NANOSECONDS.toSeconds(
-                            System.nanoTime() - ezHomes.homeManagement.teleportCooldowns.get(player.getUniqueId()));
+                    long timeLeft =
+                            TimeUnit.NANOSECONDS.toSeconds(
+                                    System.nanoTime()
+                                            - ezHomes.homeManagement.teleportCooldowns.get(
+                                                    player.getUniqueId()));
                     long configTime = ezHomes.config.getInt("teleport-cooldown");
                     player.sendMessage(
-                            ChatColor.RED + "You must wait " + (configTime - timeLeft) + " seconds to teleport.");
+                            ChatColor.RED
+                                    + "You must wait "
+                                    + (configTime - timeLeft)
+                                    + " seconds to teleport.");
                 }
             }
 
             if (item.getType() == Material.PAPER && item.getType() != Material.AIR) {
-                int currentPage = ezHomes.homeManagement.guiManagers.get(player).getCurrentPageIndex();
+                int currentPage =
+                        ezHomes.homeManagement.guiManagers.get(player).getCurrentPageIndex();
                 GUIManager guiManager = ezHomes.homeManagement.guiManagers.get(player);
                 ItemStack paper = event.getCurrentItem();
                 if (paper.getItemMeta().getDisplayName().contains("Next")) {

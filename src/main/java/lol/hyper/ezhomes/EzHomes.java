@@ -21,6 +21,7 @@ import io.papermc.lib.PaperLib;
 import lol.hyper.ezhomes.commands.*;
 import lol.hyper.ezhomes.events.InventoryClick;
 import lol.hyper.ezhomes.events.PlayerLeave;
+import lol.hyper.ezhomes.events.PlayerMove;
 import lol.hyper.ezhomes.events.PlayerRespawn;
 import lol.hyper.ezhomes.tools.HomeManagement;
 import lol.hyper.githubreleaseapi.GitHubRelease;
@@ -39,7 +40,7 @@ public final class EzHomes extends JavaPlugin {
 
     public final File configFile = new File(this.getDataFolder(), "config.yml");
     public final Logger logger = this.getLogger();
-    public final int CONFIG_VERSION = 2;
+    public final int CONFIG_VERSION = 3;
     public FileConfiguration config = this.getConfig();
     public CommandReload commandReload;
     public CommandHome commandHome;
@@ -52,6 +53,7 @@ public final class EzHomes extends JavaPlugin {
     public HomeManagement homeManagement;
     public InventoryClick inventoryClick;
     public PlayerLeave playerLeave;
+    public PlayerMove playerMove;
     public PlayerRespawn playerRespawn;
 
     @Override
@@ -67,6 +69,7 @@ public final class EzHomes extends JavaPlugin {
         commandHomeRespawn = new CommandHomeRespawn(this);
         inventoryClick = new InventoryClick(this);
         playerLeave = new PlayerLeave(this);
+        playerMove = new PlayerMove();
         playerRespawn = new PlayerRespawn(this);
         if (!configFile.exists()) {
             this.saveResource("config.yml", true);
@@ -91,6 +94,7 @@ public final class EzHomes extends JavaPlugin {
 
         Bukkit.getPluginManager().registerEvents(inventoryClick, this);
         Bukkit.getPluginManager().registerEvents(playerLeave, this);
+        Bukkit.getPluginManager().registerEvents(playerMove, this);
         Bukkit.getPluginManager().registerEvents(playerRespawn, this);
 
         Bukkit.getScheduler().runTaskLaterAsynchronously(this, () -> homeManagement.cleanEmptyHomeFiles(), 100);

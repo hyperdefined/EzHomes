@@ -1,6 +1,9 @@
 # How many seconds a player has to wait before teleporting again.
 teleport-cooldown: 100
 
+# How many seconds should a player wait when the try to teleport home?
+seconds-to-teleport: 10
+
 # How many homes a player can have.
 total-homes: 5
 
@@ -12,4 +15,4 @@ use-homes-gui: true
 allow-respawn-at-home: true
 
 # No touch please :)
-config-version: 2
+config-version: 3
