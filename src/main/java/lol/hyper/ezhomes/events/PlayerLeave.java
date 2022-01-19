@@ -33,7 +33,9 @@ public class PlayerLeave implements Listener {
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
         ezHomes.homeManagement.guiManagers.remove(event.getPlayer());
-        ezHomes.playerMove.teleportTasks.get(event.getPlayer().getUniqueId()).cancel();
-        ezHomes.playerMove.teleportTasks.remove(event.getPlayer().getUniqueId());
+        if (ezHomes.playerMove.teleportTasks.containsKey(event.getPlayer().getUniqueId())) {
+            ezHomes.playerMove.teleportTasks.get(event.getPlayer().getUniqueId()).cancel();
+            ezHomes.playerMove.teleportTasks.remove(event.getPlayer().getUniqueId());
+        }
     }
 }
