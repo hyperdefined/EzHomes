@@ -40,3 +40,6 @@ permissions:
   ezhomes.bypasscooldown:
     default: op
     description: Allows player to bypass cooldown between teleports
+libraries:
+  - org.json:json:20211205
+  - lol.hyper:github-release-api:1.0.1

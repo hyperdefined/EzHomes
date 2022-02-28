@@ -75,16 +75,8 @@
                                     <shadedPattern>lol.hyper.ezhomes.paperlib</shadedPattern>
                                 </relocation>
                                 <relocation>
-                                    <pattern>org.json</pattern>
-                                    <shadedPattern>lol.hyper.ezhomes.json</shadedPattern>
-                                </relocation>
-                                <relocation>
                                     <pattern>org.bstats</pattern>
                                     <shadedPattern>lol.hyper.ezhomes.bstats</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>com.google.guava</pattern>
-                                    <shadedPattern>lol.hyper.ezhomes.guava</shadedPattern>
                                 </relocation>
                             </relocations>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
@@ -123,6 +115,7 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20211205</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>io.papermc</groupId>
@@ -140,6 +133,7 @@
             <groupId>lol.hyper</groupId>
             <artifactId>github-release-api</artifactId>
             <version>1.0.1</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
