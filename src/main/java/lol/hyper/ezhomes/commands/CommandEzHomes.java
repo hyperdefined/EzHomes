@@ -23,23 +23,23 @@ public class CommandEzHomes implements TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length == 0) {
-            ezHomes.adventure().sender(sender).sendMessage(aboutPlugin);
+            ezHomes.getAdventure().sender(sender).sendMessage(aboutPlugin);
             return true;
         }
         if (args.length == 1) {
             if (args[0].equalsIgnoreCase("reload")) {
                 if (sender.hasPermission("ezhomes.reload")) {
                     ezHomes.loadConfig();
-                    ezHomes.adventure().sender(sender).sendMessage(ezHomes.getMessage("config-reloaded", null));
+                    ezHomes.getAdventure().sender(sender).sendMessage(ezHomes.getMessage("config-reloaded", null));
                 } else {
-                    ezHomes.adventure().sender(sender).sendMessage(ezHomes.getMessage("no-perms", null));
+                    ezHomes.getAdventure().sender(sender).sendMessage(ezHomes.getMessage("no-perms", null));
                 }
             } else {
-                ezHomes.adventure().sender(sender).sendMessage(aboutPlugin);
+                ezHomes.getAdventure().sender(sender).sendMessage(aboutPlugin);
             }
             return true;
         }
-        ezHomes.adventure().sender(sender).sendMessage(aboutPlugin);
+        ezHomes.getAdventure().sender(sender).sendMessage(aboutPlugin);
         return true;
     }
 

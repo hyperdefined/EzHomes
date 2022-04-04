@@ -38,13 +38,13 @@ public class CommandHomes implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (sender instanceof ConsoleCommandSender) {
-            ezHomes.adventure().sender(sender).sendMessage(ezHomes.getMessage("errors.must-be-player", null));
+            ezHomes.getAdventure().sender(sender).sendMessage(ezHomes.getMessage("errors.must-be-player", null));
             return true;
         }
         Player player = (Player) sender;
 
         if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
-            ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("errors.no-homes", null));
+            ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("errors.no-homes", null));
             return true;
         }
         if (ezHomes.config.getBoolean("use-homes-gui")) {
@@ -65,18 +65,18 @@ public class CommandHomes implements CommandExecutor {
                 for (Component component : ezHomes.homeManagement.getHomesClickable(player.getUniqueId())) {
                     homesList = homesList.append(component);
                 }
-                ezHomes.adventure().player(player).sendMessage(homesList);
+                ezHomes.getAdventure().player(player).sendMessage(homesList);
                 continue;
             }
             if (line.contains("%respawnhome%")) {
                 String respawnHome = ezHomes.homeManagement.getRespawnHomeName(player.getUniqueId());
                 if (ezHomes.config.getBoolean("allow-respawn-at-home") && respawnHome != null) {
-                    ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("commands.homes.respawn-home", respawnHome));
+                    ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("commands.homes.respawn-home", respawnHome));
                 }
                 continue;
             }
             Component component = ezHomes.miniMessage.deserialize(line);
-            ezHomes.adventure().player(player).sendMessage(component);
+            ezHomes.getAdventure().player(player).sendMessage(component);
         }
         return true;
     }

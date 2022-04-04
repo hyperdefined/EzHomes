@@ -42,11 +42,11 @@ public class TeleportTask extends BukkitRunnable {
         if (seconds == 0) {
             PaperLib.teleportAsync(player, location);
             ezHomes.homeManagement.teleportCooldowns.put(player.getUniqueId(), System.nanoTime());
-            ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("commands.home.on-teleport", null));
+            ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("commands.home.on-teleport", null));
             ezHomes.playerMove.teleportTasks.remove(player.getUniqueId());
             this.cancel();
         } else {
-            ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("commands.home.teleporting-in", seconds));
+            ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("commands.home.teleporting-in", seconds));
             seconds--;
         }
     }

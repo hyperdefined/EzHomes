@@ -46,7 +46,7 @@ public class CommandHome implements TabExecutor {
             @NotNull String label,
             String[] args) {
         if (sender instanceof ConsoleCommandSender) {
-            ezHomes.adventure()
+            ezHomes.getAdventure()
                     .sender(sender)
                     .sendMessage(ezHomes.getMessage("errors.must-be-player", null));
             return true;
@@ -54,7 +54,7 @@ public class CommandHome implements TabExecutor {
 
         Player player = (Player) sender;
         if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
-            ezHomes.adventure()
+            ezHomes.getAdventure()
                     .player(player)
                     .sendMessage(ezHomes.getMessage("errors.no-homes", null));
             return true;
@@ -65,7 +65,7 @@ public class CommandHome implements TabExecutor {
         int argsLength = args.length;
         switch (argsLength) {
             case 0:
-                ezHomes.adventure()
+                ezHomes.getAdventure()
                         .player(player)
                         .sendMessage(ezHomes.getMessage("errors.specify-home-name", null));
                 return true;
@@ -82,7 +82,7 @@ public class CommandHome implements TabExecutor {
                                         .runTaskTimer(ezHomes, 0, 20L);
                         ezHomes.playerMove.teleportTasks.put(player.getUniqueId(), teleportTask);
                     } else {
-                        ezHomes.adventure()
+                        ezHomes.getAdventure()
                                 .player(player)
                                 .sendMessage(
                                         ezHomes.getMessage("errors.home-does-not-exist", null));
@@ -94,7 +94,7 @@ public class CommandHome implements TabExecutor {
                                             - ezHomes.homeManagement.teleportCooldowns.get(
                                                     player.getUniqueId()));
                     long configTime = ezHomes.config.getInt("teleport-cooldown");
-                    ezHomes.adventure()
+                    ezHomes.getAdventure()
                             .player(player)
                             .sendMessage(
                                     ezHomes.getMessage(
@@ -103,7 +103,7 @@ public class CommandHome implements TabExecutor {
                 }
                 return true;
             default:
-                ezHomes.adventure()
+                ezHomes.getAdventure()
                         .player(player)
                         .sendMessage(ezHomes.getMessage("commands.home.invalid-syntax", null));
                 break;

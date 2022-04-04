@@ -44,14 +44,14 @@ public class CommandHomeRespawn implements TabExecutor {
             @NotNull String label,
             String[] args) {
         if (sender instanceof ConsoleCommandSender) {
-            ezHomes.adventure()
+            ezHomes.getAdventure()
                     .sender(sender)
                     .sendMessage(ezHomes.getMessage("errors.must-be-player", null));
             return true;
         }
 
         if (!ezHomes.config.getBoolean("allow-respawn-at-home")) {
-            ezHomes.adventure()
+            ezHomes.getAdventure()
                     .sender(sender)
                     .sendMessage(
                             ezHomes.getMessage("commands.respawnhome.feature-not-enabled", null));
@@ -60,7 +60,7 @@ public class CommandHomeRespawn implements TabExecutor {
 
         Player player = (Player) sender;
         if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
-            ezHomes.adventure()
+            ezHomes.getAdventure()
                     .player(player)
                     .sendMessage(ezHomes.getMessage("errors.no-homes", null));
             return true;
@@ -71,20 +71,20 @@ public class CommandHomeRespawn implements TabExecutor {
         int argsLength = args.length;
         switch (argsLength) {
             case 0:
-                ezHomes.adventure()
+                ezHomes.getAdventure()
                         .sender(sender)
                         .sendMessage(ezHomes.getMessage("errors.specify-action.", null));
                 break;
             case 1:
                 if (args[0].equalsIgnoreCase("remove")) {
                     ezHomes.homeManagement.removeRespawnLocation(player.getUniqueId());
-                    ezHomes.adventure()
+                    ezHomes.getAdventure()
                             .sender(sender)
                             .sendMessage(
                                     ezHomes.getMessage(
                                             "commands.respawnhome.respawnhome-removed", null));
                 } else {
-                    ezHomes.adventure()
+                    ezHomes.getAdventure()
                             .sender(sender)
                             .sendMessage(
                                     ezHomes.getMessage(
@@ -96,19 +96,19 @@ public class CommandHomeRespawn implements TabExecutor {
                     String homeName = args[1];
                     if (playerHomes.contains(homeName)) {
                         ezHomes.homeManagement.setRespawnLocation(player.getUniqueId(), homeName);
-                        ezHomes.adventure()
+                        ezHomes.getAdventure()
                                 .sender(sender)
                                 .sendMessage(
                                         ezHomes.getMessage(
                                                 "commands.respawnhome.respawnhome-set", null));
                     } else {
-                        ezHomes.adventure()
+                        ezHomes.getAdventure()
                                 .sender(sender)
                                 .sendMessage(
                                         ezHomes.getMessage("errors.home-does-not-exist.", null));
                     }
                 } else {
-                    ezHomes.adventure()
+                    ezHomes.getAdventure()
                             .sender(sender)
                             .sendMessage(
                                     ezHomes.getMessage(

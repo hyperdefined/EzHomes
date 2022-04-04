@@ -40,7 +40,7 @@ public class CommandSetHome implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (sender instanceof ConsoleCommandSender) {
-            ezHomes.adventure().sender(sender).sendMessage(ezHomes.getMessage("errors.must-be-player", null));
+            ezHomes.getAdventure().sender(sender).sendMessage(ezHomes.getMessage("errors.must-be-player", null));
             return true;
         }
 
@@ -58,7 +58,7 @@ public class CommandSetHome implements CommandExecutor {
         int argsLength = args.length;
         switch (argsLength) {
             case 0:
-                ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("errors.specify-home-name", null));
+                ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("errors.specify-home-name", null));
                 return true;
             case 1:
                 ArrayList<String> homes = ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
@@ -66,13 +66,13 @@ public class CommandSetHome implements CommandExecutor {
                     Pattern pattern = Pattern.compile("^[a-zA-Z0-9]+$");
                     Matcher matcher = pattern.matcher(args[0]);
                     if (!matcher.matches()) {
-                        ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("errors.invalid-characters", null));
+                        ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("errors.invalid-characters", null));
                         return true;
                     }
                     // check for duplicates
                     if (homeSize != 0 && homes != null) {
                         if (homes.stream().anyMatch(x -> x.equalsIgnoreCase(args[0]))) {
-                            ezHomes.adventure()
+                            ezHomes.getAdventure()
                                     .player(player)
                                     .sendMessage(
                                             ezHomes.getMessage("errors.home-already-exists", null));
@@ -80,13 +80,13 @@ public class CommandSetHome implements CommandExecutor {
                         }
                     }
                     ezHomes.homeManagement.createHome(player.getUniqueId(), args[0]);
-                    ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("commands.sethome.new-home", null));
+                    ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("commands.sethome.new-home", null));
                 } else {
-                    ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("commands.sethome.home-limit", ezHomes.config.getInt("total-homes")));
+                    ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("commands.sethome.home-limit", ezHomes.config.getInt("total-homes")));
                 }
                 return true;
             default:
-                ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("commands.sethome.invalid-syntax", null));
+                ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("commands.sethome.invalid-syntax", null));
                 break;
         }
         return true;

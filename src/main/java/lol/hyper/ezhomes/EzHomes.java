@@ -206,7 +206,7 @@ public final class EzHomes extends JavaPlugin {
         return messageList;
     }
 
-    public BukkitAudiences adventure() {
+    public BukkitAudiences getAdventure() {
         if(this.adventure == null) {
             throw new IllegalStateException("Tried to access Adventure when the plugin was disabled!");
         }

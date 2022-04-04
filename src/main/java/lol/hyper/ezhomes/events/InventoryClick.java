@@ -73,7 +73,7 @@ public class InventoryClick implements Listener {
                                             - ezHomes.homeManagement.teleportCooldowns.get(
                                                     player.getUniqueId()));
                     long configTime = ezHomes.config.getInt("teleport-cooldown");
-                    ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("commands.home.teleport-cooldown", (configTime - timeLeft)));
+                    ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("commands.home.teleport-cooldown", (configTime - timeLeft)));
                 }
             }
 

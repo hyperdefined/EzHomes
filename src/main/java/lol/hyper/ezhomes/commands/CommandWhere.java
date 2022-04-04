@@ -41,13 +41,13 @@ public class CommandWhere implements TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (sender instanceof ConsoleCommandSender) {
-            ezHomes.adventure().sender(sender).sendMessage(ezHomes.getMessage("errors.must-be-player", null));
+            ezHomes.getAdventure().sender(sender).sendMessage(ezHomes.getMessage("errors.must-be-player", null));
             return true;
         }
 
         Player player = (Player) sender;
         if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
-            ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("errors.no-homes", null));
+            ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("errors.no-homes", null));
             return true;
         }
         ArrayList<String> playerHomes = ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
@@ -55,7 +55,7 @@ public class CommandWhere implements TabExecutor {
         int argsLength = args.length;
         switch (argsLength) {
             case 0:
-                ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("errors.specify-home-name", null));
+                ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("errors.specify-home-name", null));
                 return true;
             case 1:
                 if (playerHomes.contains(args[0])) {
@@ -77,14 +77,14 @@ public class CommandWhere implements TabExecutor {
                             line = line.replace("%z%", String.valueOf((int) home.getZ()));
                         }
                         Component component = ezHomes.miniMessage.deserialize(line);
-                        ezHomes.adventure().player(player).sendMessage(component);
+                        ezHomes.getAdventure().player(player).sendMessage(component);
                     }
                 } else {
-                    ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("errors.home-does-not-exist", null));
+                    ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("errors.home-does-not-exist", null));
                 }
                 return true;
             default:
-                ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("commands.where.invalid-syntax", null));
+                ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("commands.where.invalid-syntax", null));
                 break;
         }
         return true;
