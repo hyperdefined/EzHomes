@@ -19,11 +19,10 @@ package lol.hyper.ezhomes.tools;
 
 import lol.hyper.ezhomes.EzHomes;
 import lol.hyper.ezhomes.gui.GUIManager;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.chat.hover.content.Text;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -57,6 +56,7 @@ public class HomeManagement {
 
     /**
      * Get a player's home file.
+     *
      * @param player Player to get file.
      * @return The player's home file.
      */
@@ -70,8 +70,10 @@ public class HomeManagement {
             try {
                 Files.createDirectories(homesPath);
             } catch (IOException e) {
-                ezHomes.logger.severe("Unable to create folder " + homesPath
-                        + "! Please make the folder manually or check folder permissions!");
+                ezHomes.logger.severe(
+                        "Unable to create folder "
+                                + homesPath
+                                + "! Please make the folder manually or check folder permissions!");
                 e.printStackTrace();
             }
         }
@@ -80,10 +82,14 @@ public class HomeManagement {
             try {
                 Files.createFile(respawnsFile.toPath());
                 JSONObject empty = new JSONObject();
-                writeFile(respawnsFile, empty.toString()); // write an empty json because shit won't work otherwise
+                writeFile(
+                        respawnsFile,
+                        empty.toString()); // write an empty json because shit won't work otherwise
             } catch (IOException e) {
-                ezHomes.logger.severe("Unable to create file " + respawnsFile
-                        + "! Please make the file manually or check file permissions!");
+                ezHomes.logger.severe(
+                        "Unable to create file "
+                                + respawnsFile
+                                + "! Please make the file manually or check file permissions!");
                 e.printStackTrace();
             }
         }
@@ -91,6 +97,7 @@ public class HomeManagement {
 
     /**
      * Read data from JSON file.
+     *
      * @param file File to read data from.
      * @return JSONObject with JSON data.
      */
@@ -119,6 +126,7 @@ public class HomeManagement {
 
     /**
      * Write data to JSON file.
+     *
      * @param file File to write data to.
      * @param jsonToWrite Data to write to file. This much be a JSON string.
      */
@@ -136,6 +144,7 @@ public class HomeManagement {
 
     /**
      * Delete a player's home file.
+     *
      * @param player Player to delete file.
      */
     private void deletePlayerHomeFile(UUID player) {
@@ -203,7 +212,8 @@ public class HomeManagement {
      * Returns a list of player homes.
      *
      * @param player Player to lookup homes for.
-     * @return Returns null if the file doesn't exist. Returns 0 if there are no locations. Returns the number of locations if there are any.
+     * @return Returns null if the file doesn't exist. Returns 0 if there are no locations. Returns
+     *     the number of locations if there are any.
      */
     public ArrayList<String> getPlayerHomes(UUID player) {
         File homeFile = getPlayerFile(player);
@@ -225,8 +235,10 @@ public class HomeManagement {
      */
     public boolean canPlayerTeleport(UUID player) {
         if (teleportCooldowns.containsKey(player)) {
-            long timeLeft = TimeUnit.NANOSECONDS.toSeconds((System.nanoTime() - teleportCooldowns.get(player))
-                    - (long) ezHomes.config.getInt("teleport-cooldown"));
+            long timeLeft =
+                    TimeUnit.NANOSECONDS.toSeconds(
+                            (System.nanoTime() - teleportCooldowns.get(player))
+                                    - (long) ezHomes.config.getInt("teleport-cooldown"));
             return timeLeft >= (long) ezHomes.config.getInt("teleport-cooldown");
         } else {
             return true;
@@ -287,36 +299,49 @@ public class HomeManagement {
      * @param player Player to get the homes of.
      * @return Returns TextComponent of homes that can be clicked.
      */
-    public TextComponent getHomesClickable(UUID player) {
+    public List<Component> getHomesClickable(UUID player) {
+        List<Component> components = new ArrayList<>();
         if (getPlayerHomes(player) == null) {
             return null;
         } else {
-            TextComponent homesList = new TextComponent("");
             for (String home : getPlayerHomes(player)) {
-                int index = getPlayerHomes(player).indexOf(home);
                 TextComponent singleHome;
+                int index = getPlayerHomes(player).indexOf(home);
+                String finalHomeName;
                 if (index != getPlayerHomes(player).size() - 1) {
-                    singleHome = new TextComponent(home + ", ");
+                    finalHomeName = home + ", ";
                 } else {
-                    singleHome = new TextComponent(home);
+                    finalHomeName = home;
                 }
-                if (getRespawnHomeName(player) != null && home.equals(getRespawnHomeName(player))) {
-                    singleHome.setColor(ChatColor.GREEN);
+                if (ezHomes.config.getBoolean("allow-respawn-homes") && home.equals(getRespawnHomeName(player))) {
+                    singleHome =
+                            Component.text(finalHomeName)
+                                    .color(NamedTextColor.GREEN)
+                                    .clickEvent(
+                                            ClickEvent.clickEvent(
+                                                    ClickEvent.Action.RUN_COMMAND, "/home " + home))
+                                    .hoverEvent(
+                                            Component.text("Click to teleport to " + home + "!")
+                                                    .color(NamedTextColor.GREEN));
                 } else {
-                    singleHome.setColor(ChatColor.YELLOW);
+                    singleHome =
+                            Component.text(finalHomeName)
+                                    .color(NamedTextColor.YELLOW)
+                                    .clickEvent(
+                                            ClickEvent.clickEvent(
+                                                    ClickEvent.Action.RUN_COMMAND, "/home " + home))
+                                    .hoverEvent(
+                                            Component.text("Click to teleport to " + home + "!")
+                                                    .color(NamedTextColor.GREEN));
                 }
-                singleHome.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/home " + home));
-                singleHome.setHoverEvent(new HoverEvent(
-                        HoverEvent.Action.SHOW_TEXT, new Text(ChatColor.GREEN + "Click to teleport to " + home + "!")));
-                homesList.addExtra(singleHome);
+                components.add(singleHome);
             }
-            return homesList;
+            return components;
         }
     }
 
     /**
-     * This will delete any homes files that do not have homes in them.
-     * This is just for cleanup.
+     * This will delete any homes files that do not have homes in them. This is just for cleanup.
      */
     public void cleanEmptyHomeFiles() {
         ezHomes.logger.info("Looking for any empty homes files to clean up...");
@@ -389,6 +414,7 @@ public class HomeManagement {
 
     /**
      * Get a player's respawn home name.
+     *
      * @param player Player to get the home name.
      * @return Player's respawn home name.
      */

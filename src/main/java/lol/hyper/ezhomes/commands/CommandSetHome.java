@@ -18,7 +18,6 @@
 package lol.hyper.ezhomes.commands;
 
 import lol.hyper.ezhomes.EzHomes;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -26,6 +25,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,7 +40,7 @@ public class CommandSetHome implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (sender instanceof ConsoleCommandSender) {
-            sender.sendMessage("You must be a player for this command!");
+            ezHomes.adventure().sender(sender).sendMessage(ezHomes.getMessage("errors.must-be-player", null));
             return true;
         }
 
@@ -58,25 +58,35 @@ public class CommandSetHome implements CommandExecutor {
         int argsLength = args.length;
         switch (argsLength) {
             case 0:
-                player.sendMessage(ChatColor.RED + "You must specify a home name!");
+                ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("errors.specify-home-name", null));
                 return true;
             case 1:
+                ArrayList<String> homes = ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
                 if (homeSize != ezHomes.config.getInt("total-homes") || player.hasPermission("ezhomes.bypasslimit")) {
                     Pattern pattern = Pattern.compile("^[a-zA-Z0-9]+$");
                     Matcher matcher = pattern.matcher(args[0]);
                     if (!matcher.matches()) {
-                        sender.sendMessage(ChatColor.RED + "Invalid character in home name.");
+                        ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("errors.invalid-characters", null));
                         return true;
                     }
+                    // check for duplicates
+                    if (homeSize != 0 && homes != null) {
+                        if (homes.stream().anyMatch(x -> x.equalsIgnoreCase(args[0]))) {
+                            ezHomes.adventure()
+                                    .player(player)
+                                    .sendMessage(
+                                            ezHomes.getMessage("errors.home-already-exists", null));
+                            return true;
+                        }
+                    }
                     ezHomes.homeManagement.createHome(player.getUniqueId(), args[0]);
-                    sender.sendMessage(ChatColor.GREEN + "New home set.");
+                    ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("commands.sethome.new-home", null));
                 } else {
-                    player.sendMessage(ChatColor.RED + "You can only have a maximum of "
-                            + ezHomes.config.getInt("total-homes") + " homes.");
+                    ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("commands.sethome.home-limit", ezHomes.config.getInt("total-homes")));
                 }
                 return true;
             default:
-                player.sendMessage(ChatColor.RED + "Invalid command usage. Usage: /sethome <home> to set a new home.");
+                ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("commands.sethome.invalid-syntax", null));
                 break;
         }
         return true;

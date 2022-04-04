@@ -19,7 +19,6 @@ package lol.hyper.ezhomes.tools;
 
 import io.papermc.lib.PaperLib;
 import lol.hyper.ezhomes.EzHomes;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -43,11 +42,11 @@ public class TeleportTask extends BukkitRunnable {
         if (seconds == 0) {
             PaperLib.teleportAsync(player, location);
             ezHomes.homeManagement.teleportCooldowns.put(player.getUniqueId(), System.nanoTime());
-            player.sendMessage(ChatColor.GREEN + "Whoosh!");
+            ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("commands.home.on-teleport", null));
             ezHomes.playerMove.teleportTasks.remove(player.getUniqueId());
             this.cancel();
         } else {
-            player.sendMessage(ChatColor.GREEN + "Teleporting in " + seconds + " seconds!");
+            ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("commands.home.teleporting-in", seconds));
             seconds--;
         }
     }

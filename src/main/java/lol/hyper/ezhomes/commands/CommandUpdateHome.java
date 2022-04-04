@@ -18,7 +18,6 @@
 package lol.hyper.ezhomes.commands;
 
 import lol.hyper.ezhomes.EzHomes;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -42,13 +41,13 @@ public class CommandUpdateHome implements TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (sender instanceof ConsoleCommandSender) {
-            sender.sendMessage("You must be a player for this command!");
+            ezHomes.adventure().sender(sender).sendMessage(ezHomes.getMessage("errors.must-be-player", null));
             return true;
         }
 
         Player player = (Player) sender;
         if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
-            sender.sendMessage(ChatColor.RED + "You do not have any homes.");
+            ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("errors.no-homes", null));
             return true;
         }
         ArrayList<String> playerHomes = ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
@@ -56,25 +55,24 @@ public class CommandUpdateHome implements TabExecutor {
         int argsLength = args.length;
         switch (argsLength) {
             case 0:
-                player.sendMessage(ChatColor.RED + "You must specify a home name!");
+                ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("errors.specify-home-name", null));
                 return true;
             case 1:
                 if (playerHomes.contains(args[0])) {
                     Pattern pattern = Pattern.compile("^[a-zA-Z0-9]+$");
                     Matcher matcher = pattern.matcher(args[0]);
                     if (!matcher.matches()) {
-                        sender.sendMessage(ChatColor.RED + "Invalid character in home name.");
+                        ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("errors.invalid-character", null));
                         return true;
                     }
                     ezHomes.homeManagement.updateHome(player.getUniqueId(), args[0]);
-                    player.sendMessage(ChatColor.GREEN + "Updated home.");
+                    ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("commands.updatehome.updated-home", null));
                 } else {
-                    player.sendMessage(ChatColor.RED + "That home does not exist.");
+                    ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("errors.home-does-not-exist", null));
                 }
                 return true;
             default:
-                player.sendMessage(ChatColor.RED
-                        + "Invalid command usage. Usage: /updatehome <home> to update a home's location.");
+                ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("commands.updatehome.invalid-syntax", null));
                 break;
         }
         return true;

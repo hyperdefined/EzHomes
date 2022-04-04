@@ -37,10 +37,12 @@ public class GUIManager {
     final Player owner;
     private final HomeManagement homeManagement;
     int currentPage = 0;
+    final boolean allowRespawnHomes;
 
-    public GUIManager(Player player, HomeManagement homeManagement) {
+    public GUIManager(Player player, HomeManagement homeManagement, boolean allowRespawnHomes) {
         this.homeManagement = homeManagement;
         this.owner = player;
+        this.allowRespawnHomes = allowRespawnHomes;
         homeManagement.guiManagers.put(owner, this);
 
         int pages = getPagesToMake();
@@ -89,7 +91,7 @@ public class GUIManager {
             // Break the homes list into chunks of 45
             List<List<String>> homes = Lists.partition(homeManagement.getPlayerHomes(owner.getUniqueId()), 45);
 
-            // Get the player's respawn home name so we can use it later
+            // Get the player's respawn home name, so we can use it later
             String respawnHome = homeManagement.getRespawnHomeName(owner.getUniqueId());
 
             // Go through the list of homes and put them into the inventory
@@ -103,8 +105,8 @@ public class GUIManager {
                 boolean isRespawnHome = false;
                 ItemStack bed;
                 // Check if the home is their respawn home
-                // If it is, then make the bed green so they can see it's the respawn home
-                if (respawnHome != null && respawnHome.equals(homeName)) {
+                // If it is, then make the bed green, so they can see it's the respawn home
+                if (allowRespawnHomes && respawnHome.equals(homeName)) {
                     bed = new ItemStack(Material.GREEN_BED);
                     isRespawnHome = true;
                 } else {

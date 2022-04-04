@@ -18,7 +18,7 @@
 package lol.hyper.ezhomes.commands;
 
 import lol.hyper.ezhomes.EzHomes;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -41,13 +41,13 @@ public class CommandWhere implements TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (sender instanceof ConsoleCommandSender) {
-            sender.sendMessage("You must be a player for this command!");
+            ezHomes.adventure().sender(sender).sendMessage(ezHomes.getMessage("errors.must-be-player", null));
             return true;
         }
 
         Player player = (Player) sender;
         if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
-            sender.sendMessage(ChatColor.RED + "You do not have any homes.");
+            ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("errors.no-homes", null));
             return true;
         }
         ArrayList<String> playerHomes = ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
@@ -55,25 +55,36 @@ public class CommandWhere implements TabExecutor {
         int argsLength = args.length;
         switch (argsLength) {
             case 0:
-                player.sendMessage(ChatColor.RED + "You must specify a home name!");
+                ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("errors.specify-home-name", null));
                 return true;
             case 1:
                 if (playerHomes.contains(args[0])) {
                     Location home = ezHomes.homeManagement.getHomeLocation(player.getUniqueId(), args[0]);
-                    sender.sendMessage(ChatColor.GOLD + "--------------------------------------------");
-                    sender.sendMessage(ChatColor.GOLD + args[0] + "'s location:");
-                    sender.sendMessage(ChatColor.YELLOW + "World: " + ChatColor.GOLD
-                            + home.getWorld().getName());
-                    sender.sendMessage(ChatColor.YELLOW + "X: " + ChatColor.GOLD + (int) home.getX());
-                    sender.sendMessage(ChatColor.YELLOW + "Y: " + ChatColor.GOLD + (int) home.getY());
-                    sender.sendMessage(ChatColor.YELLOW + "Z: " + ChatColor.GOLD + (int) home.getZ());
-                    sender.sendMessage(ChatColor.GOLD + "--------------------------------------------");
+                    for (String line : ezHomes.getMessageList("commands.where.command")) {
+                        if (line.contains("%home%")) {
+                            line = line.replace("%home%", args[0]);
+                        }
+                        if (line.contains("%world%")) {
+                            line = line.replace("%world%", home.getWorld().getName());
+                        }
+                        if (line.contains("%x%")) {
+                            line = line.replace("%x%", String.valueOf((int) home.getX()));
+                        }
+                        if (line.contains("%y%")) {
+                            line = line.replace("%y%", String.valueOf((int) home.getY()));
+                        }
+                        if (line.contains("%z%")) {
+                            line = line.replace("%z%", String.valueOf((int) home.getZ()));
+                        }
+                        Component component = ezHomes.miniMessage.deserialize(line);
+                        ezHomes.adventure().player(player).sendMessage(component);
+                    }
                 } else {
-                    sender.sendMessage(ChatColor.RED + "That home does not exist.");
+                    ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("errors.home-does-not-exist", null));
                 }
                 return true;
             default:
-                player.sendMessage(ChatColor.RED + "Invalid command usage. Usage: /where <home> to get it's location.");
+                ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("commands.where.invalid-syntax", null));
                 break;
         }
         return true;

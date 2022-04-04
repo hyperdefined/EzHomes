@@ -4,7 +4,7 @@ main: lol.hyper.ezhomes.EzHomes
 api-version: 1.13
 author: hyperdefined
 website: https://www.spigotmc.org/resources/ezhomes.82663/
-description: A super easy to use home plugin.
+description: A super easy to use homes plugin.
 commands:
   sethome:
     usage: /sethome <name>
@@ -30,10 +30,12 @@ commands:
   respawnhome:
     usage: /respawnhome
     description: Set a home to respawn at.
+  ezhomes:
+    usage: /ezhomes
 permissions:
   ezhomes.reload:
     default: op
-    description: Allows the usage of /homesreload
+    description: Allows the usage of /ezhomes reload
   ezhomes.bypasslimit:
     default: op
     description: Allows player to bypass home limit
@@ -43,3 +45,5 @@ permissions:
 libraries:
   - org.json:json:20211205
   - lol.hyper:github-release-api:1.0.1
+  - net.kyori:adventure-text-minimessage:4.10.1
+  - net.kyori:adventure-platform-bukkit:4.1.0

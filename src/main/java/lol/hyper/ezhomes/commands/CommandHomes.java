@@ -19,7 +19,7 @@ package lol.hyper.ezhomes.commands;
 
 import lol.hyper.ezhomes.EzHomes;
 import lol.hyper.ezhomes.gui.GUIManager;
-import net.md_5.bungee.api.ChatColor;
+import net.kyori.adventure.text.Component;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -38,28 +38,46 @@ public class CommandHomes implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (sender instanceof ConsoleCommandSender) {
-            sender.sendMessage("You must be a player for this command!");
+            ezHomes.adventure().sender(sender).sendMessage(ezHomes.getMessage("errors.must-be-player", null));
             return true;
         }
         Player player = (Player) sender;
 
         if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
-            player.sendMessage(ChatColor.RED + "You don't have any homes set! Do /sethome <name> to set a home!");
+            ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("errors.no-homes", null));
             return true;
         }
         if (ezHomes.config.getBoolean("use-homes-gui")) {
-            GUIManager gui = new GUIManager(player, ezHomes.homeManagement);
+            GUIManager gui = new GUIManager(player, ezHomes.homeManagement, ezHomes.config.getBoolean("allow-respawn-homes"));
             gui.openGUI(0);
             return true;
         }
-        sender.sendMessage(ChatColor.GOLD + "--------------------------------------------");
-        player.sendMessage(ChatColor.GOLD + player.getDisplayName() + "'s Homes");
-        player.spigot().sendMessage(ezHomes.homeManagement.getHomesClickable(player.getUniqueId()));
-        if (ezHomes.homeManagement.getRespawnHomeName(player.getUniqueId()) != null) {
-            player.sendMessage(ChatColor.GOLD + "You will respawn at " + ChatColor.GREEN
-                    + ezHomes.homeManagement.getRespawnHomeName(player.getUniqueId()) + ChatColor.GOLD + ".");
+
+        for (String line : ezHomes.getMessageList("commands.homes.command")) {
+            if (line.contains("%player%")) {
+                line = line.replace("%player%", player.getName());
+            }
+            if (line.contains("%player%")) {
+                line = line.replace("%player%", player.getName());
+            }
+            if (line.contains("%homes%")) {
+                Component homesList = Component.empty();
+                for (Component component : ezHomes.homeManagement.getHomesClickable(player.getUniqueId())) {
+                    homesList = homesList.append(component);
+                }
+                ezHomes.adventure().player(player).sendMessage(homesList);
+                continue;
+            }
+            if (line.contains("%respawnhome%")) {
+                String respawnHome = ezHomes.homeManagement.getRespawnHomeName(player.getUniqueId());
+                if (ezHomes.config.getBoolean("allow-respawn-at-home") && respawnHome != null) {
+                    ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("commands.homes.respawn-home", respawnHome));
+                }
+                continue;
+            }
+            Component component = ezHomes.miniMessage.deserialize(line);
+            ezHomes.adventure().player(player).sendMessage(component);
         }
-        sender.sendMessage(ChatColor.GOLD + "--------------------------------------------");
         return true;
     }
 }

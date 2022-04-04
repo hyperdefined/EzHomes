@@ -18,7 +18,6 @@
 package lol.hyper.ezhomes.commands;
 
 import lol.hyper.ezhomes.EzHomes;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -40,13 +39,13 @@ public class CommandDeleteHome implements TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (sender instanceof ConsoleCommandSender) {
-            sender.sendMessage("You must be a player for this command!");
+            ezHomes.adventure().sender(sender).sendMessage(ezHomes.getMessage("errors.must-be-player", null));
             return true;
         }
 
         Player player = (Player) sender;
         if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
-            sender.sendMessage(ChatColor.RED + "You do not have any homes.");
+            ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("errors.no-homes", null));
             return true;
         }
         ArrayList<String> playerHomes = ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
@@ -54,18 +53,18 @@ public class CommandDeleteHome implements TabExecutor {
         int argsLength = args.length;
         switch (argsLength) {
             case 0:
-                player.sendMessage(ChatColor.RED + "You must specify a home name!");
+                ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("errors.specify-home-name", null));
                 return true;
             case 1:
                 if (playerHomes.contains(args[0])) {
                     ezHomes.homeManagement.deleteHome(player.getUniqueId(), args[0]);
-                    player.sendMessage(ChatColor.GREEN + "Home was deleted.");
+                    ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("commands.delhome.home-deleted", null));
                 } else {
-                    player.sendMessage(ChatColor.RED + "That home does not exist.");
+                    ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("errors.home-does-not-exist", null));
                 }
                 return true;
             default:
-                player.sendMessage(ChatColor.RED + "Invalid command usage. Usage: /delhome <home> to delete a home.");
+                ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("commands.delhome.invalid-syntax", null));
                 break;
         }
         return true;

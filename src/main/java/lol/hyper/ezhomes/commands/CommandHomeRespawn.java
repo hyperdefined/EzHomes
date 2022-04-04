@@ -18,7 +18,6 @@
 package lol.hyper.ezhomes.commands;
 
 import lol.hyper.ezhomes.EzHomes;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -39,20 +38,31 @@ public class CommandHomeRespawn implements TabExecutor {
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+    public boolean onCommand(
+            @NotNull CommandSender sender,
+            @NotNull Command command,
+            @NotNull String label,
+            String[] args) {
         if (sender instanceof ConsoleCommandSender) {
-            sender.sendMessage("You must be a player for this command!");
+            ezHomes.adventure()
+                    .sender(sender)
+                    .sendMessage(ezHomes.getMessage("errors.must-be-player", null));
             return true;
         }
 
         if (!ezHomes.config.getBoolean("allow-respawn-at-home")) {
-            sender.sendMessage(ChatColor.RED + "This feature is not enabled.");
+            ezHomes.adventure()
+                    .sender(sender)
+                    .sendMessage(
+                            ezHomes.getMessage("commands.respawnhome.feature-not-enabled", null));
             return true;
         }
 
         Player player = (Player) sender;
         if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
-            sender.sendMessage(ChatColor.RED + "You do not have any homes.");
+            ezHomes.adventure()
+                    .player(player)
+                    .sendMessage(ezHomes.getMessage("errors.no-homes", null));
             return true;
         }
 
@@ -61,15 +71,24 @@ public class CommandHomeRespawn implements TabExecutor {
         int argsLength = args.length;
         switch (argsLength) {
             case 0:
-                sender.sendMessage(ChatColor.RED + "You must specify what you want to do.");
+                ezHomes.adventure()
+                        .sender(sender)
+                        .sendMessage(ezHomes.getMessage("errors.specify-action.", null));
                 break;
             case 1:
                 if (args[0].equalsIgnoreCase("remove")) {
                     ezHomes.homeManagement.removeRespawnLocation(player.getUniqueId());
-                    sender.sendMessage(ChatColor.GREEN + "Respawn home has been removed.");
+                    ezHomes.adventure()
+                            .sender(sender)
+                            .sendMessage(
+                                    ezHomes.getMessage(
+                                            "commands.respawnhome.respawnhome-removed", null));
                 } else {
-                    sender.sendMessage(
-                            ChatColor.RED + "Invalid option. Valid options are: \"remove\" or \"set <home>\".");
+                    ezHomes.adventure()
+                            .sender(sender)
+                            .sendMessage(
+                                    ezHomes.getMessage(
+                                            "commands.respawnhome.invalid-syntax", null));
                 }
                 return true;
             case 2:
@@ -77,13 +96,23 @@ public class CommandHomeRespawn implements TabExecutor {
                     String homeName = args[1];
                     if (playerHomes.contains(homeName)) {
                         ezHomes.homeManagement.setRespawnLocation(player.getUniqueId(), homeName);
-                        sender.sendMessage(ChatColor.GREEN + "Respawn home has been set.");
+                        ezHomes.adventure()
+                                .sender(sender)
+                                .sendMessage(
+                                        ezHomes.getMessage(
+                                                "commands.respawnhome.respawnhome-set", null));
                     } else {
-                        player.sendMessage(ChatColor.RED + "That home does not exist.");
+                        ezHomes.adventure()
+                                .sender(sender)
+                                .sendMessage(
+                                        ezHomes.getMessage("errors.home-does-not-exist.", null));
                     }
                 } else {
-                    sender.sendMessage(
-                            ChatColor.RED + "Invalid option. Valid options are: \"remove\" or \"set\" <home>.");
+                    ezHomes.adventure()
+                            .sender(sender)
+                            .sendMessage(
+                                    ezHomes.getMessage(
+                                            "commands.respawnhome.invalid-syntax", null));
                     return true;
                 }
         }
@@ -91,7 +120,11 @@ public class CommandHomeRespawn implements TabExecutor {
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
+    public List<String> onTabComplete(
+            @NotNull CommandSender sender,
+            @NotNull Command command,
+            @NotNull String alias,
+            String[] args) {
         if (args.length == 0) {
             return Arrays.asList("set", "remove");
         }

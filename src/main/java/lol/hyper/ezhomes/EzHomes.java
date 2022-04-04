@@ -26,6 +26,9 @@ import lol.hyper.ezhomes.events.PlayerRespawn;
 import lol.hyper.ezhomes.tools.HomeManagement;
 import lol.hyper.githubreleaseapi.GitHubRelease;
 import lol.hyper.githubreleaseapi.GitHubReleaseAPI;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -34,15 +37,24 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Logger;
 
 public final class EzHomes extends JavaPlugin {
 
     public final File configFile = new File(this.getDataFolder(), "config.yml");
-    public final Logger logger = this.getLogger();
+    public final File messagesFile = new File(this.getDataFolder(), "messages.yml");
     public final int CONFIG_VERSION = 3;
+    public final int MESSAGES_VERSION = 1;
     public FileConfiguration config = this.getConfig();
-    public CommandReload commandReload;
+    public FileConfiguration messages;
+
+    public final Logger logger = this.getLogger();
+
+    public final MiniMessage miniMessage = MiniMessage.miniMessage();
+    private BukkitAudiences adventure;
+
+    public CommandEzHomes commandEzHomes;
     public CommandHome commandHome;
     public CommandDeleteHome commandDeleteHome;
     public CommandSetHome commandSetHome;
@@ -58,8 +70,9 @@ public final class EzHomes extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        this.adventure = BukkitAudiences.create(this);
         homeManagement = new HomeManagement(this);
-        commandReload = new CommandReload(this);
+        commandEzHomes = new CommandEzHomes(this);
         commandHome = new CommandHome(this);
         commandSetHome = new CommandSetHome(this);
         commandDeleteHome = new CommandDeleteHome(this);
@@ -69,11 +82,15 @@ public final class EzHomes extends JavaPlugin {
         commandHomeRespawn = new CommandHomeRespawn(this);
         inventoryClick = new InventoryClick(this);
         playerLeave = new PlayerLeave(this);
-        playerMove = new PlayerMove();
+        playerMove = new PlayerMove(this);
         playerRespawn = new PlayerRespawn(this);
         if (!configFile.exists()) {
             this.saveResource("config.yml", true);
             logger.info("Copying default config!");
+        }
+        if (!messagesFile.exists()) {
+            this.saveResource("messages.yml", true);
+            logger.info("Copying default messages!");
         }
         loadConfig();
 
@@ -88,7 +105,7 @@ public final class EzHomes extends JavaPlugin {
         this.getCommand("homes").setExecutor(commandHomes);
         this.getCommand("updatehome").setExecutor(commandUpdateHome);
         this.getCommand("delhome").setExecutor(commandDeleteHome);
-        this.getCommand("homesreload").setExecutor(commandReload);
+        this.getCommand("ezhomes").setExecutor(commandEzHomes);
         this.getCommand("where").setExecutor(commandWhere);
         this.getCommand("respawnhome").setExecutor(commandHomeRespawn);
 
@@ -108,6 +125,11 @@ public final class EzHomes extends JavaPlugin {
         config = YamlConfiguration.loadConfiguration(configFile);
         if (config.getInt("config-version") != CONFIG_VERSION) {
             logger.warning("Your config file is outdated! Please regenerate the config.");
+        }
+
+        messages = YamlConfiguration.loadConfiguration(messagesFile);
+        if (messages.getInt("version") != MESSAGES_VERSION) {
+            logger.warning("Your messages file is outdated! Please regenerate this file!.");
         }
     }
 
@@ -132,5 +154,62 @@ public final class EzHomes extends JavaPlugin {
         } else {
             logger.warning("A new version is available (" + latest.getTagVersion() + ")! You are running version " + current.getTagVersion() + ". You are " + buildsBehind + " version(s) behind.");
         }
+    }
+
+    /**
+     * Gets a message from messages.yml.
+     * @param path The path to the message.
+     * @return Component with formatting applied.
+     */
+    public Component getMessage(String path, Object replacement) {
+        String message = messages.getString(path);
+        if (message == null) {
+            logger.warning(path + " is not a valid message!");
+            return miniMessage.deserialize("<red>Invalid path! " + path + "</red>");
+        }
+        if (message.contains("%seconds%")) {
+            message = message.replace("%seconds%", replacement.toString());
+        }
+        if (message.contains("%homes%")) {
+            message = message.replace("%homes%", replacement.toString());
+        }
+        if (message.contains("%home%")) {
+            message = message.replace("%home%", replacement.toString());
+        }
+        if (message.contains("%world%")) {
+            message = message.replace("%world%", replacement.toString());
+        }
+        if (message.contains("%x%")) {
+            message = message.replace("%x%", replacement.toString());
+        }
+        if (message.contains("%y%")) {
+            message = message.replace("%y%", replacement.toString());
+        }
+        if (message.contains("%z%")) {
+            message = message.replace("%z%", replacement.toString());
+        }
+        return miniMessage.deserialize(message);
+    }
+
+    /**
+     * Gets a message list.
+     * @param path The path to the message.
+     * @return A raw string list of messages.
+     */
+    public List<String> getMessageList(String path) {
+        List<String> messageList = messages.getStringList(path);
+        if (!messageList.isEmpty()) {
+            return messageList;
+        }
+        logger.warning(path + " is not a valid message!");
+        messageList.add("<red>Invalid path! " + path + "</red>");
+        return messageList;
+    }
+
+    public BukkitAudiences adventure() {
+        if(this.adventure == null) {
+            throw new IllegalStateException("Tried to access Adventure when the plugin was disabled!");
+        }
+        return this.adventure;
     }
 }

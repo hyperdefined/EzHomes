@@ -1,0 +1,53 @@
+errors:
+  must-be-player: "<red>You must be a player for this command!</red>"
+  no-homes: "<red>You do not have any homes.</red>"
+  home-does-not-exist: "<red>That home does not exist.</red>"
+  specify-home-name: "<red>You must specify a home name!</red>"
+  specify-action: "<red>You must specify what you want to do.</red>"
+  invalid-character: "<red>Invalid character in home name.</red>"
+  teleport-canceled: "<red>Teleport canceled!</red>"
+  home-already-exists: "<red>That home already exists.</red>"
+
+no-perms: "<red>You don't have permission to use this command.</red>"
+config-reloaded: "<green>Config was reloaded!</green>"
+
+commands:
+  delhome:
+    home-deleted: "<green>Home was deleted.</green>"
+    invalid-syntax: "<red>Invalid command usage. Usage: /delhome <home> to delete a home.</red>"
+  home:
+    on-teleport: "<green>Whoosh!</green>"
+    teleport-cooldown: "<red>You must wait %seconds% seconds to teleport.</red>"
+    teleporting-in: "<green>Teleporting in %seconds%!</green>"
+    invalid-syntax: "<red>Invalid command usage. Usage: /home <home> to teleport to a home.</red>"
+  respawnhome:
+    feature-not-enabled: "<red>This feature is not enabled.</red>"
+    respawnhome-removed: "<green>Respawn home has been removed.</green>"
+    respawnhome-set: "<green>Respawn home has been set.</green>"
+    invalid-syntax: "<red>Invalid option. Valid options are: \"remove\" or \"set <home>\".</red>"
+  homes:
+    command:
+      - "<gold>--------------------------------------------</gold>"
+      - "<gold>%player%'s Homes"
+      - "%homes%"
+      - "%respawnhome%"
+      - "<gold>--------------------------------------------</gold>"
+    respawn-home: "<gold>You will respawn at</gold><green> %home%</green><gold>.</gold>"
+  sethome:
+    new-home: "<green>New home set.</green>"
+    home-limit: "<red>You can only have a maximum of %homes% + homes.</red>"
+    invalid-syntax: "<red>Invalid command usage. Usage: /sethome <home> to set a new home.</red>"
+  updatehome:
+    updated-home: "<green>Updated home location.</green>"
+    invalid-syntax: "<red>Invalid command usage. Usage: /updatehome <home> to update a home's location.</red>"
+  where:
+    command:
+      - "<gold>--------------------------------------------</gold>"
+      - "<gold>%home%'s location:"
+      - "<yellow>World:</yellow> <gold>%world%</gold>"
+      - "<yellow>X:</yellow> <gold>%x%</gold>"
+      - "<yellow>Y:</yellow> <gold>%y%</gold>"
+      - "<yellow>Z:</yellow> <gold>%z%</gold>"
+      - "<gold>--------------------------------------------</gold>"
+    invalid-syntax: "<red>Invalid command usage. Usage: /where <home> to get it's location.</red>"
+version: 1

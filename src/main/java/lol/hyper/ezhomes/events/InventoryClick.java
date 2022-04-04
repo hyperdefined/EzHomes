@@ -21,7 +21,7 @@ import lol.hyper.ezhomes.EzHomes;
 import lol.hyper.ezhomes.gui.GUIHolder;
 import lol.hyper.ezhomes.gui.GUIManager;
 import lol.hyper.ezhomes.tools.TeleportTask;
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -73,11 +73,7 @@ public class InventoryClick implements Listener {
                                             - ezHomes.homeManagement.teleportCooldowns.get(
                                                     player.getUniqueId()));
                     long configTime = ezHomes.config.getInt("teleport-cooldown");
-                    player.sendMessage(
-                            ChatColor.RED
-                                    + "You must wait "
-                                    + (configTime - timeLeft)
-                                    + " seconds to teleport.");
+                    ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("commands.home.teleport-cooldown", (configTime - timeLeft)));
                 }
             }
 

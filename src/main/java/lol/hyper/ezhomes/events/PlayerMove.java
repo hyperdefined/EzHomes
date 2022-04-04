@@ -17,7 +17,7 @@
 
 package lol.hyper.ezhomes.events;
 
-import org.bukkit.ChatColor;
+import lol.hyper.ezhomes.EzHomes;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -28,6 +28,12 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class PlayerMove implements Listener {
+
+    private final EzHomes ezHomes;
+
+    public PlayerMove(EzHomes ezHomes) {
+        this.ezHomes = ezHomes;
+    }
 
     public final HashMap<UUID, BukkitTask> teleportTasks = new HashMap<>();
 
@@ -41,7 +47,7 @@ public class PlayerMove implements Listener {
             Player player = event.getPlayer();
             teleportTasks.get(player.getUniqueId()).cancel();
             teleportTasks.remove(player.getUniqueId());
-            player.sendMessage(ChatColor.RED + "Teleport canceled!");
+            ezHomes.adventure().player(player).sendMessage(ezHomes.getMessage("errors.teleport-canceled", null));
         }
     }
 }
