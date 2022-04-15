@@ -29,11 +29,16 @@ import lol.hyper.githubreleaseapi.GitHubReleaseAPI;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
 import java.io.File;
 import java.io.IOException;
@@ -68,8 +73,13 @@ public final class EzHomes extends JavaPlugin {
     public PlayerMove playerMove;
     public PlayerRespawn playerRespawn;
 
+    private Scoreboard sb = null;
+
     @Override
     public void onEnable() {
+
+        sb = Bukkit.getScoreboardManager().getMainScoreboard();
+
         this.adventure = BukkitAudiences.create(this);
         homeManagement = new HomeManagement(this);
         commandEzHomes = new CommandEzHomes(this);
@@ -179,6 +189,9 @@ public final class EzHomes extends JavaPlugin {
         if (message.contains("%world%")) {
             message = message.replace("%world%", replacement.toString());
         }
+        if (message.contains("%player%") && replacement instanceof Player) {
+            message = replaceTeamFormattedPlayerDisplayName(message, (Player)replacement);
+        }
         if (message.contains("%x%")) {
             message = message.replace("%x%", replacement.toString());
         }
@@ -212,4 +225,24 @@ public final class EzHomes extends JavaPlugin {
         }
         return this.adventure;
     }
+
+    private String replaceTeamFormattedPlayerDisplayName(String message, final Player player) {
+
+		if (sb != null) {
+
+			final Team team = sb.getEntryTeam(player.getName());
+
+			if (team != null) {
+
+                final Component mmsg = miniMessage.deserialize(message);
+                final String lmsg = LegacyComponentSerializer.builder().build().serialize(mmsg);
+
+                return miniMessage.serialize(LegacyComponentSerializer.builder().build().
+                    deserialize(lmsg.replace("%player%", "" + team.getColor() +
+                    team.getPrefix() + player.getDisplayName() + team.getSuffix() + ChatColor.RESET)));
+			}
+		}
+
+		return message.replace("%player%", player.getDisplayName());
+	}
 }

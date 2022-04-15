@@ -14,5 +14,8 @@ use-homes-gui: true
 # Allow users to set a home they will respawn at when they die.
 allow-respawn-at-home: true
 
+# Play an enderman sound when player teleports to their home.
+play-warp-sound: true
+
 # No touch please :)
 config-version: 3

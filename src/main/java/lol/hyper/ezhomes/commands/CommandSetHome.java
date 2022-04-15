@@ -80,7 +80,7 @@ public class CommandSetHome implements CommandExecutor {
                         }
                     }
                     ezHomes.homeManagement.createHome(player.getUniqueId(), args[0]);
-                    ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("commands.sethome.new-home", null));
+                    ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("commands.sethome.new-home", player));
                 } else {
                     ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("commands.sethome.home-limit", ezHomes.config.getInt("total-homes")));
                 }
