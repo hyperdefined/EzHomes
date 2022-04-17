@@ -190,7 +190,7 @@ public final class EzHomes extends JavaPlugin {
             message = message.replace("%world%", replacement.toString());
         }
         if (message.contains("%player%") && replacement instanceof Player) {
-            message = replaceTeamFormattedPlayerDisplayName(message, (Player)replacement);
+            message = replaceTeamFormattedPlayerDisplayName(message, (Player) replacement);
         }
         if (message.contains("%x%")) {
             message = message.replace("%x%", replacement.toString());
@@ -226,23 +226,21 @@ public final class EzHomes extends JavaPlugin {
         return this.adventure;
     }
 
+    /**
+     * Replace player's name with a formatted name.
+     * @param message The message with player placeholder.
+     * @param player The player.
+     * @return A formatted message with formatted player display name.
+     */
     private String replaceTeamFormattedPlayerDisplayName(String message, final Player player) {
-
 		if (config.getBoolean("use-team-formatting") && sb != null) {
-
 			final Team team = sb.getEntryTeam(player.getName());
-
 			if (team != null) {
-
                 final Component mmsg = miniMessage.deserialize(message);
                 final String lmsg = LegacyComponentSerializer.builder().build().serialize(mmsg);
-
-                return miniMessage.serialize(LegacyComponentSerializer.builder().build().
-                    deserialize(lmsg.replace("%player%", "" + team.getColor() +
-                    team.getPrefix() + player.getDisplayName() + team.getSuffix() + ChatColor.RESET)));
+                return miniMessage.serialize(LegacyComponentSerializer.builder().build().deserialize(lmsg.replace("%player%", "" + team.getColor() + team.getPrefix() + player.getDisplayName() + team.getSuffix() + ChatColor.RESET)));
 			}
 		}
-
 		return message.replace("%player%", player.getDisplayName());
 	}
 }
