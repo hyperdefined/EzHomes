@@ -228,7 +228,7 @@ public final class EzHomes extends JavaPlugin {
 
     private String replaceTeamFormattedPlayerDisplayName(String message, final Player player) {
 
-		if (sb != null) {
+		if (config.getBoolean("use-team-formatting") && sb != null) {
 
 			final Team team = sb.getEntryTeam(player.getName());
 
