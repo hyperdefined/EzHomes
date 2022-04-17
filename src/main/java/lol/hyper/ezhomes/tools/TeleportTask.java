@@ -19,6 +19,7 @@ package lol.hyper.ezhomes.tools;
 
 import io.papermc.lib.PaperLib;
 import lol.hyper.ezhomes.EzHomes;
+import org.bukkit.Sound;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -41,8 +42,13 @@ public class TeleportTask extends BukkitRunnable {
     public void run() {
         if (seconds == 0) {
             PaperLib.teleportAsync(player, location);
+
+            if(ezHomes.config.getBoolean("play-warp-sound")) {
+                player.playSound(location, Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
+            }
+
             ezHomes.homeManagement.teleportCooldowns.put(player.getUniqueId(), System.nanoTime());
-            ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("commands.home.on-teleport", null));
+            ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("commands.home.on-teleport", player));
             ezHomes.playerMove.teleportTasks.remove(player.getUniqueId());
             this.cancel();
         } else {
