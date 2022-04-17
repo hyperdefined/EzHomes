@@ -21,4 +21,4 @@ play-warp-sound: true
 use-team-formatting: false
 
 # No touch please :)
-config-version: 3
+config-version: 4

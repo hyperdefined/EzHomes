@@ -49,7 +49,7 @@ public final class EzHomes extends JavaPlugin {
 
     public final File configFile = new File(this.getDataFolder(), "config.yml");
     public final File messagesFile = new File(this.getDataFolder(), "messages.yml");
-    public final int CONFIG_VERSION = 3;
+    public final int CONFIG_VERSION = 4;
     public final int MESSAGES_VERSION = 1;
     public FileConfiguration config = this.getConfig();
     public FileConfiguration messages;
