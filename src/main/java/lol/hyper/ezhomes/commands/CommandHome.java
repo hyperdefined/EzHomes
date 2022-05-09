@@ -18,7 +18,10 @@
 package lol.hyper.ezhomes.commands;
 
 import lol.hyper.ezhomes.EzHomes;
+import lol.hyper.ezhomes.events.PlayerMove;
+import lol.hyper.ezhomes.tools.HomeManagement;
 import lol.hyper.ezhomes.tools.TeleportTask;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -34,9 +37,15 @@ import java.util.concurrent.TimeUnit;
 public class CommandHome implements TabExecutor {
 
     private final EzHomes ezHomes;
+    private final HomeManagement homeManagement;
+    private final BukkitAudiences audiences;
+    private final PlayerMove playerMove;
 
     public CommandHome(EzHomes ezHomes) {
         this.ezHomes = ezHomes;
+        this.homeManagement = ezHomes.homeManagement;
+        this.audiences = ezHomes.getAdventure();
+        this.playerMove = ezHomes.playerMove;
     }
 
     @Override
@@ -46,66 +55,47 @@ public class CommandHome implements TabExecutor {
             @NotNull String label,
             String[] args) {
         if (sender instanceof ConsoleCommandSender) {
-            ezHomes.getAdventure()
-                    .sender(sender)
-                    .sendMessage(ezHomes.getMessage("errors.must-be-player", null));
+            audiences.sender(sender).sendMessage(ezHomes.getMessage("errors.must-be-player", null));
             return true;
         }
 
         Player player = (Player) sender;
-        if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
-            ezHomes.getAdventure()
-                    .player(player)
-                    .sendMessage(ezHomes.getMessage("errors.no-homes", null));
+        if (homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
+            audiences.player(player).sendMessage(ezHomes.getMessage("errors.no-homes", null));
             return true;
         }
 
-        ArrayList<String> playerHomes = ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
+        ArrayList<String> playerHomes = homeManagement.getPlayerHomes(player.getUniqueId());
 
         int argsLength = args.length;
         switch (argsLength) {
-            case 0:
-                ezHomes.getAdventure()
-                        .player(player)
-                        .sendMessage(ezHomes.getMessage("errors.specify-home-name", null));
+            case 0: {
+                audiences.player(player).sendMessage(ezHomes.getMessage("errors.specify-home-name", null));
                 return true;
-            case 1:
-                if (ezHomes.homeManagement.canPlayerTeleport(player.getUniqueId())
-                        || player.hasPermission("ezhomes.bypasscooldown")) {
+            }
+            case 1: {
+                if (homeManagement.canPlayerTeleport(player.getUniqueId()) || player.hasPermission("ezhomes.bypasscooldown")) {
                     if (playerHomes.contains(args[0])) {
                         BukkitTask teleportTask =
                                 new TeleportTask(
-                                                ezHomes,
-                                                player,
-                                                ezHomes.homeManagement.getHomeLocation(
-                                                        player.getUniqueId(), args[0]))
+                                        ezHomes,
+                                        player,
+                                        homeManagement.getHomeLocation(
+                                                player.getUniqueId(), args[0]))
                                         .runTaskTimer(ezHomes, 0, 20L);
-                        ezHomes.playerMove.teleportTasks.put(player.getUniqueId(), teleportTask);
+                        playerMove.teleportTasks.put(player.getUniqueId(), teleportTask);
                     } else {
-                        ezHomes.getAdventure()
-                                .player(player)
-                                .sendMessage(
-                                        ezHomes.getMessage("errors.home-does-not-exist", null));
+                        audiences.player(player).sendMessage(ezHomes.getMessage("errors.home-does-not-exist", null));
                     }
                 } else {
-                    long timeLeft =
-                            TimeUnit.NANOSECONDS.toSeconds(
-                                    System.nanoTime()
-                                            - ezHomes.homeManagement.teleportCooldowns.get(
-                                                    player.getUniqueId()));
+                    long timeLeft = TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - homeManagement.teleportCooldowns.get(player.getUniqueId()));
                     long configTime = ezHomes.config.getInt("teleport-cooldown");
-                    ezHomes.getAdventure()
-                            .player(player)
-                            .sendMessage(
-                                    ezHomes.getMessage(
-                                            "commands.home.teleport-cooldown",
-                                            (configTime - timeLeft)));
+                    audiences.player(player).sendMessage(ezHomes.getMessage("commands.home.teleport-cooldown", (configTime - timeLeft)));
                 }
                 return true;
+            }
             default:
-                ezHomes.getAdventure()
-                        .player(player)
-                        .sendMessage(ezHomes.getMessage("commands.home.invalid-syntax", null));
+                audiences.player(player).sendMessage(ezHomes.getMessage("commands.home.invalid-syntax", null));
                 break;
         }
         return true;
@@ -118,6 +108,6 @@ public class CommandHome implements TabExecutor {
             @NotNull String alias,
             String[] args) {
         Player player = (Player) sender;
-        return ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
+        return homeManagement.getPlayerHomes(player.getUniqueId());
     }
 }

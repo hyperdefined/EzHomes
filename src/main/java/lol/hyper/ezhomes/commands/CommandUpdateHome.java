@@ -18,6 +18,8 @@
 package lol.hyper.ezhomes.commands;
 
 import lol.hyper.ezhomes.EzHomes;
+import lol.hyper.ezhomes.tools.HomeManagement;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -33,54 +35,68 @@ import java.util.regex.Pattern;
 public class CommandUpdateHome implements TabExecutor {
 
     private final EzHomes ezHomes;
+    private final HomeManagement homeManagement;
+    private final BukkitAudiences audiences;
 
     public CommandUpdateHome(EzHomes ezHomes) {
         this.ezHomes = ezHomes;
+        this.homeManagement = ezHomes.homeManagement;
+        this.audiences = ezHomes.getAdventure();
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+    public boolean onCommand(
+            @NotNull CommandSender sender,
+            @NotNull Command command,
+            @NotNull String label,
+            String[] args) {
         if (sender instanceof ConsoleCommandSender) {
-            ezHomes.getAdventure().sender(sender).sendMessage(ezHomes.getMessage("errors.must-be-player", null));
+            audiences.sender(sender).sendMessage(ezHomes.getMessage("errors.must-be-player", null));
             return true;
         }
 
         Player player = (Player) sender;
-        if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
-            ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("errors.no-homes", null));
+        if (homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
+            audiences.player(player).sendMessage(ezHomes.getMessage("errors.no-homes", null));
             return true;
         }
-        ArrayList<String> playerHomes = ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
+        ArrayList<String> playerHomes = homeManagement.getPlayerHomes(player.getUniqueId());
 
         int argsLength = args.length;
         switch (argsLength) {
-            case 0:
-                ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("errors.specify-home-name", null));
+            case 0: {
+                audiences.player(player).sendMessage(ezHomes.getMessage("errors.specify-home-name", null));
                 return true;
-            case 1:
+            }
+            case 1: {
                 if (playerHomes.contains(args[0])) {
                     Pattern pattern = Pattern.compile("^[a-zA-Z0-9]+$");
                     Matcher matcher = pattern.matcher(args[0]);
                     if (!matcher.matches()) {
-                        ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("errors.invalid-character", null));
+                        audiences.player(player).sendMessage(ezHomes.getMessage("errors.invalid-character", null));
                         return true;
                     }
-                    ezHomes.homeManagement.updateHome(player.getUniqueId(), args[0]);
-                    ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("commands.updatehome.updated-home", null));
+                    homeManagement.updateHome(player.getUniqueId(), args[0]);
+                    audiences.player(player).sendMessage(ezHomes.getMessage("commands.updatehome.updated-home", null));
                 } else {
-                    ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("errors.home-does-not-exist", null));
+                    audiences.player(player).sendMessage(ezHomes.getMessage("errors.home-does-not-exist", null));
                 }
                 return true;
+            }
             default:
-                ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("commands.updatehome.invalid-syntax", null));
+                audiences.player(player).sendMessage(ezHomes.getMessage("commands.updatehome.invalid-syntax", null));
                 break;
         }
         return true;
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
+    public List<String> onTabComplete(
+            @NotNull CommandSender sender,
+            @NotNull Command command,
+            @NotNull String alias,
+            String[] args) {
         Player player = (Player) sender;
-        return ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
+        return homeManagement.getPlayerHomes(player.getUniqueId());
     }
 }

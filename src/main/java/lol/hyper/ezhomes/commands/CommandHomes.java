@@ -19,7 +19,10 @@ package lol.hyper.ezhomes.commands;
 
 import lol.hyper.ezhomes.EzHomes;
 import lol.hyper.ezhomes.gui.GUIManager;
+import lol.hyper.ezhomes.tools.HomeManagement;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -30,25 +33,31 @@ import org.jetbrains.annotations.NotNull;
 public class CommandHomes implements CommandExecutor {
 
     private final EzHomes ezHomes;
+    private final HomeManagement homeManagement;
+    private final BukkitAudiences audiences;
+    private final MiniMessage miniMessage;
 
     public CommandHomes(EzHomes ezHomes) {
         this.ezHomes = ezHomes;
+        this.homeManagement = ezHomes.homeManagement;
+        this.audiences = ezHomes.getAdventure();
+        this.miniMessage = ezHomes.miniMessage;
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (sender instanceof ConsoleCommandSender) {
-            ezHomes.getAdventure().sender(sender).sendMessage(ezHomes.getMessage("errors.must-be-player", null));
+            audiences.sender(sender).sendMessage(ezHomes.getMessage("errors.must-be-player", null));
             return true;
         }
         Player player = (Player) sender;
 
-        if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
-            ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("errors.no-homes", null));
+        if (homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
+            audiences.player(player).sendMessage(ezHomes.getMessage("errors.no-homes", null));
             return true;
         }
         if (ezHomes.config.getBoolean("use-homes-gui")) {
-            GUIManager gui = new GUIManager(player, ezHomes.homeManagement, ezHomes.config.getBoolean("allow-respawn-homes"));
+            GUIManager gui = new GUIManager(player, homeManagement, ezHomes.config.getBoolean("allow-respawn-homes"));
             gui.openGUI(0);
             return true;
         }
@@ -62,21 +71,21 @@ public class CommandHomes implements CommandExecutor {
             }
             if (line.contains("%homes%")) {
                 Component homesList = Component.empty();
-                for (Component component : ezHomes.homeManagement.getHomesClickable(player.getUniqueId())) {
+                for (Component component : homeManagement.getHomesClickable(player.getUniqueId())) {
                     homesList = homesList.append(component);
                 }
-                ezHomes.getAdventure().player(player).sendMessage(homesList);
+                audiences.player(player).sendMessage(homesList);
                 continue;
             }
             if (line.contains("%respawnhome%")) {
-                String respawnHome = ezHomes.homeManagement.getRespawnHomeName(player.getUniqueId());
+                String respawnHome = homeManagement.getRespawnHomeName(player.getUniqueId());
                 if (ezHomes.config.getBoolean("allow-respawn-at-home") && respawnHome != null) {
-                    ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("commands.homes.respawn-home", respawnHome));
+                    audiences.player(player).sendMessage(ezHomes.getMessage("commands.homes.respawn-home", respawnHome));
                 }
                 continue;
             }
-            Component component = ezHomes.miniMessage.deserialize(line);
-            ezHomes.getAdventure().player(player).sendMessage(component);
+            Component component = miniMessage.deserialize(line);
+            audiences.player(player).sendMessage(component);
         }
         return true;
     }

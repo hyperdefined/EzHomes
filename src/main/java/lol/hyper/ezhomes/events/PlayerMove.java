@@ -18,6 +18,8 @@
 package lol.hyper.ezhomes.events;
 
 import lol.hyper.ezhomes.EzHomes;
+import lol.hyper.ezhomes.tools.HomeManagement;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -30,9 +32,13 @@ import java.util.UUID;
 public class PlayerMove implements Listener {
 
     private final EzHomes ezHomes;
+    private final BukkitAudiences audiences;
+    private final HomeManagement homeManagement;
 
     public PlayerMove(EzHomes ezHomes) {
         this.ezHomes = ezHomes;
+        this.audiences = ezHomes.getAdventure();
+        this.homeManagement = ezHomes.homeManagement;
     }
 
     public final HashMap<UUID, BukkitTask> teleportTasks = new HashMap<>();
@@ -47,7 +53,8 @@ public class PlayerMove implements Listener {
             Player player = event.getPlayer();
             teleportTasks.get(player.getUniqueId()).cancel();
             teleportTasks.remove(player.getUniqueId());
-            ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("errors.teleport-canceled", null));
+            audiences.player(player).sendMessage(ezHomes.getMessage("errors.teleport-canceled", null));
+            homeManagement.guiManagers.remove(player.getUniqueId());
         }
     }
 }

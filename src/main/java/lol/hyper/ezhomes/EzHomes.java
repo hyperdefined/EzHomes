@@ -19,10 +19,7 @@ package lol.hyper.ezhomes;
 
 import io.papermc.lib.PaperLib;
 import lol.hyper.ezhomes.commands.*;
-import lol.hyper.ezhomes.events.InventoryClick;
-import lol.hyper.ezhomes.events.PlayerLeave;
-import lol.hyper.ezhomes.events.PlayerMove;
-import lol.hyper.ezhomes.events.PlayerRespawn;
+import lol.hyper.ezhomes.events.*;
 import lol.hyper.ezhomes.tools.HomeManagement;
 import lol.hyper.githubreleaseapi.GitHubRelease;
 import lol.hyper.githubreleaseapi.GitHubReleaseAPI;
@@ -42,7 +39,9 @@ import org.bukkit.scoreboard.Team;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 public final class EzHomes extends JavaPlugin {
@@ -53,6 +52,7 @@ public final class EzHomes extends JavaPlugin {
     public final int MESSAGES_VERSION = 1;
     public FileConfiguration config = this.getConfig();
     public FileConfiguration messages;
+    public final ArrayList<UUID> isTeleporting = new ArrayList<>();
 
     public final Logger logger = this.getLogger();
 
@@ -72,12 +72,12 @@ public final class EzHomes extends JavaPlugin {
     public PlayerLeave playerLeave;
     public PlayerMove playerMove;
     public PlayerRespawn playerRespawn;
+    public PlayerTeleport playerTeleport;
 
     private Scoreboard sb = null;
 
     @Override
     public void onEnable() {
-
         sb = Bukkit.getScoreboardManager().getMainScoreboard();
 
         this.adventure = BukkitAudiences.create(this);
@@ -90,10 +90,11 @@ public final class EzHomes extends JavaPlugin {
         commandWhere = new CommandWhere(this);
         commandUpdateHome = new CommandUpdateHome(this);
         commandHomeRespawn = new CommandHomeRespawn(this);
-        inventoryClick = new InventoryClick(this);
         playerLeave = new PlayerLeave(this);
         playerMove = new PlayerMove(this);
         playerRespawn = new PlayerRespawn(this);
+        playerTeleport = new PlayerTeleport(this);
+        inventoryClick = new InventoryClick(this);
         if (!configFile.exists()) {
             this.saveResource("config.yml", true);
             logger.info("Copying default config!");
@@ -123,6 +124,7 @@ public final class EzHomes extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(playerLeave, this);
         Bukkit.getPluginManager().registerEvents(playerMove, this);
         Bukkit.getPluginManager().registerEvents(playerRespawn, this);
+        Bukkit.getPluginManager().registerEvents(playerTeleport, this);
 
         Bukkit.getScheduler().runTaskLaterAsynchronously(this, () -> homeManagement.cleanEmptyHomeFiles(), 100);
 

@@ -18,7 +18,10 @@
 package lol.hyper.ezhomes.commands;
 
 import lol.hyper.ezhomes.EzHomes;
+import lol.hyper.ezhomes.tools.HomeManagement;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -33,33 +36,40 @@ import java.util.List;
 public class CommandWhere implements TabExecutor {
 
     private final EzHomes ezHomes;
+    private final HomeManagement homeManagement;
+    private final BukkitAudiences audiences;
+    private final MiniMessage miniMessage;
 
     public CommandWhere(EzHomes ezHomes) {
         this.ezHomes = ezHomes;
+        this.homeManagement = ezHomes.homeManagement;
+        this.audiences = ezHomes.getAdventure();
+        this.miniMessage = ezHomes.miniMessage;
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (sender instanceof ConsoleCommandSender) {
-            ezHomes.getAdventure().sender(sender).sendMessage(ezHomes.getMessage("errors.must-be-player", null));
+            audiences.sender(sender).sendMessage(ezHomes.getMessage("errors.must-be-player", null));
             return true;
         }
 
         Player player = (Player) sender;
-        if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
-            ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("errors.no-homes", null));
+        if (homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
+            audiences.player(player).sendMessage(ezHomes.getMessage("errors.no-homes", null));
             return true;
         }
-        ArrayList<String> playerHomes = ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
+        ArrayList<String> playerHomes = homeManagement.getPlayerHomes(player.getUniqueId());
 
         int argsLength = args.length;
         switch (argsLength) {
-            case 0:
-                ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("errors.specify-home-name", null));
+            case 0: {
+                audiences.player(player).sendMessage(ezHomes.getMessage("errors.specify-home-name", null));
                 return true;
-            case 1:
+            }
+            case 1: {
                 if (playerHomes.contains(args[0])) {
-                    Location home = ezHomes.homeManagement.getHomeLocation(player.getUniqueId(), args[0]);
+                    Location home = homeManagement.getHomeLocation(player.getUniqueId(), args[0]);
                     for (String line : ezHomes.getMessageList("commands.where.command")) {
                         if (line.contains("%home%")) {
                             line = line.replace("%home%", args[0]);
@@ -76,16 +86,18 @@ public class CommandWhere implements TabExecutor {
                         if (line.contains("%z%")) {
                             line = line.replace("%z%", String.valueOf((int) home.getZ()));
                         }
-                        Component component = ezHomes.miniMessage.deserialize(line);
-                        ezHomes.getAdventure().player(player).sendMessage(component);
+                        Component component = miniMessage.deserialize(line);
+                        audiences.player(player).sendMessage(component);
                     }
                 } else {
-                    ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("errors.home-does-not-exist", null));
+                    audiences.player(player).sendMessage(ezHomes.getMessage("errors.home-does-not-exist", null));
                 }
                 return true;
-            default:
-                ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("commands.where.invalid-syntax", null));
+            }
+            default: {
+                audiences.player(player).sendMessage(ezHomes.getMessage("commands.where.invalid-syntax", null));
                 break;
+            }
         }
         return true;
     }
@@ -93,6 +105,6 @@ public class CommandWhere implements TabExecutor {
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
         Player player = (Player) sender;
-        return ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
+        return homeManagement.getPlayerHomes(player.getUniqueId());
     }
 }

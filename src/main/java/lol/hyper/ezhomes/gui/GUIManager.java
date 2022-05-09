@@ -33,17 +33,17 @@ import java.util.List;
 
 public class GUIManager {
 
-    final ArrayList<Inventory> homePages = new ArrayList<>();
-    final Player owner;
+    private final ArrayList<Inventory> homePages = new ArrayList<>();
+    private final Player owner;
     private final HomeManagement homeManagement;
-    int currentPage = 0;
-    final boolean allowRespawnHomes;
+    private int currentPage = 0;
+    private final boolean allowRespawnHomes;
 
     public GUIManager(Player player, HomeManagement homeManagement, boolean allowRespawnHomes) {
         this.homeManagement = homeManagement;
         this.owner = player;
         this.allowRespawnHomes = allowRespawnHomes;
-        homeManagement.guiManagers.put(owner, this);
+        homeManagement.guiManagers.put(owner.getUniqueId(), this);
 
         int pages = getPagesToMake();
         createGUI(pages);
@@ -55,7 +55,7 @@ public class GUIManager {
      */
     private void createGUI(int pagesToMake) {
         for (int i = 0; i < pagesToMake; i++) {
-            Inventory inv = Bukkit.createInventory(new GUIHolder(), 54, owner.getDisplayName() + "'s Homes");
+            Inventory inv = Bukkit.createInventory(owner, 54, owner.getDisplayName() + "'s Homes");
 
             // Create the next and previous page items
             ItemStack prevPage = new ItemStack(Material.PAPER);
@@ -173,5 +173,9 @@ public class GUIManager {
      */
     public int getCurrentPageIndex() {
         return currentPage - 1;
+    }
+
+    public ArrayList<Inventory> getHomePages() {
+        return homePages;
     }
 }

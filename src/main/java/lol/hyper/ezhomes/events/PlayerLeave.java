@@ -18,24 +18,32 @@
 package lol.hyper.ezhomes.events;
 
 import lol.hyper.ezhomes.EzHomes;
+import lol.hyper.ezhomes.tools.HomeManagement;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.util.UUID;
+
 public class PlayerLeave implements Listener {
 
-    private final EzHomes ezHomes;
+    private final HomeManagement homeManagement;
+    private final PlayerMove playerMove;
 
     public PlayerLeave(EzHomes ezHomes) {
-        this.ezHomes = ezHomes;
+        this.homeManagement = ezHomes.homeManagement;
+        this.playerMove = ezHomes.playerMove;
     }
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
-        ezHomes.homeManagement.guiManagers.remove(event.getPlayer());
-        if (ezHomes.playerMove.teleportTasks.containsKey(event.getPlayer().getUniqueId())) {
-            ezHomes.playerMove.teleportTasks.get(event.getPlayer().getUniqueId()).cancel();
-            ezHomes.playerMove.teleportTasks.remove(event.getPlayer().getUniqueId());
+        Player player = event.getPlayer();
+        UUID uuid = player.getUniqueId();
+        homeManagement.guiManagers.remove(uuid);
+        if (playerMove.teleportTasks.containsKey(uuid)) {
+            playerMove.teleportTasks.get(uuid).cancel();
+            playerMove.teleportTasks.remove(uuid);
         }
     }
 }

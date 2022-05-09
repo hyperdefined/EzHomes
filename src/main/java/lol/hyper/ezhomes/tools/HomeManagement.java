@@ -26,7 +26,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.json.JSONObject;
 
 import java.io.*;
@@ -40,7 +39,7 @@ import java.util.concurrent.TimeUnit;
 public class HomeManagement {
 
     public final HashMap<UUID, Long> teleportCooldowns = new HashMap<>();
-    public final HashMap<Player, GUIManager> guiManagers = new HashMap<>();
+    public final HashMap<UUID, GUIManager> guiManagers = new HashMap<>();
 
     public final Path homesPath;
     public final File respawnsFile;

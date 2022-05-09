@@ -18,6 +18,8 @@
 package lol.hyper.ezhomes.commands;
 
 import lol.hyper.ezhomes.EzHomes;
+import lol.hyper.ezhomes.tools.HomeManagement;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -32,9 +34,13 @@ import java.util.List;
 public class CommandHomeRespawn implements TabExecutor {
 
     private final EzHomes ezHomes;
+    private final HomeManagement homeManagement;
+    private final BukkitAudiences audiences;
 
     public CommandHomeRespawn(EzHomes ezHomes) {
         this.ezHomes = ezHomes;
+        this.homeManagement = ezHomes.homeManagement;
+        this.audiences = ezHomes.getAdventure();
     }
 
     @Override
@@ -44,77 +50,52 @@ public class CommandHomeRespawn implements TabExecutor {
             @NotNull String label,
             String[] args) {
         if (sender instanceof ConsoleCommandSender) {
-            ezHomes.getAdventure()
-                    .sender(sender)
-                    .sendMessage(ezHomes.getMessage("errors.must-be-player", null));
+            audiences.sender(sender).sendMessage(ezHomes.getMessage("errors.must-be-player", null));
             return true;
         }
 
         if (!ezHomes.config.getBoolean("allow-respawn-at-home")) {
-            ezHomes.getAdventure()
-                    .sender(sender)
-                    .sendMessage(
-                            ezHomes.getMessage("commands.respawnhome.feature-not-enabled", null));
+            audiences.sender(sender).sendMessage(ezHomes.getMessage("commands.respawnhome.feature-not-enabled", null));
             return true;
         }
 
         Player player = (Player) sender;
-        if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
-            ezHomes.getAdventure()
-                    .player(player)
-                    .sendMessage(ezHomes.getMessage("errors.no-homes", null));
+        if (homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
+            audiences.player(player).sendMessage(ezHomes.getMessage("errors.no-homes", null));
             return true;
         }
 
-        ArrayList<String> playerHomes = ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
+        ArrayList<String> playerHomes = homeManagement.getPlayerHomes(player.getUniqueId());
 
         int argsLength = args.length;
         switch (argsLength) {
-            case 0:
-                ezHomes.getAdventure()
-                        .sender(sender)
-                        .sendMessage(ezHomes.getMessage("errors.specify-action.", null));
+            case 0: {
+                audiences.sender(sender).sendMessage(ezHomes.getMessage("errors.specify-action.", null));
                 break;
-            case 1:
+            }
+            case 1: {
                 if (args[0].equalsIgnoreCase("remove")) {
-                    ezHomes.homeManagement.removeRespawnLocation(player.getUniqueId());
-                    ezHomes.getAdventure()
-                            .sender(sender)
-                            .sendMessage(
-                                    ezHomes.getMessage(
-                                            "commands.respawnhome.respawnhome-removed", null));
+                    homeManagement.removeRespawnLocation(player.getUniqueId());
+                    audiences.sender(sender).sendMessage(ezHomes.getMessage("commands.respawnhome.respawnhome-removed", null));
                 } else {
-                    ezHomes.getAdventure()
-                            .sender(sender)
-                            .sendMessage(
-                                    ezHomes.getMessage(
-                                            "commands.respawnhome.invalid-syntax", null));
+                    audiences.sender(sender).sendMessage(ezHomes.getMessage("commands.respawnhome.invalid-syntax", null));
                 }
                 return true;
-            case 2:
+            }
+            case 2: {
                 if (args[0].equalsIgnoreCase("set")) {
                     String homeName = args[1];
                     if (playerHomes.contains(homeName)) {
-                        ezHomes.homeManagement.setRespawnLocation(player.getUniqueId(), homeName);
-                        ezHomes.getAdventure()
-                                .sender(sender)
-                                .sendMessage(
-                                        ezHomes.getMessage(
-                                                "commands.respawnhome.respawnhome-set", null));
+                        homeManagement.setRespawnLocation(player.getUniqueId(), homeName);
+                        audiences.sender(sender).sendMessage(ezHomes.getMessage("commands.respawnhome.respawnhome-set", null));
                     } else {
-                        ezHomes.getAdventure()
-                                .sender(sender)
-                                .sendMessage(
-                                        ezHomes.getMessage("errors.home-does-not-exist.", null));
+                        audiences.sender(sender).sendMessage(ezHomes.getMessage("errors.home-does-not-exist.", null));
                     }
                 } else {
-                    ezHomes.getAdventure()
-                            .sender(sender)
-                            .sendMessage(
-                                    ezHomes.getMessage(
-                                            "commands.respawnhome.invalid-syntax", null));
+                    audiences.sender(sender).sendMessage(ezHomes.getMessage("commands.respawnhome.invalid-syntax", null));
                     return true;
                 }
+            }
         }
         return true;
     }
@@ -131,7 +112,7 @@ public class CommandHomeRespawn implements TabExecutor {
 
         if (args[0].equalsIgnoreCase("set")) {
             Player player = (Player) sender;
-            return ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
+            return homeManagement.getPlayerHomes(player.getUniqueId());
         }
         return null;
     }

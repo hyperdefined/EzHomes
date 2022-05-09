@@ -18,6 +18,7 @@
 package lol.hyper.ezhomes.events;
 
 import lol.hyper.ezhomes.EzHomes;
+import lol.hyper.ezhomes.tools.HomeManagement;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,9 +28,11 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 public class PlayerRespawn implements Listener {
 
     private final EzHomes ezHomes;
+    private final HomeManagement homeManagement;
 
     public PlayerRespawn(EzHomes ezHomes) {
         this.ezHomes = ezHomes;
+        this.homeManagement = ezHomes.homeManagement;
     }
 
     @EventHandler
@@ -39,7 +42,7 @@ public class PlayerRespawn implements Listener {
         }
 
         Player player = event.getPlayer();
-        Location respawnLocation = ezHomes.homeManagement.getRespawnLocation(player.getUniqueId());
+        Location respawnLocation = homeManagement.getRespawnLocation(player.getUniqueId());
 
         if (respawnLocation != null) {
             event.setRespawnLocation(respawnLocation);

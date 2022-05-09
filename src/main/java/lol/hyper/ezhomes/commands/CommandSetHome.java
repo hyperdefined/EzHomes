@@ -18,6 +18,8 @@
 package lol.hyper.ezhomes.commands;
 
 import lol.hyper.ezhomes.EzHomes;
+import lol.hyper.ezhomes.tools.HomeManagement;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -32,15 +34,23 @@ import java.util.regex.Pattern;
 public class CommandSetHome implements CommandExecutor {
 
     private final EzHomes ezHomes;
+    private final HomeManagement homeManagement;
+    private final BukkitAudiences audiences;
 
     public CommandSetHome(EzHomes ezHomes) {
         this.ezHomes = ezHomes;
+        this.homeManagement = ezHomes.homeManagement;
+        this.audiences = ezHomes.getAdventure();
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+    public boolean onCommand(
+            @NotNull CommandSender sender,
+            @NotNull Command command,
+            @NotNull String label,
+            String[] args) {
         if (sender instanceof ConsoleCommandSender) {
-            ezHomes.getAdventure().sender(sender).sendMessage(ezHomes.getMessage("errors.must-be-player", null));
+            audiences.sender(sender).sendMessage(ezHomes.getMessage("errors.must-be-player", null));
             return true;
         }
 
@@ -48,45 +58,45 @@ public class CommandSetHome implements CommandExecutor {
 
         // Doing this here because I am lazy LOL
         int homeSize;
-        if (ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
+        if (homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
             homeSize = 0;
         } else {
-            homeSize =
-                    ezHomes.homeManagement.getPlayerHomes(player.getUniqueId()).size();
+            homeSize = homeManagement.getPlayerHomes(player.getUniqueId()).size();
         }
 
         int argsLength = args.length;
         switch (argsLength) {
-            case 0:
-                ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("errors.specify-home-name", null));
-                return true;
-            case 1:
-                ArrayList<String> homes = ezHomes.homeManagement.getPlayerHomes(player.getUniqueId());
-                if (homeSize != ezHomes.config.getInt("total-homes") || player.hasPermission("ezhomes.bypasslimit")) {
-                    Pattern pattern = Pattern.compile("^[a-zA-Z0-9]+$");
-                    Matcher matcher = pattern.matcher(args[0]);
-                    if (!matcher.matches()) {
-                        ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("errors.invalid-characters", null));
-                        return true;
-                    }
-                    // check for duplicates
-                    if (homeSize != 0 && homes != null) {
-                        if (homes.stream().anyMatch(x -> x.equalsIgnoreCase(args[0]))) {
-                            ezHomes.getAdventure()
-                                    .player(player)
-                                    .sendMessage(
-                                            ezHomes.getMessage("errors.home-already-exists", null));
+            case 0: {
+                    audiences.player(player).sendMessage(ezHomes.getMessage("errors.specify-home-name", null));
+                    return true;
+                }
+            case 1: {
+                    ArrayList<String> homes = homeManagement.getPlayerHomes(player.getUniqueId());
+                    if (homeSize != ezHomes.config.getInt("total-homes")
+                            || player.hasPermission("ezhomes.bypasslimit")) {
+                        Pattern pattern = Pattern.compile("^[a-zA-Z0-9]+$");
+                        Matcher matcher = pattern.matcher(args[0]);
+                        if (!matcher.matches()) {
+                            audiences.player(player).sendMessage(ezHomes.getMessage("errors.invalid-characters", null));
                             return true;
                         }
+                        // check for duplicates
+                        if (homeSize != 0 && homes != null) {
+                            if (homes.stream().anyMatch(x -> x.equalsIgnoreCase(args[0]))) {
+                                audiences.player(player).sendMessage(ezHomes.getMessage("errors.home-already-exists", null));
+                                return true;
+                            }
+                        }
+                        homeManagement.createHome(player.getUniqueId(), args[0]);
+                        audiences.player(player).sendMessage(ezHomes.getMessage("commands.sethome.new-home", player));
+                    } else {
+                        int homeLimit = ezHomes.config.getInt("total-homes");
+                        audiences.player(player).sendMessage(ezHomes.getMessage("commands.sethome.home-limit", homeLimit));
                     }
-                    ezHomes.homeManagement.createHome(player.getUniqueId(), args[0]);
-                    ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("commands.sethome.new-home", player));
-                } else {
-                    ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("commands.sethome.home-limit", ezHomes.config.getInt("total-homes")));
+                    return true;
                 }
-                return true;
             default:
-                ezHomes.getAdventure().player(player).sendMessage(ezHomes.getMessage("commands.sethome.invalid-syntax", null));
+                audiences.player(player).sendMessage(ezHomes.getMessage("commands.sethome.invalid-syntax", null));
                 break;
         }
         return true;
