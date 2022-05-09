@@ -1,7 +1,9 @@
 package lol.hyper.ezhomes.commands;
 
 import lol.hyper.ezhomes.EzHomes;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -13,33 +15,33 @@ import java.util.List;
 public class CommandEzHomes implements TabExecutor {
 
     private final EzHomes ezHomes;
-    private final Component aboutPlugin;
+    private final BukkitAudiences audiences;
 
     public CommandEzHomes (EzHomes ezHomes) {
         this.ezHomes = ezHomes;
-        this.aboutPlugin = ezHomes.miniMessage.deserialize("<green>EzHomes version " + ezHomes.getDescription().getVersion() + " . Created by hyperdefined.</green>");
+        this.audiences = ezHomes.getAdventure();
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length == 0) {
-            ezHomes.getAdventure().sender(sender).sendMessage(aboutPlugin);
+            audiences.sender(sender).sendMessage(Component.text("EzHomes version " + ezHomes.getDescription().getVersion() + ". Created by hyperdefined.").color(NamedTextColor.GREEN));
             return true;
         }
         if (args.length == 1) {
             if (args[0].equalsIgnoreCase("reload")) {
                 if (sender.hasPermission("ezhomes.reload")) {
                     ezHomes.loadConfig();
-                    ezHomes.getAdventure().sender(sender).sendMessage(ezHomes.getMessage("config-reloaded", null));
+                    audiences.sender(sender).sendMessage(ezHomes.getMessage("config-reloaded", null));
                 } else {
-                    ezHomes.getAdventure().sender(sender).sendMessage(ezHomes.getMessage("no-perms", null));
+                    audiences.sender(sender).sendMessage(ezHomes.getMessage("no-perms", null));
                 }
             } else {
-                ezHomes.getAdventure().sender(sender).sendMessage(aboutPlugin);
+                audiences.sender(sender).sendMessage(Component.text("EzHomes version " + ezHomes.getDescription().getVersion() + ". Created by hyperdefined.").color(NamedTextColor.GREEN));
             }
             return true;
         }
-        ezHomes.getAdventure().sender(sender).sendMessage(aboutPlugin);
+        audiences.sender(sender).sendMessage(Component.text("EzHomes version " + ezHomes.getDescription().getVersion() + ". Created by hyperdefined.").color(NamedTextColor.GREEN));
         return true;
     }
 
