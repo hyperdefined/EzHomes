@@ -35,6 +35,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 
 import java.io.File;
@@ -78,7 +79,10 @@ public final class EzHomes extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        sb = Bukkit.getScoreboardManager().getMainScoreboard();
+        ScoreboardManager manager = Bukkit.getScoreboardManager();
+        if (manager != null) {
+            sb = manager.getMainScoreboard();
+        }
 
         this.adventure = BukkitAudiences.create(this);
         homeManagement = new HomeManagement(this);
