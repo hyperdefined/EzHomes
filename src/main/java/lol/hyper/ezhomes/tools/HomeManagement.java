@@ -35,7 +35,6 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-@SuppressWarnings("DuplicatedCode")
 public class HomeManagement {
 
     public final HashMap<UUID, Long> teleportCooldowns = new HashMap<>();
