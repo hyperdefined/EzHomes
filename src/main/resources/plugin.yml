@@ -21,9 +21,6 @@ commands:
   delhome:
     usage: /delhome
     description: Delete a home.
-  homesreload:
-    usage: /homesreload
-    description: Reloads config.
   where:
     usage: /where
     description: Shows a home's location.
