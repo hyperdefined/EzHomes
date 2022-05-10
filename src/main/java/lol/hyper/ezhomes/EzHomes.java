@@ -130,7 +130,8 @@ public final class EzHomes extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(playerRespawn, this);
         Bukkit.getPluginManager().registerEvents(playerTeleport, this);
 
-        Bukkit.getScheduler().runTaskLaterAsynchronously(this, () -> homeManagement.cleanEmptyHomeFiles(), 100);
+        Bukkit.getScheduler()
+                .runTaskLaterAsynchronously(this, () -> homeManagement.cleanEmptyHomeFiles(), 100);
 
         new Metrics(this, 9390);
 
@@ -161,19 +162,28 @@ public final class EzHomes extends JavaPlugin {
         GitHubRelease current = api.getReleaseByTag(this.getDescription().getVersion());
         GitHubRelease latest = api.getLatestVersion();
         if (current == null) {
-            logger.warning("You are running a version that does not exist on GitHub. If you are in a dev environment, you can ignore this. Otherwise, this is a bug!");
+            logger.warning(
+                    "You are running a version that does not exist on GitHub. If you are in a dev environment, you can ignore this. Otherwise, this is a bug!");
             return;
         }
         int buildsBehind = api.getBuildsBehind(current);
         if (buildsBehind == 0) {
             logger.info("You are running the latest version.");
         } else {
-            logger.warning("A new version is available (" + latest.getTagVersion() + ")! You are running version " + current.getTagVersion() + ". You are " + buildsBehind + " version(s) behind.");
+            logger.warning(
+                    "A new version is available ("
+                            + latest.getTagVersion()
+                            + ")! You are running version "
+                            + current.getTagVersion()
+                            + ". You are "
+                            + buildsBehind
+                            + " version(s) behind.");
         }
     }
 
     /**
      * Gets a message from messages.yml.
+     *
      * @param path The path to the message.
      * @return Component with formatting applied.
      */
@@ -212,6 +222,7 @@ public final class EzHomes extends JavaPlugin {
 
     /**
      * Gets a message list.
+     *
      * @param path The path to the message.
      * @return A raw string list of messages.
      */
@@ -226,27 +237,40 @@ public final class EzHomes extends JavaPlugin {
     }
 
     public BukkitAudiences getAdventure() {
-        if(this.adventure == null) {
-            throw new IllegalStateException("Tried to access Adventure when the plugin was disabled!");
+        if (this.adventure == null) {
+            throw new IllegalStateException(
+                    "Tried to access Adventure when the plugin was disabled!");
         }
         return this.adventure;
     }
 
     /**
      * Replace player's name with a formatted name.
+     *
      * @param message The message with player placeholder.
      * @param player The player.
      * @return A formatted message with formatted player display name.
      */
     private String replaceTeamFormattedPlayerDisplayName(String message, final Player player) {
-		if (config.getBoolean("use-team-formatting") && sb != null) {
-			final Team team = sb.getEntryTeam(player.getName());
-			if (team != null) {
+        if (config.getBoolean("use-team-formatting") && sb != null) {
+            final Team team = sb.getEntryTeam(player.getName());
+            if (team != null) {
                 final Component mmsg = miniMessage.deserialize(message);
                 final String lmsg = LegacyComponentSerializer.builder().build().serialize(mmsg);
-                return miniMessage.serialize(LegacyComponentSerializer.builder().build().deserialize(lmsg.replace("%player%", "" + team.getColor() + team.getPrefix() + player.getDisplayName() + team.getSuffix() + ChatColor.RESET)));
-			}
-		}
-		return message.replace("%player%", player.getDisplayName());
-	}
+                return miniMessage.serialize(
+                        LegacyComponentSerializer.builder()
+                                .build()
+                                .deserialize(
+                                        lmsg.replace(
+                                                "%player%",
+                                                ""
+                                                        + team.getColor()
+                                                        + team.getPrefix()
+                                                        + player.getDisplayName()
+                                                        + team.getSuffix()
+                                                        + ChatColor.RESET)));
+            }
+        }
+        return message.replace("%player%", player.getDisplayName());
+    }
 }
