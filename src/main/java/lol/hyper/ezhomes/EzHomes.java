@@ -94,8 +94,8 @@ public final class EzHomes extends JavaPlugin {
         commandWhere = new CommandWhere(this);
         commandUpdateHome = new CommandUpdateHome(this);
         commandHomeRespawn = new CommandHomeRespawn(this);
-        playerLeave = new PlayerLeave(this);
         playerMove = new PlayerMove(this);
+        playerLeave = new PlayerLeave(this);
         playerRespawn = new PlayerRespawn(this);
         playerTeleport = new PlayerTeleport(this);
         inventoryClick = new InventoryClick(this);
