@@ -10,6 +10,8 @@ import org.bukkit.command.TabExecutor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class CommandEzHomes implements TabExecutor {
@@ -48,6 +50,9 @@ public class CommandEzHomes implements TabExecutor {
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        if (args.length == 1) {
+            return Collections.singletonList("reload");
+        }
         return null;
     }
 }

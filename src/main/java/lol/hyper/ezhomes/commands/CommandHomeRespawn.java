@@ -70,13 +70,17 @@ public class CommandHomeRespawn implements TabExecutor {
         int argsLength = args.length;
         switch (argsLength) {
             case 0: {
-                audiences.sender(sender).sendMessage(ezHomes.getMessage("errors.specify-action.", null));
+                audiences.sender(sender).sendMessage(ezHomes.getMessage("errors.specify-action", null));
                 break;
             }
             case 1: {
                 if (args[0].equalsIgnoreCase("remove")) {
-                    homeManagement.removeRespawnLocation(player.getUniqueId());
-                    audiences.sender(sender).sendMessage(ezHomes.getMessage("commands.respawnhome.respawnhome-removed", null));
+                    if (homeManagement.getRespawnHomeName(player.getUniqueId()) != null) {
+                        homeManagement.removeRespawnLocation(player.getUniqueId());
+                        audiences.sender(sender).sendMessage(ezHomes.getMessage("commands.respawnhome.respawnhome-removed", null));
+                    } else {
+                        audiences.sender(sender).sendMessage(ezHomes.getMessage("commands.respawnhome.no-respawnhome", null));
+                    }
                 } else {
                     audiences.sender(sender).sendMessage(ezHomes.getMessage("commands.respawnhome.invalid-syntax", null));
                 }
@@ -106,7 +110,7 @@ public class CommandHomeRespawn implements TabExecutor {
             @NotNull Command command,
             @NotNull String alias,
             String[] args) {
-        if (args.length == 0) {
+        if (args.length == 1) {
             return Arrays.asList("set", "remove");
         }
 

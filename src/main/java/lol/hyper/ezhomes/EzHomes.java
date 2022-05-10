@@ -50,7 +50,7 @@ public final class EzHomes extends JavaPlugin {
     public final File configFile = new File(this.getDataFolder(), "config.yml");
     public final File messagesFile = new File(this.getDataFolder(), "messages.yml");
     public final int CONFIG_VERSION = 4;
-    public final int MESSAGES_VERSION = 1;
+    public final int MESSAGES_VERSION = 2;
     public FileConfiguration config = this.getConfig();
     public FileConfiguration messages;
     public final ArrayList<UUID> isTeleporting = new ArrayList<>();
@@ -146,7 +146,7 @@ public final class EzHomes extends JavaPlugin {
 
         messages = YamlConfiguration.loadConfiguration(messagesFile);
         if (messages.getInt("version") != MESSAGES_VERSION) {
-            logger.warning("Your messages file is outdated! Please regenerate this file!.");
+            logger.warning("Your messages file is outdated! Please regenerate this file.");
         }
     }
 

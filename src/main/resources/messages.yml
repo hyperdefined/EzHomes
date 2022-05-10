@@ -24,6 +24,7 @@ commands:
     feature-not-enabled: "<red>This feature is not enabled.</red>"
     respawnhome-removed: "<green>Respawn home has been removed.</green>"
     respawnhome-set: "<green>Respawn home has been set.</green>"
+    no-respawnhome: "<red>You do not have respawn home set.</red>"
     invalid-syntax: "<red>Invalid option. Valid options are: \"remove\" or \"set <home>\".</red>"
   homes:
     command:
@@ -50,4 +51,4 @@ commands:
       - "<yellow>Z:</yellow> <gold>%z%</gold>"
       - "<gold>--------------------------------------------</gold>"
     invalid-syntax: "<red>Invalid command usage. Usage: /where <home> to get it's location.</red>"
-version: 1
+version: 2
