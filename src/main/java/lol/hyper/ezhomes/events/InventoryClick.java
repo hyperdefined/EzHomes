@@ -73,7 +73,11 @@ public class InventoryClick implements Listener {
                                 homeManagement.getHomeLocation(
                                         player.getUniqueId(),
                                         ChatColor.stripColor(meta.getDisplayName()));
-
+                        BukkitTask currentTask = playerMove.teleportTasks.get(player.getUniqueId());
+                        if (currentTask != null) {
+                            currentTask.cancel();
+                            audiences.player(player).sendMessage(ezHomes.getMessage("errors.teleport-canceled", null));
+                        }
                         BukkitTask teleportTask =
                                 new TeleportTask(ezHomes, player, loc)
                                         .runTaskTimer(ezHomes, 0, 20L);

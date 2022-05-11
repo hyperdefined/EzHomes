@@ -76,6 +76,11 @@ public class CommandHome implements TabExecutor {
             case 1: {
                 if (homeManagement.canPlayerTeleport(player.getUniqueId()) || player.hasPermission("ezhomes.bypasscooldown")) {
                     if (playerHomes.contains(args[0])) {
+                        BukkitTask currentTask = playerMove.teleportTasks.get(player.getUniqueId());
+                        if (currentTask != null) {
+                            currentTask.cancel();
+                            audiences.player(player).sendMessage(ezHomes.getMessage("errors.teleport-canceled", null));
+                        }
                         BukkitTask teleportTask =
                                 new TeleportTask(
                                         ezHomes,
