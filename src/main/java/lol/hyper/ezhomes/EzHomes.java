@@ -86,6 +86,7 @@ public final class EzHomes extends JavaPlugin {
 
         this.adventure = BukkitAudiences.create(this);
         homeManagement = new HomeManagement(this);
+        playerMove = new PlayerMove(this);
         commandEzHomes = new CommandEzHomes(this);
         commandHome = new CommandHome(this);
         commandSetHome = new CommandSetHome(this);
@@ -94,7 +95,6 @@ public final class EzHomes extends JavaPlugin {
         commandWhere = new CommandWhere(this);
         commandUpdateHome = new CommandUpdateHome(this);
         commandHomeRespawn = new CommandHomeRespawn(this);
-        playerMove = new PlayerMove(this);
         playerLeave = new PlayerLeave(this);
         playerRespawn = new PlayerRespawn(this);
         playerTeleport = new PlayerTeleport(this);
