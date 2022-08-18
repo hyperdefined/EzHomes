@@ -23,6 +23,7 @@ import lol.hyper.ezhomes.tools.HomeManagement;
 import lol.hyper.ezhomes.tools.TeleportTask;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -82,7 +83,7 @@ public class InventoryClick implements Listener {
                                 new TeleportTask(ezHomes, player, loc)
                                         .runTaskTimer(ezHomes, 0, 20L);
                         playerMove.teleportTasks.put(player.getUniqueId(), teleportTask);
-                        player.closeInventory();
+                        Bukkit.getScheduler().runTaskLater(ezHomes, () -> player.getOpenInventory().close(), 1);
                     } else {
                         long timeLeft =
                                 TimeUnit.NANOSECONDS.toSeconds(
@@ -106,11 +107,11 @@ public class InventoryClick implements Listener {
                                     .getCurrentPageIndex();
                     ItemStack paper = event.getCurrentItem();
                     if (paper.getItemMeta().getDisplayName().contains("Next")) {
-                        player.getOpenInventory().close();
+                        Bukkit.getScheduler().runTaskLater(ezHomes, () -> player.getOpenInventory().close(), 1);
                         guiManager.openGUI(currentPage + 1);
                     }
                     if (paper.getItemMeta().getDisplayName().contains("Previous")) {
-                        player.getOpenInventory().close();
+                        Bukkit.getScheduler().runTaskLater(ezHomes, () -> player.getOpenInventory().close(), 1);
                         guiManager.openGUI(currentPage - 1);
                     }
                 }
