@@ -8,34 +8,59 @@ description: A super easy to use homes plugin.
 commands:
   sethome:
     usage: /sethome <name>
-    description: Set home.
+    permission: ezhomes.sethome
   home:
     usage: /home <name>
-    description: Teleport to home.
+    permission: ezhomes.home
   homes:
     usage: /homes
-    description: List player homes.
+    permission: ezhomes.homes
   updatehome:
-    usage: /updatehome
-    description: Update a home location.
+    usage: /updatehome <home>
+    permission: ezhomes.updatehome
   delhome:
-    usage: /delhome
-    description: Delete a home.
+    usage: /delhome <home>
+    permission: ezhomes.delhome
   where:
-    usage: /where
-    description: Shows a home's location.
+    usage: /where <home>
+    permission: ezhomes.where
   respawnhome:
-    usage: /respawnhome
-    description: Set a home to respawn at.
+    usage: /respawnhome <home>
+    permission: ezhomes.respawnhome
   ezhomes:
     usage: /ezhomes
+    permission: ezhomes.command
 permissions:
   ezhomes.reload:
     default: op
-    description: Allows the usage of /ezhomes reload
+    description: Allows the usage of /ezhomes reload.
   ezhomes.bypasslimit:
     default: op
-    description: Allows player to bypass home limit
+    description: Allows player to bypass home limit.
   ezhomes.bypasscooldown:
     default: op
-    description: Allows player to bypass cooldown between teleports
+    description: Allows player to bypass cooldown between teleports.
+  ezhomes.command:
+    default: op
+    description: Allows the usage of /ezhomes.
+  ezhomes.sethome:
+    default: true
+    description: Allows the usage of /sethome.
+  ezhomes.home:
+    default: true
+    description: Allows the usage of /home.
+  ezhomes.homes:
+    default: true
+    description: Allows the usage of /homes.
+  ezhomes.updatehome:
+    default: true
+    description: Allows the usage of /updatehome.
+  ezhomes.delhome:
+    default: true
+    description: Allows the usage of /delhome.
+  ezhomes.where:
+    default: true
+    description: Allows the usage of /where.
+  ezhomes.respawnhome:
+    default: true
+    description: Allows the usage of /respawnhome.

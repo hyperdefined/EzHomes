@@ -49,6 +49,11 @@ public class CommandDeleteHome implements TabExecutor {
             return true;
         }
 
+        if (!sender.hasPermission("ezhomes.delhome")) {
+            audiences.sender(sender).sendMessage(ezHomes.getMessage("no-perms", null));
+            return true;
+        }
+
         Player player = (Player) sender;
         if (homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
             audiences.player(player).sendMessage(ezHomes.getMessage("errors.no-homes", null));

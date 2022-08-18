@@ -26,6 +26,11 @@ public class CommandEzHomes implements TabExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if (!sender.hasPermission("ezhomes.command")) {
+            audiences.sender(sender).sendMessage(ezHomes.getMessage("no-perms", null));
+            return true;
+        }
+
         if (args.length == 0) {
             audiences.sender(sender).sendMessage(Component.text("EzHomes version " + ezHomes.getDescription().getVersion() + ". Created by hyperdefined.").color(NamedTextColor.GREEN));
             return true;
