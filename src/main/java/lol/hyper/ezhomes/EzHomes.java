@@ -264,8 +264,7 @@ public final class EzHomes extends JavaPlugin {
                                 .deserialize(
                                         lmsg.replace(
                                                 "%player%",
-                                                ""
-                                                        + team.getColor()
+                                                team.getColor()
                                                         + team.getPrefix()
                                                         + player.getDisplayName()
                                                         + team.getSuffix()
