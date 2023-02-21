@@ -278,7 +278,7 @@ public class HomeManagement {
         // check if the player has zero homes
         // if they do, delete the file off of the disk
         // otherwise write the new file
-        if (homes.length() == 0) {
+        if (homes.isEmpty()) {
             deletePlayerHomeFile(player);
             return;
         }
@@ -299,8 +299,8 @@ public class HomeManagement {
      */
     public List<Component> getHomesClickable(UUID player) {
         List<Component> components = new ArrayList<>();
-        if (getPlayerHomes(player) == null) {
-            return null;
+        if (getPlayerHomes(player).isEmpty()) {
+            return Collections.emptyList();
         } else {
             for (String home : getPlayerHomes(player)) {
                 TextComponent singleHome;

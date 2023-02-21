@@ -27,8 +27,8 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class CommandHomeRespawn implements TabExecutor {
@@ -119,6 +119,6 @@ public class CommandHomeRespawn implements TabExecutor {
             Player player = (Player) sender;
             return homeManagement.getPlayerHomes(player.getUniqueId());
         }
-        return null;
+        return Collections.emptyList();
     }
 }
