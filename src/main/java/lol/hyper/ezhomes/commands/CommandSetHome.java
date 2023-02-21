@@ -28,6 +28,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -57,48 +58,37 @@ public class CommandSetHome implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        // Doing this here because I am lazy LOL
-        int homeSize;
-        if (homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
-            homeSize = 0;
-        } else {
-            homeSize = homeManagement.getPlayerHomes(player.getUniqueId()).size();
-        }
-
         int argsLength = args.length;
         switch (argsLength) {
             case 0: {
-                    audiences.player(player).sendMessage(ezHomes.getMessage("errors.specify-home-name", null));
-                    return true;
-                }
+                audiences.player(player).sendMessage(ezHomes.getMessage("errors.specify-home-name", null));
+                return true;
+            }
             case 1: {
-                    ArrayList<String> homes = homeManagement.getPlayerHomes(player.getUniqueId());
-                    if (homeSize != ezHomes.config.getInt("total-homes")
-                            || player.hasPermission("ezhomes.bypasslimit")) {
-                        Pattern pattern = Pattern.compile("^[a-zA-Z0-9]+$");
-                        Matcher matcher = pattern.matcher(args[0]);
-                        if (!matcher.matches()) {
-                            audiences.player(player).sendMessage(ezHomes.getMessage("errors.invalid-characters", null));
-                            return true;
-                        }
-                        // check for duplicates
-                        if (homeSize != 0 && homes != null) {
-                            if (homes.stream().anyMatch(x -> x.equalsIgnoreCase(args[0]))) {
-                                audiences.player(player).sendMessage(ezHomes.getMessage("errors.home-already-exists", null));
-                                return true;
-                            }
-                        }
-                        homeManagement.createHome(player.getUniqueId(), args[0]);
-                        audiences.player(player).sendMessage(ezHomes.getMessage("commands.sethome.new-home", player));
-                    } else {
-                        int homeLimit = ezHomes.config.getInt("total-homes");
-                        audiences.player(player).sendMessage(ezHomes.getMessage("commands.sethome.home-limit", homeLimit));
-                    }
+                List<String> homes = homeManagement.getPlayerHomes(player.getUniqueId());
+                int homeLimit = ezHomes.config.getInt("total-homes");
+                if (homes.size() > homeLimit || player.hasPermission("ezhomes.bypasslimit")) {
+                    audiences.player(player).sendMessage(ezHomes.getMessage("commands.sethome.home-limit", homeLimit));
                     return true;
                 }
-            default:
+                Pattern pattern = Pattern.compile("^[a-zA-Z0-9]+$");
+                Matcher matcher = pattern.matcher(args[0]);
+                if (!matcher.matches()) {
+                    audiences.player(player).sendMessage(ezHomes.getMessage("errors.invalid-characters", null));
+                    return true;
+                }
+                if (homes.stream().anyMatch(x -> x.equalsIgnoreCase(args[0]))) {
+                    audiences.player(player).sendMessage(ezHomes.getMessage("errors.home-already-exists", null));
+                    return true;
+                }
+                homeManagement.createHome(player.getUniqueId(), args[0]);
+                audiences.player(player).sendMessage(ezHomes.getMessage("commands.sethome.new-home", player));
+                return true;
+            }
+            default: {
                 audiences.player(player).sendMessage(ezHomes.getMessage("commands.sethome.invalid-syntax", null));
                 break;
+            }
         }
         return true;
     }

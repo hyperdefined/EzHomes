@@ -57,7 +57,7 @@ public class CommandHomes implements CommandExecutor {
         }
         Player player = (Player) sender;
 
-        if (homeManagement.getPlayerHomes(player.getUniqueId()) == null) {
+        if (homeManagement.getPlayerHomes(player.getUniqueId()).isEmpty()) {
             audiences.player(player).sendMessage(ezHomes.getMessage("errors.no-homes", null));
             return true;
         }

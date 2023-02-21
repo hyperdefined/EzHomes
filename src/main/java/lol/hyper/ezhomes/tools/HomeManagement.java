@@ -213,15 +213,15 @@ public class HomeManagement {
      * @return Returns null if the file doesn't exist. Returns 0 if there are no locations. Returns
      *     the number of locations if there are any.
      */
-    public ArrayList<String> getPlayerHomes(UUID player) {
+    public List<String> getPlayerHomes(UUID player) {
         File homeFile = getPlayerFile(player);
         if (readFile(homeFile) != null) {
             JSONObject currentHomeFileJSON = readFile(homeFile);
-            ArrayList<String> playerHomes = new ArrayList<>(currentHomeFileJSON.keySet());
+            List<String> playerHomes = new ArrayList<>(currentHomeFileJSON.keySet());
             Collections.sort(playerHomes);
             return playerHomes;
         } else {
-            return null;
+            return Collections.emptyList();
         }
     }
 
