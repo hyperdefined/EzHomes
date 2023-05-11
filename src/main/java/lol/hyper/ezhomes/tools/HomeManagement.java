@@ -177,7 +177,7 @@ public class HomeManagement {
         m.put("z", homeLocation.getZ());
         m.put("pitch", homeLocation.getPitch());
         m.put("yaw", homeLocation.getYaw());
-        m.put("world", homeLocation.getWorld().getName());
+        m.put("world", homeLocation.getWorld().getUID().toString());
         homes.put(homeName, m);
         writeFile(homeFile, homes.toString());
     }
@@ -193,13 +193,22 @@ public class HomeManagement {
         File homeFile = getPlayerFile(player);
         if (readFile(homeFile) != null) {
             JSONObject homes = readFile(homeFile);
-            JSONObject home = (JSONObject) homes.get(homeName);
-            double x = Double.parseDouble(home.get("x").toString());
-            double y = Double.parseDouble(home.get("y").toString());
-            double z = Double.parseDouble(home.get("z").toString());
-            float pitch = Float.parseFloat(home.get("pitch").toString());
-            float yaw = Float.parseFloat(home.get("yaw").toString());
-            World w = Bukkit.getWorld(home.get("world").toString());
+            if (homes == null) {
+                return null;
+            }
+            JSONObject home = homes.getJSONObject(homeName);
+            double x = home.getDouble("x");
+            double y = home.getDouble("y");
+            double z = home.getDouble("z");
+            float pitch = home.getFloat("pitch");
+            float yaw = home.getFloat("yaw");
+            World w;
+            try {
+                UUID uuid = UUID.fromString(home.getString("world"));
+                w = Bukkit.getWorld(uuid);
+            } catch (IllegalArgumentException exception) {
+                w = Bukkit.getWorld(home.getString("world"));
+            }
             return new Location(w, x, y, z, yaw, pitch);
         } else {
             return null;
@@ -215,8 +224,8 @@ public class HomeManagement {
      */
     public List<String> getPlayerHomes(UUID player) {
         File homeFile = getPlayerFile(player);
-        if (readFile(homeFile) != null) {
-            JSONObject currentHomeFileJSON = readFile(homeFile);
+        JSONObject currentHomeFileJSON = readFile(homeFile);
+        if (currentHomeFileJSON != null) {
             List<String> playerHomes = new ArrayList<>(currentHomeFileJSON.keySet());
             Collections.sort(playerHomes);
             return playerHomes;
@@ -260,7 +269,7 @@ public class HomeManagement {
         m.put("z", newLocation.getZ());
         m.put("pitch", newLocation.getPitch());
         m.put("yaw", newLocation.getYaw());
-        m.put("world", newLocation.getWorld().getName());
+        m.put("world", newLocation.getWorld().getUID().toString());
         homes.put(homeName, m);
         writeFile(homeFile, homes.toString());
     }
@@ -351,6 +360,9 @@ public class HomeManagement {
         int fileCount = 0;
         for (File f : homeFiles) {
             JSONObject homeFileJSON = readFile(f);
+            if (homeFileJSON == null) {
+                continue;
+            }
             if (homeFileJSON.length() == 0) {
                 try {
                     Files.delete(f.toPath());
@@ -403,6 +415,9 @@ public class HomeManagement {
      */
     public Location getRespawnLocation(UUID player) {
         JSONObject respawns = readFile(respawnsFile);
+        if (respawns == null) {
+            return null;
+        }
         if (respawns.has(player.toString())) {
             return getHomeLocation(player, respawns.get(player.toString()).toString());
         } else {
@@ -418,6 +433,9 @@ public class HomeManagement {
      */
     public String getRespawnHomeName(UUID player) {
         JSONObject respawns = readFile(respawnsFile);
+        if (respawns == null) {
+            return null;
+        }
         if (respawns.has(player.toString())) {
             return respawns.get(player.toString()).toString();
         } else {

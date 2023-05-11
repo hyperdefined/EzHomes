@@ -30,7 +30,6 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CommandWhere implements TabExecutor {
@@ -73,11 +72,12 @@ public class CommandWhere implements TabExecutor {
                 return true;
             }
             case 1: {
-                if (playerHomes.contains(args[0])) {
-                    Location home = homeManagement.getHomeLocation(player.getUniqueId(), args[0]);
+                String homeName = args[0];
+                if (playerHomes.contains(homeName)) {
+                    Location home = homeManagement.getHomeLocation(player.getUniqueId(), homeName);
                     for (String line : ezHomes.getMessageList("commands.where.command")) {
                         if (line.contains("%home%")) {
-                            line = line.replace("%home%", args[0]);
+                            line = line.replace("%home%", homeName);
                         }
                         if (line.contains("%world%")) {
                             line = line.replace("%world%", home.getWorld().getName());

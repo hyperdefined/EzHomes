@@ -27,7 +27,6 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -71,17 +70,18 @@ public class CommandSetHome implements CommandExecutor {
                     audiences.player(player).sendMessage(ezHomes.getMessage("commands.sethome.home-limit", homeLimit));
                     return true;
                 }
+                String homeName = args[0];
                 Pattern pattern = Pattern.compile("^[a-zA-Z0-9]+$");
-                Matcher matcher = pattern.matcher(args[0]);
+                Matcher matcher = pattern.matcher(homeName);
                 if (!matcher.matches()) {
                     audiences.player(player).sendMessage(ezHomes.getMessage("errors.invalid-characters", null));
                     return true;
                 }
-                if (homes.stream().anyMatch(x -> x.equalsIgnoreCase(args[0]))) {
+                if (homes.stream().anyMatch(x -> x.equalsIgnoreCase(homeName))) {
                     audiences.player(player).sendMessage(ezHomes.getMessage("errors.home-already-exists", null));
                     return true;
                 }
-                homeManagement.createHome(player.getUniqueId(), args[0]);
+                homeManagement.createHome(player.getUniqueId(), homeName);
                 audiences.player(player).sendMessage(ezHomes.getMessage("commands.sethome.new-home", player));
                 return true;
             }
