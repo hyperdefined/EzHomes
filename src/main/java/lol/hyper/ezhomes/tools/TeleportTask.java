@@ -57,7 +57,7 @@ public class TeleportTask extends BukkitRunnable {
             }
 
             homeManagement.teleportCooldowns.put(player.getUniqueId(), System.nanoTime());
-            audiences.player(player).sendMessage(ezHomes.getMessage("commands.home.on-teleport", player));
+            audiences.player(player).sendMessage(ezHomes.getMessage("commands.home.on-teleport"));
             playerMove.teleportTasks.remove(player.getUniqueId());
             this.cancel();
         } else {

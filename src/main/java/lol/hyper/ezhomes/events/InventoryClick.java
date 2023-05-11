@@ -92,7 +92,7 @@ public class InventoryClick implements Listener {
                     currentTask.cancel();
                     audiences
                             .player(player)
-                            .sendMessage(ezHomes.getMessage("errors.teleport-canceled", null));
+                            .sendMessage(ezHomes.getMessage("errors.teleport-canceled"));
                 }
                 BukkitTask teleportTask =
                         new TeleportTask(ezHomes, player, loc).runTaskTimer(ezHomes, 0, 20L);

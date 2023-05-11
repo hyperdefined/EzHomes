@@ -50,18 +50,18 @@ public class CommandHome implements TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (!sender.hasPermission("ezhomes.home")) {
-            audiences.sender(sender).sendMessage(ezHomes.getMessage("no-perms", null));
+            audiences.sender(sender).sendMessage(ezHomes.getMessage("no-perms"));
             return true;
         }
 
         if (sender instanceof ConsoleCommandSender) {
-            audiences.sender(sender).sendMessage(ezHomes.getMessage("errors.must-be-player", null));
+            audiences.sender(sender).sendMessage(ezHomes.getMessage("errors.must-be-player"));
             return true;
         }
 
         Player player = (Player) sender;
         if (homeManagement.getPlayerHomes(player.getUniqueId()).isEmpty()) {
-            audiences.player(player).sendMessage(ezHomes.getMessage("errors.no-homes", null));
+            audiences.player(player).sendMessage(ezHomes.getMessage("errors.no-homes"));
             return true;
         }
 
@@ -70,7 +70,7 @@ public class CommandHome implements TabExecutor {
         int argsLength = args.length;
         switch (argsLength) {
             case 0: {
-                audiences.player(player).sendMessage(ezHomes.getMessage("errors.specify-home-name", null));
+                audiences.player(player).sendMessage(ezHomes.getMessage("errors.specify-home-name"));
                 return true;
             }
             case 1: {
@@ -79,7 +79,7 @@ public class CommandHome implements TabExecutor {
                         BukkitTask currentTask = playerMove.teleportTasks.get(player.getUniqueId());
                         if (currentTask != null) {
                             currentTask.cancel();
-                            audiences.player(player).sendMessage(ezHomes.getMessage("errors.teleport-canceled", null));
+                            audiences.player(player).sendMessage(ezHomes.getMessage("errors.teleport-canceled"));
                         }
                         BukkitTask teleportTask =
                                 new TeleportTask(
@@ -90,7 +90,7 @@ public class CommandHome implements TabExecutor {
                                         .runTaskTimer(ezHomes, 0, 20L);
                         playerMove.teleportTasks.put(player.getUniqueId(), teleportTask);
                     } else {
-                        audiences.player(player).sendMessage(ezHomes.getMessage("errors.home-does-not-exist", null));
+                        audiences.player(player).sendMessage(ezHomes.getMessage("errors.home-does-not-exist"));
                     }
                 } else {
                     long timeLeft = TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - homeManagement.teleportCooldowns.get(player.getUniqueId()));
@@ -100,7 +100,7 @@ public class CommandHome implements TabExecutor {
                 return true;
             }
             default:
-                audiences.player(player).sendMessage(ezHomes.getMessage("commands.home.invalid-syntax", null));
+                audiences.player(player).sendMessage(ezHomes.getMessage("commands.home.invalid-syntax"));
                 break;
         }
         return true;

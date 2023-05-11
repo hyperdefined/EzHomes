@@ -53,7 +53,7 @@ public class PlayerMove implements Listener {
             Player player = event.getPlayer();
             teleportTasks.get(player.getUniqueId()).cancel();
             teleportTasks.remove(player.getUniqueId());
-            audiences.player(player).sendMessage(ezHomes.getMessage("errors.teleport-canceled", null));
+            audiences.player(player).sendMessage(ezHomes.getMessage("errors.teleport-canceled"));
             homeManagement.guiManagers.remove(player.getUniqueId());
         }
     }

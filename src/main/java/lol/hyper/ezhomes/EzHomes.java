@@ -186,6 +186,7 @@ public final class EzHomes extends JavaPlugin {
      * Gets a message from messages.yml.
      *
      * @param path The path to the message.
+     * @param replacement The replacement.
      * @return Component with formatting applied.
      */
     public Component getMessage(String path, Object replacement) {
@@ -222,6 +223,21 @@ public final class EzHomes extends JavaPlugin {
     }
 
     /**
+     * Gets a message from messages.yml.
+     *
+     * @param path The path to the message.
+     * @return Component with formatting applied.
+     */
+    public Component getMessage(String path) {
+        String message = messages.getString(path);
+        if (message == null) {
+            logger.warning(path + " is not a valid message!");
+            return Component.text("Invalid path! " + path).color(NamedTextColor.RED);
+        }
+        return miniMessage.deserialize(message);
+    }
+
+    /**
      * Gets a message list.
      *
      * @param path The path to the message.
@@ -236,6 +252,7 @@ public final class EzHomes extends JavaPlugin {
         messageList.add("<red>Invalid path! " + path + "</red>");
         return messageList;
     }
+
 
     public BukkitAudiences getAdventure() {
         if (this.adventure == null) {

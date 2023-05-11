@@ -26,7 +26,7 @@ public class CommandEzHomes implements TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!sender.hasPermission("ezhomes.command")) {
-            audiences.sender(sender).sendMessage(ezHomes.getMessage("no-perms", null));
+            audiences.sender(sender).sendMessage(ezHomes.getMessage("no-perms"));
             return true;
         }
 
@@ -38,9 +38,9 @@ public class CommandEzHomes implements TabExecutor {
             if (args[0].equalsIgnoreCase("reload")) {
                 if (sender.hasPermission("ezhomes.reload")) {
                     ezHomes.loadConfig();
-                    audiences.sender(sender).sendMessage(ezHomes.getMessage("config-reloaded", null));
+                    audiences.sender(sender).sendMessage(ezHomes.getMessage("config-reloaded"));
                 } else {
-                    audiences.sender(sender).sendMessage(ezHomes.getMessage("no-perms", null));
+                    audiences.sender(sender).sendMessage(ezHomes.getMessage("no-perms"));
                 }
             } else {
                 audiences.sender(sender).sendMessage(Component.text("EzHomes version " + ezHomes.getDescription().getVersion() + ". Created by hyperdefined.").color(NamedTextColor.GREEN));

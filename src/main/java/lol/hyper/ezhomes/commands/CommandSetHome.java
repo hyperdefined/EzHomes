@@ -46,12 +46,12 @@ public class CommandSetHome implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (!sender.hasPermission("ezhomes.sethome")) {
-            audiences.sender(sender).sendMessage(ezHomes.getMessage("no-perms", null));
+            audiences.sender(sender).sendMessage(ezHomes.getMessage("no-perms"));
             return true;
         }
 
         if (sender instanceof ConsoleCommandSender) {
-            audiences.sender(sender).sendMessage(ezHomes.getMessage("errors.must-be-player", null));
+            audiences.sender(sender).sendMessage(ezHomes.getMessage("errors.must-be-player"));
             return true;
         }
 
@@ -60,7 +60,7 @@ public class CommandSetHome implements CommandExecutor {
         int argsLength = args.length;
         switch (argsLength) {
             case 0: {
-                audiences.player(player).sendMessage(ezHomes.getMessage("errors.specify-home-name", null));
+                audiences.player(player).sendMessage(ezHomes.getMessage("errors.specify-home-name"));
                 return true;
             }
             case 1: {
@@ -74,11 +74,11 @@ public class CommandSetHome implements CommandExecutor {
                 Pattern pattern = Pattern.compile("^[a-zA-Z0-9]+$");
                 Matcher matcher = pattern.matcher(homeName);
                 if (!matcher.matches()) {
-                    audiences.player(player).sendMessage(ezHomes.getMessage("errors.invalid-characters", null));
+                    audiences.player(player).sendMessage(ezHomes.getMessage("errors.invalid-characters"));
                     return true;
                 }
                 if (homes.stream().anyMatch(x -> x.equalsIgnoreCase(homeName))) {
-                    audiences.player(player).sendMessage(ezHomes.getMessage("errors.home-already-exists", null));
+                    audiences.player(player).sendMessage(ezHomes.getMessage("errors.home-already-exists"));
                     return true;
                 }
                 homeManagement.createHome(player.getUniqueId(), homeName);
@@ -86,7 +86,7 @@ public class CommandSetHome implements CommandExecutor {
                 return true;
             }
             default: {
-                audiences.player(player).sendMessage(ezHomes.getMessage("commands.sethome.invalid-syntax", null));
+                audiences.player(player).sendMessage(ezHomes.getMessage("commands.sethome.invalid-syntax"));
                 break;
             }
         }

@@ -46,18 +46,18 @@ public class CommandUpdateHome implements TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (!sender.hasPermission("ezhomes.updatehome")) {
-            audiences.sender(sender).sendMessage(ezHomes.getMessage("no-perms", null));
+            audiences.sender(sender).sendMessage(ezHomes.getMessage("no-perms"));
             return true;
         }
 
         if (sender instanceof ConsoleCommandSender) {
-            audiences.sender(sender).sendMessage(ezHomes.getMessage("errors.must-be-player", null));
+            audiences.sender(sender).sendMessage(ezHomes.getMessage("errors.must-be-player"));
             return true;
         }
 
         Player player = (Player) sender;
         if (homeManagement.getPlayerHomes(player.getUniqueId()).isEmpty()) {
-            audiences.player(player).sendMessage(ezHomes.getMessage("errors.no-homes", null));
+            audiences.player(player).sendMessage(ezHomes.getMessage("errors.no-homes"));
             return true;
         }
         List<String> playerHomes = homeManagement.getPlayerHomes(player.getUniqueId());
@@ -65,7 +65,7 @@ public class CommandUpdateHome implements TabExecutor {
         int argsLength = args.length;
         switch (argsLength) {
             case 0: {
-                audiences.player(player).sendMessage(ezHomes.getMessage("errors.specify-home-name", null));
+                audiences.player(player).sendMessage(ezHomes.getMessage("errors.specify-home-name"));
                 return true;
             }
             case 1: {
@@ -73,18 +73,18 @@ public class CommandUpdateHome implements TabExecutor {
                     Pattern pattern = Pattern.compile("^[a-zA-Z0-9]+$");
                     Matcher matcher = pattern.matcher(args[0]);
                     if (!matcher.matches()) {
-                        audiences.player(player).sendMessage(ezHomes.getMessage("errors.invalid-character", null));
+                        audiences.player(player).sendMessage(ezHomes.getMessage("errors.invalid-character"));
                         return true;
                     }
                     homeManagement.updateHome(player.getUniqueId(), args[0]);
-                    audiences.player(player).sendMessage(ezHomes.getMessage("commands.updatehome.updated-home", null));
+                    audiences.player(player).sendMessage(ezHomes.getMessage("commands.updatehome.updated-home"));
                 } else {
-                    audiences.player(player).sendMessage(ezHomes.getMessage("errors.home-does-not-exist", null));
+                    audiences.player(player).sendMessage(ezHomes.getMessage("errors.home-does-not-exist"));
                 }
                 return true;
             }
             default:
-                audiences.player(player).sendMessage(ezHomes.getMessage("commands.updatehome.invalid-syntax", null));
+                audiences.player(player).sendMessage(ezHomes.getMessage("commands.updatehome.invalid-syntax"));
                 break;
         }
         return true;

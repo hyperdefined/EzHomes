@@ -54,13 +54,13 @@ public class CommandWhere implements TabExecutor {
         }
 
         if (sender instanceof ConsoleCommandSender) {
-            audiences.sender(sender).sendMessage(ezHomes.getMessage("errors.must-be-player", null));
+            audiences.sender(sender).sendMessage(ezHomes.getMessage("errors.must-be-player"));
             return true;
         }
 
         Player player = (Player) sender;
         if (homeManagement.getPlayerHomes(player.getUniqueId()).isEmpty()) {
-            audiences.player(player).sendMessage(ezHomes.getMessage("errors.no-homes", null));
+            audiences.player(player).sendMessage(ezHomes.getMessage("errors.no-homes"));
             return true;
         }
         List<String> playerHomes = homeManagement.getPlayerHomes(player.getUniqueId());
@@ -68,7 +68,7 @@ public class CommandWhere implements TabExecutor {
         int argsLength = args.length;
         switch (argsLength) {
             case 0: {
-                audiences.player(player).sendMessage(ezHomes.getMessage("errors.specify-home-name", null));
+                audiences.player(player).sendMessage(ezHomes.getMessage("errors.specify-home-name"));
                 return true;
             }
             case 1: {
@@ -95,12 +95,12 @@ public class CommandWhere implements TabExecutor {
                         audiences.player(player).sendMessage(component);
                     }
                 } else {
-                    audiences.player(player).sendMessage(ezHomes.getMessage("errors.home-does-not-exist", null));
+                    audiences.player(player).sendMessage(ezHomes.getMessage("errors.home-does-not-exist"));
                 }
                 return true;
             }
             default: {
-                audiences.player(player).sendMessage(ezHomes.getMessage("commands.where.invalid-syntax", null));
+                audiences.player(player).sendMessage(ezHomes.getMessage("commands.where.invalid-syntax"));
                 break;
             }
         }

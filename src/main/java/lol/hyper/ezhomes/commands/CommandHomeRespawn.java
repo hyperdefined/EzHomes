@@ -46,23 +46,23 @@ public class CommandHomeRespawn implements TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (!sender.hasPermission("ezhomes.respawnhome")) {
-            audiences.sender(sender).sendMessage(ezHomes.getMessage("no-perms", null));
+            audiences.sender(sender).sendMessage(ezHomes.getMessage("no-perms"));
             return true;
         }
 
         if (sender instanceof ConsoleCommandSender) {
-            audiences.sender(sender).sendMessage(ezHomes.getMessage("errors.must-be-player", null));
+            audiences.sender(sender).sendMessage(ezHomes.getMessage("errors.must-be-player"));
             return true;
         }
 
         if (!ezHomes.config.getBoolean("allow-respawn-at-home")) {
-            audiences.sender(sender).sendMessage(ezHomes.getMessage("commands.respawnhome.feature-not-enabled", null));
+            audiences.sender(sender).sendMessage(ezHomes.getMessage("commands.respawnhome.feature-not-enabled"));
             return true;
         }
 
         Player player = (Player) sender;
         if (homeManagement.getPlayerHomes(player.getUniqueId()).isEmpty()) {
-            audiences.player(player).sendMessage(ezHomes.getMessage("errors.no-homes", null));
+            audiences.player(player).sendMessage(ezHomes.getMessage("errors.no-homes"));
             return true;
         }
 
@@ -71,19 +71,19 @@ public class CommandHomeRespawn implements TabExecutor {
         int argsLength = args.length;
         switch (argsLength) {
             case 0: {
-                audiences.sender(sender).sendMessage(ezHomes.getMessage("errors.specify-action", null));
+                audiences.sender(sender).sendMessage(ezHomes.getMessage("errors.specify-action"));
                 break;
             }
             case 1: {
                 if (args[0].equalsIgnoreCase("remove")) {
                     if (homeManagement.getRespawnHomeName(player.getUniqueId()) != null) {
                         homeManagement.removeRespawnLocation(player.getUniqueId());
-                        audiences.sender(sender).sendMessage(ezHomes.getMessage("commands.respawnhome.respawnhome-removed", null));
+                        audiences.sender(sender).sendMessage(ezHomes.getMessage("commands.respawnhome.respawnhome-removed"));
                     } else {
-                        audiences.sender(sender).sendMessage(ezHomes.getMessage("commands.respawnhome.no-respawnhome", null));
+                        audiences.sender(sender).sendMessage(ezHomes.getMessage("commands.respawnhome.no-respawnhome"));
                     }
                 } else {
-                    audiences.sender(sender).sendMessage(ezHomes.getMessage("commands.respawnhome.invalid-syntax", null));
+                    audiences.sender(sender).sendMessage(ezHomes.getMessage("commands.respawnhome.invalid-syntax"));
                 }
                 return true;
             }
@@ -92,12 +92,12 @@ public class CommandHomeRespawn implements TabExecutor {
                     String homeName = args[1];
                     if (playerHomes.contains(homeName)) {
                         homeManagement.setRespawnLocation(player.getUniqueId(), homeName);
-                        audiences.sender(sender).sendMessage(ezHomes.getMessage("commands.respawnhome.respawnhome-set", null));
+                        audiences.sender(sender).sendMessage(ezHomes.getMessage("commands.respawnhome.respawnhome-set"));
                     } else {
-                        audiences.sender(sender).sendMessage(ezHomes.getMessage("errors.home-does-not-exist.", null));
+                        audiences.sender(sender).sendMessage(ezHomes.getMessage("errors.home-does-not-exist."));
                     }
                 } else {
-                    audiences.sender(sender).sendMessage(ezHomes.getMessage("commands.respawnhome.invalid-syntax", null));
+                    audiences.sender(sender).sendMessage(ezHomes.getMessage("commands.respawnhome.invalid-syntax"));
                     return true;
                 }
             }
