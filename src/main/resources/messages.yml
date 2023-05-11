@@ -36,7 +36,7 @@ commands:
     respawn-home: "<gold>You will respawn at</gold><green> %home%</green><gold>.</gold>"
   sethome:
     new-home: "<green>New home set.</green>"
-    home-limit: "<red>You can only have a maximum of %homes% + homes.</red>"
+    home-limit: "<red>You can only have a maximum of %homes%+ homes.</red>"
     invalid-syntax: "<red>Invalid command usage. Usage: /sethome <home> to set a new home.</red>"
   updatehome:
     updated-home: "<green>Updated home location.</green>"

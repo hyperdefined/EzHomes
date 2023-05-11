@@ -66,7 +66,7 @@ public class CommandSetHome implements CommandExecutor {
             case 1: {
                 List<String> homes = homeManagement.getPlayerHomes(player.getUniqueId());
                 int homeLimit = ezHomes.config.getInt("total-homes");
-                if (homes.size() > homeLimit || player.hasPermission("ezhomes.bypasslimit")) {
+                if (homes.size() >= homeLimit && !player.hasPermission("ezhomes.bypasslimit")) {
                     audiences.player(player).sendMessage(ezHomes.getMessage("commands.sethome.home-limit", homeLimit));
                     return true;
                 }
