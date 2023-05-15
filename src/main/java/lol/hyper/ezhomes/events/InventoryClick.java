@@ -63,70 +63,67 @@ public class InventoryClick implements Listener {
             return;
         }
 
-        if (!homeManagement.guiManagers.containsKey(player.getUniqueId())) {
-            return;
-        }
+        // we don't have a gui saved for them
         GUIManager guiManager = homeManagement.guiManagers.get(player.getUniqueId());
         if (guiManager == null) {
             return;
         }
 
-        // player did not click our custom inventory
+        // player has gui saved, but they didn't click the inventory
         if (!guiManager.getHomePages().contains(inventory)) {
-            event.setCancelled(true);
             return;
         }
 
         // player clicked our custom inventory
+        // cancel them clicking anything in the gui, but react on it
         event.setCancelled(true);
-        if ((item.getType() == Material.RED_BED || item.getType() == Material.GREEN_BED)
-                && item.getType() != Material.AIR) {
-            if (homeManagement.canPlayerTeleport(player.getUniqueId())
-                    || player.hasPermission("ezhomes.bypasscooldown")) {
+        Material clickedType = item.getType();
+        switch (clickedType) {
+            // beds are homes
+            case RED_BED:
+            case GREEN_BED: {
+                // player has a cooldown still
+                if (!homeManagement.canPlayerTeleport(player.getUniqueId()) || !player.hasPermission("ezhomes.bypasscooldown")) {
+                    long timeLeft = TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - homeManagement.teleportCooldowns.get(player.getUniqueId()));
+                    long configTime = ezHomes.config.getInt("teleport-cooldown");
+                    audiences.player(player).sendMessage(ezHomes.getMessage("commands.home.teleport-cooldown", (configTime - timeLeft)));
+                    return;
+                }
+
+                // get home name from item
                 ItemMeta meta = item.getItemMeta();
-                Location loc =
-                        homeManagement.getHomeLocation(
-                                player.getUniqueId(), ChatColor.stripColor(meta.getDisplayName()));
+                Location loc = homeManagement.getHomeLocation(player.getUniqueId(), ChatColor.stripColor(meta.getDisplayName()));
+
+                // see if the player is already teleporting
+                // if they are, cancel it
                 BukkitTask currentTask = playerMove.teleportTasks.get(player.getUniqueId());
                 if (currentTask != null) {
                     currentTask.cancel();
-                    audiences
-                            .player(player)
-                            .sendMessage(ezHomes.getMessage("errors.teleport-canceled"));
+                    audiences.player(player).sendMessage(ezHomes.getMessage("errors.teleport-canceled"));
                 }
+
+                // start the teleport countdown task
                 BukkitTask teleportTask =
                         new TeleportTask(ezHomes, player, loc).runTaskTimer(ezHomes, 0, 20L);
                 playerMove.teleportTasks.put(player.getUniqueId(), teleportTask);
-                Bukkit.getScheduler()
-                        .runTaskLater(ezHomes, () -> player.getOpenInventory().close(), 1);
-            } else {
-                long timeLeft =
-                        TimeUnit.NANOSECONDS.toSeconds(
-                                System.nanoTime()
-                                        - homeManagement.teleportCooldowns.get(
-                                                player.getUniqueId()));
-                long configTime = ezHomes.config.getInt("teleport-cooldown");
-                audiences
-                        .player(player)
-                        .sendMessage(
-                                ezHomes.getMessage(
-                                        "commands.home.teleport-cooldown",
-                                        (configTime - timeLeft)));
+                // make sure to close the inventory afterwards!!
+                Bukkit.getScheduler().runTaskLater(ezHomes, () -> player.getOpenInventory().close(), 1);
             }
-        }
-        if (item.getType() == Material.PAPER && item.getType() != Material.AIR) {
-            int currentPage =
-                    homeManagement.guiManagers.get(player.getUniqueId()).getCurrentPageIndex();
-            ItemStack paper = event.getCurrentItem();
-            if (paper.getItemMeta().getDisplayName().contains("Next")) {
-                Bukkit.getScheduler()
-                        .runTaskLater(ezHomes, () -> player.getOpenInventory().close(), 1);
-                guiManager.openGUI(currentPage + 1);
-            }
-            if (paper.getItemMeta().getDisplayName().contains("Previous")) {
-                Bukkit.getScheduler()
-                        .runTaskLater(ezHomes, () -> player.getOpenInventory().close(), 1);
-                guiManager.openGUI(currentPage - 1);
+            // paper is next/prev page
+            case PAPER: {
+                // find the current page the player has opened
+                int currentPage = homeManagement.guiManagers.get(player.getUniqueId()).getCurrentPageIndex();
+                ItemStack paper = event.getCurrentItem();
+                // move to next page
+                if (paper.getItemMeta().getDisplayName().contains("Next")) {
+                    Bukkit.getScheduler().runTaskLater(ezHomes, () -> player.getOpenInventory().close(), 1);
+                    guiManager.openGUI(currentPage + 1);
+                }
+                // move to previous page
+                if (paper.getItemMeta().getDisplayName().contains("Previous")) {
+                    Bukkit.getScheduler().runTaskLater(ezHomes, () -> player.getOpenInventory().close(), 1);
+                    guiManager.openGUI(currentPage - 1);
+                }
             }
         }
     }
