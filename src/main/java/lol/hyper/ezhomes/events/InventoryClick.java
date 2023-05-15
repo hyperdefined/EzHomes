@@ -83,7 +83,7 @@ public class InventoryClick implements Listener {
             case RED_BED:
             case GREEN_BED: {
                 // player has a cooldown still
-                if (!homeManagement.canPlayerTeleport(player.getUniqueId()) || !player.hasPermission("ezhomes.bypasscooldown")) {
+                if (!homeManagement.canPlayerTeleport(player.getUniqueId()) && !player.hasPermission("ezhomes.bypasscooldown")) {
                     long timeLeft = TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - homeManagement.teleportCooldowns.get(player.getUniqueId()));
                     long configTime = ezHomes.config.getInt("teleport-cooldown");
                     audiences.player(player).sendMessage(ezHomes.getMessage("commands.home.teleport-cooldown", (configTime - timeLeft)));

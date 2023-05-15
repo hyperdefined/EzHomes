@@ -130,6 +130,7 @@ public class HomeManagement {
      */
     private void writeFile(File file, String jsonToWrite) {
         try {
+            file.getParentFile().mkdirs();
             FileWriter writer = new FileWriter(file);
             writer.write(jsonToWrite);
             writer.close();
@@ -171,7 +172,7 @@ public class HomeManagement {
         if (homes == null) {
             homes = new JSONObject();
         }
-        Map<String, Object> m = new LinkedHashMap<>(5);
+        Map<String, Object> m = new LinkedHashMap<>();
         m.put("x", homeLocation.getX());
         m.put("y", homeLocation.getY());
         m.put("z", homeLocation.getZ());
@@ -263,7 +264,7 @@ public class HomeManagement {
         File homeFile = getPlayerFile(player);
         JSONObject homes = readFile(homeFile);
         homes.remove(homeName);
-        Map<String, Object> m = new LinkedHashMap<>(5);
+        Map<String, Object> m = new LinkedHashMap<>();
         m.put("x", newLocation.getX());
         m.put("y", newLocation.getY());
         m.put("z", newLocation.getZ());
