@@ -175,7 +175,7 @@ public class GUIManager {
         return currentPage - 1;
     }
 
-    public ArrayList<Inventory> getHomePages() {
+    public List<Inventory> getHomePages() {
         return homePages;
     }
 }

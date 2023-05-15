@@ -110,6 +110,7 @@ public class InventoryClick implements Listener {
                 playerMove.teleportTasks.put(player.getUniqueId(), teleportTask);
                 // make sure to close the inventory afterwards!!
                 Bukkit.getScheduler().runTaskLater(ezHomes, () -> player.getOpenInventory().close(), 1);
+                break;
             }
             // paper is next/prev page
             case PAPER: {
@@ -128,6 +129,7 @@ public class InventoryClick implements Listener {
                     Bukkit.getScheduler().runTaskLater(ezHomes, () -> player.getOpenInventory().close(), 1);
                     guiManager.openGUI(currentPage - 1);
                 }
+                break;
             }
         }
     }
