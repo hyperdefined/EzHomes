@@ -54,7 +54,7 @@ public final class EzHomes extends JavaPlugin {
     public final int MESSAGES_VERSION = 2;
     public FileConfiguration config = this.getConfig();
     public FileConfiguration messages;
-    public final ArrayList<UUID> isTeleporting = new ArrayList<>();
+    public final List<UUID> isTeleporting = new ArrayList<>();
 
     public final Logger logger = this.getLogger();
 

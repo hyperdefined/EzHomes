@@ -37,8 +37,8 @@ import java.util.concurrent.TimeUnit;
 
 public class HomeManagement {
 
-    public final HashMap<UUID, Long> teleportCooldowns = new HashMap<>();
-    public final HashMap<UUID, GUIManager> guiManagers = new HashMap<>();
+    public final Map<UUID, Long> teleportCooldowns = new HashMap<>();
+    public final Map<UUID, GUIManager> guiManagers = new HashMap<>();
 
     public final Path homesPath;
     public final File respawnsFile;

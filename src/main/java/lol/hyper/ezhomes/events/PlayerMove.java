@@ -27,6 +27,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class PlayerMove implements Listener {
@@ -41,7 +42,7 @@ public class PlayerMove implements Listener {
         this.homeManagement = ezHomes.homeManagement;
     }
 
-    public final HashMap<UUID, BukkitTask> teleportTasks = new HashMap<>();
+    public final Map<UUID, BukkitTask> teleportTasks = new HashMap<>();
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
