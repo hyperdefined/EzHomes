@@ -294,7 +294,7 @@ public class HomeManagement {
         }
         writeFile(homeFile, homes.toString());
 
-        // If the player deletes their respawn location, then remove
+        // If the player deletes their respawn home, then remove
         // it from the respawn home lists
         if (homeName.equals(getRespawnHomeName(player))) {
             removeRespawnLocation(player);

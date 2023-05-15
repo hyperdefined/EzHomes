@@ -117,7 +117,7 @@ public class GUIManager {
                 if (isRespawnHome) {
                     bedMeta.setDisplayName(ChatColor.GREEN + homeName);
                 } else {
-                    bedMeta.setDisplayName(homeName);
+                    bedMeta.setDisplayName(ChatColor.RESET + homeName);
                 }
                 Location loc = homeManagement.getHomeLocation(
                         owner.getUniqueId(), homes.get(i).get(x));

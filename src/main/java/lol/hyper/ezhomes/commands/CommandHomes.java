@@ -62,7 +62,7 @@ public class CommandHomes implements CommandExecutor {
             return true;
         }
         if (ezHomes.config.getBoolean("use-homes-gui")) {
-            GUIManager gui = new GUIManager(player, homeManagement, ezHomes.config.getBoolean("allow-respawn-homes"));
+            GUIManager gui = new GUIManager(player, homeManagement, ezHomes.config.getBoolean("allow-respawn-at-home"));
             gui.openGUI(0);
             return true;
         }

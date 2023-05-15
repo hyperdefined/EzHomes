@@ -87,6 +87,8 @@ public class InventoryClick implements Listener {
                     long timeLeft = TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - homeManagement.teleportCooldowns.get(player.getUniqueId()));
                     long configTime = ezHomes.config.getInt("teleport-cooldown");
                     audiences.player(player).sendMessage(ezHomes.getMessage("commands.home.teleport-cooldown", (configTime - timeLeft)));
+                    // make sure to close the inventory afterwards!!
+                    Bukkit.getScheduler().runTaskLater(ezHomes, () -> player.getOpenInventory().close(), 1);
                     return;
                 }
 
@@ -116,11 +118,13 @@ public class InventoryClick implements Listener {
                 ItemStack paper = event.getCurrentItem();
                 // move to next page
                 if (paper.getItemMeta().getDisplayName().contains("Next")) {
+                    // make sure to close the inventory afterwards!!
                     Bukkit.getScheduler().runTaskLater(ezHomes, () -> player.getOpenInventory().close(), 1);
                     guiManager.openGUI(currentPage + 1);
                 }
                 // move to previous page
                 if (paper.getItemMeta().getDisplayName().contains("Previous")) {
+                    // make sure to close the inventory afterwards!!
                     Bukkit.getScheduler().runTaskLater(ezHomes, () -> player.getOpenInventory().close(), 1);
                     guiManager.openGUI(currentPage - 1);
                 }
