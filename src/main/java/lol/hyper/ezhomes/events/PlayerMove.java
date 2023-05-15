@@ -20,6 +20,7 @@ package lol.hyper.ezhomes.events;
 import lol.hyper.ezhomes.EzHomes;
 import lol.hyper.ezhomes.tools.HomeManagement;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -50,7 +51,13 @@ public class PlayerMove implements Listener {
             return;
         }
 
-        if (event.getFrom().getBlockX() != event.getTo().getBlockX() || event.getFrom().getBlockZ() != event.getTo().getBlockZ() || event.getFrom().getBlockY() != event.getTo().getBlockY()) {
+        Location oldLocation = event.getFrom();
+        Location newLocation = event.getTo();
+        if (newLocation == null) {
+            return;
+        }
+
+        if (oldLocation.getBlockX() != newLocation.getBlockX() || oldLocation.getBlockZ() != newLocation.getBlockZ() || oldLocation.getBlockY() != newLocation.getBlockY()) {
             Player player = event.getPlayer();
             teleportTasks.get(player.getUniqueId()).cancel();
             teleportTasks.remove(player.getUniqueId());

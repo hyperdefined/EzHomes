@@ -103,22 +103,17 @@ public class GUIManager {
                     break;
                 }
                 boolean isRespawnHome = false;
-                ItemStack bed;
-                // Check if the home is their respawn home
-                // If it is, then make the bed green, so they can see it's the respawn home
-                if (allowRespawnHomes && respawnHome.equals(homeName)) {
-                    bed = new ItemStack(Material.GREEN_BED);
+                ItemStack bed = allowRespawnHomes && respawnHome != null && respawnHome.equals(homeName)
+                        ? new ItemStack(Material.GREEN_BED)
+                        : new ItemStack(Material.RED_BED);
+
+                if (allowRespawnHomes && respawnHome != null && respawnHome.equals(homeName)) {
                     isRespawnHome = true;
-                } else {
-                    bed = new ItemStack(Material.RED_BED);
                 }
+
                 ItemMeta bedMeta = bed.getItemMeta();
                 // Make the name green if it's their respawn home
-                if (isRespawnHome) {
-                    bedMeta.setDisplayName(ChatColor.GREEN + homeName);
-                } else {
-                    bedMeta.setDisplayName(ChatColor.RESET + homeName);
-                }
+                bedMeta.setDisplayName(isRespawnHome ? ChatColor.GREEN + homeName : ChatColor.RESET + homeName);
                 Location loc = homeManagement.getHomeLocation(
                         owner.getUniqueId(), homes.get(i).get(x));
                 ArrayList<String> lore = new ArrayList<>();

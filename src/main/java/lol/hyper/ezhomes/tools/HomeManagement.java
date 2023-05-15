@@ -59,7 +59,7 @@ public class HomeManagement {
      * @return The player's home file.
      */
     private File getPlayerFile(UUID player) {
-        return Paths.get(homesPath.toString(), player.toString() + ".json").toFile();
+        return new File(homesPath.toFile(), player.toString() + ".json");
     }
 
     private void createFilesWeNeed() {
@@ -125,7 +125,7 @@ public class HomeManagement {
     /**
      * Write data to JSON file.
      *
-     * @param file File to write data to.
+     * @param file        File to write data to.
      * @param jsonToWrite Data to write to file. This much be a JSON string.
      */
     private void writeFile(File file, String jsonToWrite) {
@@ -160,7 +160,7 @@ public class HomeManagement {
     /**
      * Create a new home for a player.
      *
-     * @param player Player that is creating a new home.
+     * @param player   Player that is creating a new home.
      * @param homeName Name of the home to create.
      */
     public void createHome(UUID player, String homeName) {
@@ -178,7 +178,7 @@ public class HomeManagement {
         m.put("z", homeLocation.getZ());
         m.put("pitch", homeLocation.getPitch());
         m.put("yaw", homeLocation.getYaw());
-        m.put("world", homeLocation.getWorld().getUID().toString());
+        m.put("world", homeLocation.getWorld().getName());
         homes.put(homeName, m);
         writeFile(homeFile, homes.toString());
     }
@@ -186,7 +186,7 @@ public class HomeManagement {
     /**
      * Get the location of a home.
      *
-     * @param player Player to see home location.
+     * @param player   Player to see home location.
      * @param homeName Home name to get location.
      * @return Location of the home.
      */
@@ -203,13 +203,7 @@ public class HomeManagement {
             double z = home.getDouble("z");
             float pitch = home.getFloat("pitch");
             float yaw = home.getFloat("yaw");
-            World w;
-            try {
-                UUID uuid = UUID.fromString(home.getString("world"));
-                w = Bukkit.getWorld(uuid);
-            } catch (IllegalArgumentException exception) {
-                w = Bukkit.getWorld(home.getString("world"));
-            }
+            World w = Bukkit.getWorld(home.getString("world"));
             return new Location(w, x, y, z, yaw, pitch);
         } else {
             return null;
@@ -221,7 +215,7 @@ public class HomeManagement {
      *
      * @param player Player to lookup homes for.
      * @return Returns null if the file doesn't exist. Returns 0 if there are no locations. Returns
-     *     the number of locations if there are any.
+     * the number of locations if there are any.
      */
     public List<String> getPlayerHomes(UUID player) {
         File homeFile = getPlayerFile(player);
@@ -256,7 +250,7 @@ public class HomeManagement {
     /**
      * Update a home's location.
      *
-     * @param player Player to update home.
+     * @param player   Player to update home.
      * @param homeName Home to update location for.
      */
     public void updateHome(UUID player, String homeName) {
@@ -270,7 +264,7 @@ public class HomeManagement {
         m.put("z", newLocation.getZ());
         m.put("pitch", newLocation.getPitch());
         m.put("yaw", newLocation.getYaw());
-        m.put("world", newLocation.getWorld().getUID().toString());
+        m.put("world", newLocation.getWorld().getName());
         homes.put(homeName, m);
         writeFile(homeFile, homes.toString());
     }
@@ -278,7 +272,7 @@ public class HomeManagement {
     /**
      * Delete a player's home.
      *
-     * @param player Player to delete home from.
+     * @param player   Player to delete home from.
      * @param homeName Home to delete.
      */
     public void deleteHome(UUID player, String homeName) {
@@ -381,7 +375,7 @@ public class HomeManagement {
     /**
      * Set a player's respawn location home.
      *
-     * @param player Player to set spawn location for.
+     * @param player   Player to set spawn location for.
      * @param homeName Home to set as spawn.
      */
     public void setRespawnLocation(UUID player, String homeName) {
