@@ -59,11 +59,11 @@ public class CommandWhere implements TabExecutor {
         }
 
         Player player = (Player) sender;
-        if (homeManagement.getPlayerHomes(player.getUniqueId()).isEmpty()) {
+        List<String> playerHomes = homeManagement.getPlayerHomes(player.getUniqueId());
+        if (playerHomes.isEmpty()) {
             audiences.player(player).sendMessage(ezHomes.getMessage("errors.no-homes"));
             return true;
         }
-        List<String> playerHomes = homeManagement.getPlayerHomes(player.getUniqueId());
 
         int argsLength = args.length;
         switch (argsLength) {

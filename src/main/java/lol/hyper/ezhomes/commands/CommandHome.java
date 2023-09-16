@@ -60,12 +60,11 @@ public class CommandHome implements TabExecutor {
         }
 
         Player player = (Player) sender;
-        if (homeManagement.getPlayerHomes(player.getUniqueId()).isEmpty()) {
+        List<String> playerHomes = homeManagement.getPlayerHomes(player.getUniqueId());
+        if (playerHomes.isEmpty()) {
             audiences.player(player).sendMessage(ezHomes.getMessage("errors.no-homes"));
             return true;
         }
-
-        List<String> playerHomes = homeManagement.getPlayerHomes(player.getUniqueId());
 
         int argsLength = args.length;
         switch (argsLength) {
@@ -74,20 +73,15 @@ public class CommandHome implements TabExecutor {
                 return true;
             }
             case 1: {
+                String homeName = args[0];
                 if (homeManagement.canPlayerTeleport(player.getUniqueId()) || player.hasPermission("ezhomes.bypasscooldown")) {
-                    if (playerHomes.contains(args[0])) {
+                    if (playerHomes.contains(homeName)) {
                         BukkitTask currentTask = playerMove.teleportTasks.get(player.getUniqueId());
                         if (currentTask != null) {
                             currentTask.cancel();
                             audiences.player(player).sendMessage(ezHomes.getMessage("errors.teleport-canceled"));
                         }
-                        BukkitTask teleportTask =
-                                new TeleportTask(
-                                        ezHomes,
-                                        player,
-                                        homeManagement.getHomeLocation(
-                                                player.getUniqueId(), args[0]))
-                                        .runTaskTimer(ezHomes, 0, 20L);
+                        BukkitTask teleportTask = new TeleportTask(ezHomes, player, homeManagement.getHomeLocation(player.getUniqueId(), homeName)).runTaskTimer(ezHomes, 0, 20L);
                         playerMove.teleportTasks.put(player.getUniqueId(), teleportTask);
                     } else {
                         audiences.player(player).sendMessage(ezHomes.getMessage("errors.home-does-not-exist"));
@@ -107,11 +101,7 @@ public class CommandHome implements TabExecutor {
     }
 
     @Override
-    public List<String> onTabComplete(
-            @NotNull CommandSender sender,
-            @NotNull Command command,
-            @NotNull String alias,
-            String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
         Player player = (Player) sender;
         return homeManagement.getPlayerHomes(player.getUniqueId());
     }

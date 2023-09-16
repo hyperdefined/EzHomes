@@ -56,11 +56,11 @@ public class CommandUpdateHome implements TabExecutor {
         }
 
         Player player = (Player) sender;
-        if (homeManagement.getPlayerHomes(player.getUniqueId()).isEmpty()) {
+        List<String> playerHomes = homeManagement.getPlayerHomes(player.getUniqueId());
+        if (playerHomes.isEmpty()) {
             audiences.player(player).sendMessage(ezHomes.getMessage("errors.no-homes"));
             return true;
         }
-        List<String> playerHomes = homeManagement.getPlayerHomes(player.getUniqueId());
 
         int argsLength = args.length;
         switch (argsLength) {
@@ -91,11 +91,7 @@ public class CommandUpdateHome implements TabExecutor {
     }
 
     @Override
-    public List<String> onTabComplete(
-            @NotNull CommandSender sender,
-            @NotNull Command command,
-            @NotNull String alias,
-            String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
         Player player = (Player) sender;
         return homeManagement.getPlayerHomes(player.getUniqueId());
     }

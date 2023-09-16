@@ -61,12 +61,11 @@ public class CommandHomeRespawn implements TabExecutor {
         }
 
         Player player = (Player) sender;
-        if (homeManagement.getPlayerHomes(player.getUniqueId()).isEmpty()) {
+        List<String> playerHomes = homeManagement.getPlayerHomes(player.getUniqueId());
+        if (playerHomes.isEmpty()) {
             audiences.player(player).sendMessage(ezHomes.getMessage("errors.no-homes"));
             return true;
         }
-
-        List<String> playerHomes = homeManagement.getPlayerHomes(player.getUniqueId());
 
         int argsLength = args.length;
         switch (argsLength) {
@@ -75,7 +74,8 @@ public class CommandHomeRespawn implements TabExecutor {
                 break;
             }
             case 1: {
-                if (args[0].equalsIgnoreCase("remove")) {
+                String whatToDo = args[0];
+                if (whatToDo.equalsIgnoreCase("remove")) {
                     if (homeManagement.getRespawnHomeName(player.getUniqueId()) != null) {
                         homeManagement.removeRespawnLocation(player.getUniqueId());
                         audiences.sender(sender).sendMessage(ezHomes.getMessage("commands.respawnhome.respawnhome-removed"));
@@ -88,7 +88,8 @@ public class CommandHomeRespawn implements TabExecutor {
                 return true;
             }
             case 2: {
-                if (args[0].equalsIgnoreCase("set")) {
+                String whatToDo = args[0];
+                if (whatToDo.equalsIgnoreCase("set")) {
                     String homeName = args[1];
                     if (playerHomes.contains(homeName)) {
                         homeManagement.setRespawnLocation(player.getUniqueId(), homeName);
@@ -106,11 +107,7 @@ public class CommandHomeRespawn implements TabExecutor {
     }
 
     @Override
-    public List<String> onTabComplete(
-            @NotNull CommandSender sender,
-            @NotNull Command command,
-            @NotNull String alias,
-            String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
         if (args.length == 1) {
             return Arrays.asList("set", "remove");
         }

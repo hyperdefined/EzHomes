@@ -54,11 +54,11 @@ public class CommandDeleteHome implements TabExecutor {
         }
 
         Player player = (Player) sender;
-        if (homeManagement.getPlayerHomes(player.getUniqueId()).isEmpty()) {
+        List<String> playerHomes = homeManagement.getPlayerHomes(player.getUniqueId());
+        if (playerHomes.isEmpty()) {
             audiences.player(player).sendMessage(ezHomes.getMessage("errors.no-homes"));
             return true;
         }
-        List<String> playerHomes = homeManagement.getPlayerHomes(player.getUniqueId());
 
         int argsLength = args.length;
         switch (argsLength) {
@@ -67,8 +67,9 @@ public class CommandDeleteHome implements TabExecutor {
                 return true;
             }
             case 1: {
-                if (playerHomes.contains(args[0])) {
-                    homeManagement.deleteHome(player.getUniqueId(), args[0]);
+                String homeName = args[0];
+                if (playerHomes.contains(homeName)) {
+                    homeManagement.deleteHome(player.getUniqueId(), homeName);
                     audiences.player(player).sendMessage(ezHomes.getMessage("commands.delhome.home-deleted"));
                 } else {
                     audiences.player(player).sendMessage(ezHomes.getMessage("errors.home-does-not-exist"));
